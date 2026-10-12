@@ -1,0 +1,6 @@
+@KinemoPlatform.API_HostAddress = http://localhost:5089
+
+GET {{KinemoPlatform.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
