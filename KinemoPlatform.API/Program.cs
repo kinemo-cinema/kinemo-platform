@@ -1,26 +1,21 @@
-// TODO: Uncomment these usings as you create the corresponding files in your Shared folder
-// using KinemoPlatform.API.Shared.Domain.Repositories;
-// using KinemoPlatform.API.Shared.Infrastructure.Interfaces.ASP.Configuration;
-// using KinemoPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration;
-// using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
-// using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
-// using Cortex.Mediator.Commands;
-// using Cortex.Mediator.DependencyInjection;
-// using Microsoft.EntityFrameworkCore;
-// using Microsoft.OpenApi.Models;
+using KinemoPlatform.API.Shared.Domain.Repositories;
+using KinemoPlatform.API.Shared.Infrastructure.Interfaces.ASP.Configuration;
+using KinemoPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration;
+using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
+using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
+using Cortex.Mediator.Commands;
+using Cortex.Mediator.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// TODO: Add the KebabCaseRouteNamingConvention options once you create that file in Shared.
-// builder.Services.AddControllers(options => options.Conventions.Add(new KebabCaseRouteNamingConvention()));
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => options.Conventions.Add(new KebabCaseRouteNamingConvention()));
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-// TODO: Uncomment the Database Context setup once you create AppDbContext in Shared/Infrastructure/Persistence/EFC/Configuration
-/*
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 if (connectionString == null) throw new InvalidOperationException("Connection string not found.");
 
@@ -35,13 +30,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseMySQL(connectionString)
             .LogTo(Console.WriteLine, LogLevel.Error);
 });
-*/
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// TODO: Uncomment this block when you are ready to configure your Swagger metadata
-/*
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1",
@@ -64,12 +54,11 @@ builder.Services.AddSwaggerGen(options =>
         });
     options.EnableAnnotations();
 });
-*/
 
 // Dependency Injection
 
-// TODO: Uncomment as you build your Shared Kernel
-// builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+// Shared Bounded Context
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // TODO: Uncomment as you build your Publishing Bounded Context
 // builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -84,20 +73,24 @@ builder.Services.AddSwaggerGen(options =>
 // builder.Services.AddScoped<IProfileCommandService, ProfileCommandService>();
 // builder.Services.AddScoped<IProfileQueryService, ProfileQueryService>();
 
-// TODO: Uncomment as you build your Mediator Configuration
-// builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
-// builder.Services.AddCortexMediator(
-//     configuration: builder.Configuration,
-//     handlerAssemblyMarkerTypes: [typeof(Program)], configure: options =>
-//     {
-//         options.AddOpenCommandPipelineBehavior(typeof(LoggingCommandBehavior<>));
-//     });
+// Mediator Configuration
+
+// Add Mediator Injection Configuration
+builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
+
+// Add Cortex Mediator for Event Handling
+builder.Services.AddCortexMediator(
+    configuration: builder.Configuration,
+    handlerAssemblyMarkerTypes: new[] { typeof(Program) }, 
+    configure: options =>
+    {
+        options.AddOpenCommandPipelineBehavior(typeof(LoggingCommandBehavior<>));
+        //options.AddDefaultBehaviors();
+    });
 
 var app = builder.Build();
 
-// TODO: Uncomment this block ONLY AFTER you create AppDbContext and set up your connection string.
-// This is what ensures your MySQL database is created if it doesn't exist.
-/*
+// Verify if the database exists and create it if it doesn't
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -105,7 +98,6 @@ using (var scope = app.Services.CreateScope())
 
     context.Database.EnsureCreated();
 }
-*/
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
