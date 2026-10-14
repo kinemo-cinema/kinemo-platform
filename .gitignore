@@ -10,3 +10,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+
+# Local sensory file storage (development only)
+storage/
+KinemoPlatform.API/storage/
