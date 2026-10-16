@@ -9,7 +9,7 @@ namespace KinemoPlatform.API.Movies.Domain.Model.Entities;
 ///     This entity belongs to the Movie aggregate and is not accessible
 ///     independently. It groups the sensory tracks and the configuration history.
 /// </remarks>
-public class SensoryContent
+public partial class SensoryContent
 {
     /// <summary>
     ///     Default constructor for the sensory content entity.
