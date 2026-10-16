@@ -31,10 +31,7 @@ public static class ModelBuilderExtensions
             .Property(m => m.Status).IsRequired()
             .HasConversion<string>().HasMaxLength(20);
 
-        // Unique title at the database level (mirrors ExistsByTitleAsync)
         builder.Entity<Movie>().HasIndex(m => m.Title).IsUnique();
-
-        // Fast filtering for search queries
         builder.Entity<Movie>().HasIndex(m => m.Genre);
         builder.Entity<Movie>().HasIndex(m => m.Status);
 
@@ -54,6 +51,7 @@ public static class ModelBuilderExtensions
             .HasOne(m => m.SensoryContent)
             .WithOne()
             .HasForeignKey<SensoryContent>(sc => sc.MovieId)
+            .HasConstraintName("fk_sensory_contents_movies")
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
@@ -72,6 +70,7 @@ public static class ModelBuilderExtensions
             .HasMany(sc => sc.Tracks)
             .WithOne()
             .HasForeignKey(t => t.SensoryContentId)
+            .HasConstraintName("fk_sensory_tracks_sensory_contents")
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
@@ -92,6 +91,7 @@ public static class ModelBuilderExtensions
             .HasMany(sc => sc.History)
             .WithOne()
             .HasForeignKey(h => h.SensoryContentId)
+            .HasConstraintName("fk_configuration_history_sensory_contents")
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
     }
