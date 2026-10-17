@@ -189,8 +189,8 @@ public class MoviesController(
     }
 
     // ---------------------------------------------------------------------
-    // POST /api/v1/movies/{movieId}/sensory-file
-    // ---------------------------------------------------------------------
+// POST /api/v1/movies/{movieId}/sensory-file
+// ---------------------------------------------------------------------
     [HttpPost("{movieId:int}/sensory-file")]
     [Consumes("multipart/form-data")]
     [SwaggerOperation(
@@ -202,7 +202,7 @@ public class MoviesController(
     [SwaggerResponse(StatusCodes.Status400BadRequest, "The uploaded file is invalid.")]
     public async Task<IActionResult> AssociateSensoryFile(
         [FromRoute] int movieId,
-        [FromForm] IFormFile? file,                                    // ← made nullable
+        IFormFile? file,                                    // <-- REMOVED [FromForm] HERE
         [FromForm] EEffectType effectType,
         [FromForm] int durationSeconds)
     {
