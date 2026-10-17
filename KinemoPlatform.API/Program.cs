@@ -8,6 +8,14 @@ using Cortex.Mediator.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
+using KinemoPlatform.API.Movies.Application.Internal.CommandServices;
+using KinemoPlatform.API.Movies.Application.Internal.DomainServices;
+using KinemoPlatform.API.Movies.Application.Internal.QueryServices;
+using KinemoPlatform.API.Movies.Domain.Repositories;
+using KinemoPlatform.API.Movies.Domain.Services;
+using KinemoPlatform.API.Movies.Infrastructure.External.FileStorage;
+using KinemoPlatform.API.Movies.Infrastructure.Persistence.EFC.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -73,13 +81,12 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // builder.Services.AddScoped<ISubscriptionCommandService, SubscriptionCommandService>();
 // builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>();
 
-// TODO: Uncomment as you build your Movie & Sensory Content Management Bounded Context (BC01)
-// builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-// builder.Services.AddScoped<ISensoryContentRepository, SensoryContentRepository>();
-// builder.Services.AddScoped<IMovieCommandService, MovieCommandService>();
-// builder.Services.AddScoped<IMovieQueryService, MovieQueryService>();
-// builder.Services.AddScoped<ISensoryContentCommandService, SensoryContentCommandService>();
-// builder.Services.AddScoped<ISensoryContentQueryService, SensoryContentQueryService>();
+// Movies Bounded Context (BC01)
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<IMovieCommandService, MovieCommandService>();
+builder.Services.AddScoped<IMovieQueryService, MovieQueryService>();
+builder.Services.AddScoped<IMovieSensoryDomainService, MovieSensoryDomainService>();
+builder.Services.AddScoped<ISensoryFileStorage, LocalSensoryFileStorage>();
 
 // TODO: Uncomment as you build your Scheduling & Calendar Bounded Context (BC02)
 // builder.Services.AddScoped<IShowRepository, ShowRepository>();
