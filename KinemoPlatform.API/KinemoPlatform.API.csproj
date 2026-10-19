@@ -47,8 +47,6 @@
       <Folder Include="Scheduling\Application\Internal\DomainServices\" />
       <Folder Include="Scheduling\Application\Internal\EventHandlers\" />
       <Folder Include="Scheduling\Application\Internal\QueryServices\" />
-      <Folder Include="Scheduling\Domain\Repositories\" />
-      <Folder Include="Scheduling\Domain\Services\" />
       <Folder Include="Scheduling\Infrastructure\External\" />
       <Folder Include="Scheduling\Infrastructure\Persistence\EFC\Configuration\Extensions\" />
       <Folder Include="Scheduling\Infrastructure\Persistence\EFC\Repositories\" />
