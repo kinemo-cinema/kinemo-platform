@@ -45,8 +45,6 @@
       <Folder Include="Movies\Application\ACL\" />
       <Folder Include="Scheduling\Application\Internal\DomainServices\" />
       <Folder Include="Scheduling\Infrastructure\External\" />
-      <Folder Include="Scheduling\Infrastructure\Persistence\EFC\Configuration\Extensions\" />
-      <Folder Include="Scheduling\Infrastructure\Persistence\EFC\Repositories\" />
       <Folder Include="Scheduling\Interfaces\REST\Controllers\" />
       <Folder Include="Scheduling\Interfaces\REST\Resources\" />
       <Folder Include="Scheduling\Interfaces\REST\Transform\" />
