@@ -16,6 +16,12 @@ using KinemoPlatform.API.Movies.Domain.Services;
 using KinemoPlatform.API.Movies.Infrastructure.External.FileStorage;
 using KinemoPlatform.API.Movies.Infrastructure.Persistence.EFC.Repositories;
 
+using KinemoPlatform.API.Scheduling.Application.Internal.CommandServices;
+using KinemoPlatform.API.Scheduling.Application.Internal.QueryServices;
+using KinemoPlatform.API.Scheduling.Domain.Repositories;
+using KinemoPlatform.API.Scheduling.Domain.Services;
+using KinemoPlatform.API.Scheduling.Infrastructure.Persistence.EFC.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -93,11 +99,10 @@ builder.Services.AddScoped<IMovieQueryService, MovieQueryService>();
 builder.Services.AddScoped<IMovieSensoryDomainService, MovieSensoryDomainService>();
 builder.Services.AddScoped<ISensoryFileStorage, LocalSensoryFileStorage>();
 
-// TODO: Uncomment as you build your Scheduling & Calendar Bounded Context (BC02)
-// builder.Services.AddScoped<IShowRepository, ShowRepository>();
-// builder.Services.AddScoped<IScheduleConflictRepository, ScheduleConflictRepository>();
-// builder.Services.AddScoped<IShowCommandService, ShowCommandService>();
-// builder.Services.AddScoped<IShowQueryService, ShowQueryService>();
+// Scheduling Bounded Context (BC02)
+builder.Services.AddScoped<IShowRepository, ShowRepository>();
+builder.Services.AddScoped<IShowCommandService, ShowCommandService>();
+builder.Services.AddScoped<IShowQueryService, ShowQueryService>();
 
 // TODO: Uncomment as you build your Room & Resource Readiness Bounded Context (BC03)
 // builder.Services.AddScoped<IRoomRepository, RoomRepository>();
