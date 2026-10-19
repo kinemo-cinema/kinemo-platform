@@ -50,7 +50,6 @@
       <Folder Include="Scheduling\Domain\Model\Aggregates\" />
       <Folder Include="Scheduling\Domain\Model\Entities\" />
       <Folder Include="Scheduling\Domain\Model\Events\" />
-      <Folder Include="Scheduling\Domain\Model\Queries\" />
       <Folder Include="Scheduling\Domain\Repositories\" />
       <Folder Include="Scheduling\Domain\Services\" />
       <Folder Include="Scheduling\Infrastructure\External\" />
