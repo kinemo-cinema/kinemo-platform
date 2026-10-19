@@ -22,8 +22,8 @@ public static class ModelBuilderExtensions
             .Property(s => s.Status).IsRequired()
             .HasConversion<string>().HasMaxLength(20);
 
-        // Map the TimeSlot Value Object (Owned Entity)
-        builder.Entity<Show>().OwnsOne(s => s.TimeSlot, ts =>
+        // Map the TimeSlot Value Object (Complex Type - EF Core 8+)
+        builder.Entity<Show>().ComplexProperty(s => s.TimeSlot, ts =>
         {
             ts.Property(t => t.StartDateTime).IsRequired().HasColumnName("start_datetime");
             ts.Property(t => t.EndDateTime).IsRequired().HasColumnName("end_datetime");
@@ -55,5 +55,7 @@ public static class ModelBuilderExtensions
             .HasForeignKey(sc => sc.ConflictingShowId)
             .HasConstraintName("fk_schedule_conflicts_shows_conflicting_id")
             .OnDelete(DeleteBehavior.Cascade);
+        
+        
     }
 }
