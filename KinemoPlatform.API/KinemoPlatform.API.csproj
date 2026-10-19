@@ -48,7 +48,6 @@
       <Folder Include="Scheduling\Application\Internal\EventHandlers\" />
       <Folder Include="Scheduling\Application\Internal\QueryServices\" />
       <Folder Include="Scheduling\Domain\Model\Aggregates\" />
-      <Folder Include="Scheduling\Domain\Model\Commands\" />
       <Folder Include="Scheduling\Domain\Model\Entities\" />
       <Folder Include="Scheduling\Domain\Model\Events\" />
       <Folder Include="Scheduling\Domain\Model\Queries\" />
