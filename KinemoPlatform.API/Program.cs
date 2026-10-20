@@ -22,6 +22,14 @@ using KinemoPlatform.API.Scheduling.Domain.Repositories;
 using KinemoPlatform.API.Scheduling.Domain.Services;
 using KinemoPlatform.API.Scheduling.Infrastructure.Persistence.EFC.Repositories;
 
+using KinemoPlatform.API.Ticketing.Application.Internal.CommandServices;
+using KinemoPlatform.API.Ticketing.Application.Internal.QueryServices;
+using KinemoPlatform.API.Ticketing.Domain.ExternalServices;
+using KinemoPlatform.API.Ticketing.Domain.Repositories;
+using KinemoPlatform.API.Ticketing.Domain.Services;
+using KinemoPlatform.API.Ticketing.Infrastructure.External;
+using KinemoPlatform.API.Ticketing.Infrastructure.Persistence.EFC.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -111,12 +119,12 @@ builder.Services.AddScoped<IShowQueryService, ShowQueryService>();
 // builder.Services.AddScoped<IRoomCommandService, RoomCommandService>();
 // builder.Services.AddScoped<IRoomQueryService, RoomQueryService>();
 
-// TODO: Uncomment as you build your Ticketing Integration Bounded Context (BC04)
-// builder.Services.AddScoped<ITicketingIntegrationRepository, TicketingIntegrationRepository>();
-// builder.Services.AddScoped<ISyncLogRepository, SyncLogRepository>();
-// builder.Services.AddScoped<IShowOccupancyRepository, ShowOccupancyRepository>();
-// builder.Services.AddScoped<ITicketingCommandService, TicketingCommandService>();
-// builder.Services.AddScoped<ITicketingQueryService, TicketingQueryService>();
+// Ticketing Bounded Context (BC04)
+
+builder.Services.AddScoped<ITicketingRepository, TicketingRepository>();
+builder.Services.AddScoped<ITicketingCommandService, TicketingCommandService>();
+builder.Services.AddScoped<ITicketingQueryService, TicketingQueryService>();
+builder.Services.AddScoped<IExternalTicketingClient, MockExternalTicketingClient>();
 
 // TODO: Uncomment as you build your Seat Allocation & Control Bounded Context (BC05)
 // builder.Services.AddScoped<ISeatAllocationRepository, SeatAllocationRepository>();
