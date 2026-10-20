@@ -43,7 +43,6 @@
 
     <ItemGroup>
       <Folder Include="Movies\Application\ACL\" />
-      <Folder Include="Rooms\Interfaces\REST\" />
       <Folder Include="Scheduling\Application\Internal\DomainServices\" />
       <Folder Include="Scheduling\Infrastructure\External\" />
     </ItemGroup>
