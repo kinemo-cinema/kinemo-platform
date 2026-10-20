@@ -22,6 +22,13 @@ using KinemoPlatform.API.Scheduling.Domain.Repositories;
 using KinemoPlatform.API.Scheduling.Domain.Services;
 using KinemoPlatform.API.Scheduling.Infrastructure.Persistence.EFC.Repositories;
 
+using KinemoPlatform.API.Rooms.Application.Internal.CommandServices;
+using KinemoPlatform.API.Rooms.Application.Internal.QueryServices;
+using KinemoPlatform.API.Rooms.Domain.Repositories;
+using KinemoPlatform.API.Rooms.Domain.Services;
+using KinemoPlatform.API.Rooms.Infrastructure.Persistence.EFC.Repositories;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -104,12 +111,10 @@ builder.Services.AddScoped<IShowRepository, ShowRepository>();
 builder.Services.AddScoped<IShowCommandService, ShowCommandService>();
 builder.Services.AddScoped<IShowQueryService, ShowQueryService>();
 
-// TODO: Uncomment as you build your Room & Resource Readiness Bounded Context (BC03)
-// builder.Services.AddScoped<IRoomRepository, RoomRepository>();
-// builder.Services.AddScoped<IRoomInspectionRepository, RoomInspectionRepository>();
-// builder.Services.AddScoped<IRoomBlockRepository, RoomBlockRepository>();
-// builder.Services.AddScoped<IRoomCommandService, RoomCommandService>();
-// builder.Services.AddScoped<IRoomQueryService, RoomQueryService>();
+// Rooms Bounded Context (BC03)
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IRoomCommandService, RoomCommandService>();
+builder.Services.AddScoped<IRoomQueryService, RoomQueryService>();
 
 // TODO: Uncomment as you build your Ticketing Integration Bounded Context (BC04)
 // builder.Services.AddScoped<ITicketingIntegrationRepository, TicketingIntegrationRepository>();
