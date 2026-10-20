@@ -43,6 +43,14 @@
 
     <ItemGroup>
       <Folder Include="Movies\Application\ACL\" />
+      <Folder Include="Rooms\Application\Internal\" />
+      <Folder Include="Rooms\Domain\Model\Aggregates\" />
+      <Folder Include="Rooms\Domain\Model\Entities\" />
+      <Folder Include="Rooms\Domain\Model\Events\" />
+      <Folder Include="Rooms\Domain\Repositories\" />
+      <Folder Include="Rooms\Domain\Services\" />
+      <Folder Include="Rooms\Infrastructure\Persistence\EFC\" />
+      <Folder Include="Rooms\Interfaces\REST\" />
       <Folder Include="Scheduling\Application\Internal\DomainServices\" />
       <Folder Include="Scheduling\Infrastructure\External\" />
     </ItemGroup>
