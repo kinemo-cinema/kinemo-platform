@@ -46,9 +46,6 @@
       <Folder Include="Scheduling\Application\Internal\DomainServices\" />
       <Folder Include="Scheduling\Infrastructure\External\" />
       <Folder Include="Ticketing\Application\Internal\" />
-      <Folder Include="Ticketing\Domain\Model\Aggregates\" />
-      <Folder Include="Ticketing\Domain\Model\Entities\" />
-      <Folder Include="Ticketing\Domain\Model\Events\" />
       <Folder Include="Ticketing\Domain\Repositories\" />
       <Folder Include="Ticketing\Domain\Services\" />
       <Folder Include="Ticketing\Infrastructure\External\" />
