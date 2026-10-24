@@ -46,6 +46,9 @@
       <Folder Include="Scheduling\Application\Internal\DomainServices\" />
       <Folder Include="Scheduling\Infrastructure\External\" />
       <Folder Include="Subscriptions\" />
+      <Folder Include="Subscriptions\Application\Internal\CommandServices\" />
+      <Folder Include="Subscriptions\Application\Internal\EventHandlers\" />
+      <Folder Include="Subscriptions\Application\Internal\QueryServices\" />
       <Folder Include="Subscriptions\Domain\Repositories\" />
       <Folder Include="Subscriptions\Domain\Services\" />
     </ItemGroup>
