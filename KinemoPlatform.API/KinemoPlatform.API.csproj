@@ -51,6 +51,7 @@
       <Folder Include="Subscriptions\Application\Internal\QueryServices\" />
       <Folder Include="Subscriptions\Domain\Repositories\" />
       <Folder Include="Subscriptions\Domain\Services\" />
+      <Folder Include="Subscriptions\Infrastructure\Persistence\EFC\Repositories\" />
     </ItemGroup>
 
 </Project>

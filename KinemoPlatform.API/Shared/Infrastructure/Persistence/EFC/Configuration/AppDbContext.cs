@@ -2,7 +2,7 @@
 
 // TODO: Uncomment as you build other bounded contexts
 // using KinemoPlatform.API.IAM.Infrastructure.Persistence.EFC.Configuration.Extensions;              // IAM
-// using KinemoPlatform.API.Subscriptions.Infrastructure.Persistence.EFC.Configuration.Extensions;    // BC09
+using KinemoPlatform.API.Subscriptions.Infrastructure.Persistence.EFC.Configuration.Extensions;    // BC09
 using KinemoPlatform.API.Scheduling.Infrastructure.Persistence.EFC.Configuration.Extensions;       // BC02
 // using KinemoPlatform.API.Rooms.Infrastructure.Persistence.EFC.Configuration.Extensions;            // BC03
 // using KinemoPlatform.API.Ticketing.Infrastructure.Persistence.EFC.Configuration.Extensions;        // BC04
@@ -62,7 +62,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
 
         // TODO: Uncomment as you build other bounded contexts
         // builder.ApplyIAMConfiguration();              // IAM
-        // builder.ApplySubscriptionsConfiguration();    // BC09
+        builder.ApplySubscriptionsConfiguration();    // BC09
         // builder.ApplySchedulingConfiguration();       // BC02
         // builder.ApplyRoomsConfiguration();            // BC03
         // builder.ApplyTicketingConfiguration();        // BC04
