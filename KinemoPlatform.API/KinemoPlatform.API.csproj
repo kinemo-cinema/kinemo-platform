@@ -46,6 +46,8 @@
       <Folder Include="Scheduling\Application\Internal\DomainServices\" />
       <Folder Include="Scheduling\Infrastructure\External\" />
       <Folder Include="Subscriptions\" />
+      <Folder Include="Subscriptions\Domain\Repositories\" />
+      <Folder Include="Subscriptions\Domain\Services\" />
     </ItemGroup>
 
 </Project>
