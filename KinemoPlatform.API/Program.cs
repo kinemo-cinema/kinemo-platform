@@ -22,35 +22,48 @@ using KinemoPlatform.API.Scheduling.Domain.Repositories;
 using KinemoPlatform.API.Scheduling.Domain.Services;
 using KinemoPlatform.API.Scheduling.Infrastructure.Persistence.EFC.Repositories;
 
+using KinemoPlatform.API.Analytics.Application.Internal.CommandServices;
+using KinemoPlatform.API.Analytics.Application.Internal.QueryServices;
+using KinemoPlatform.API.Analytics.Domain.Repositories;
+using KinemoPlatform.API.Analytics.Domain.Services;
+using KinemoPlatform.API.Analytics.Infrastructure.Persistence.EFC.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers(options => options.Conventions.Add(new KebabCaseRouteNamingConvention()))
+builder.Services.AddControllers(options =>
+        options.Conventions.Add(new KebabCaseRouteNamingConvention()))
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(
             new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-if (connectionString == null) throw new InvalidOperationException("Connection string not found.");
+
+if (connectionString == null)
+    throw new InvalidOperationException("Connection string not found.");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     if (builder.Environment.IsDevelopment())
+    {
         options.UseMySQL(connectionString)
             .LogTo(Console.WriteLine, LogLevel.Information)
             .EnableSensitiveDataLogging()
             .EnableDetailedErrors();
+    }
     else if (builder.Environment.IsProduction())
+    {
         options.UseMySQL(connectionString)
             .LogTo(Console.WriteLine, LogLevel.Error);
+    }
 });
 
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1",
@@ -71,6 +84,7 @@ builder.Services.AddSwaggerGen(options =>
                 Url = new Uri("https://www.apache.org/licenses/LICENSE-2.0.html")
             }
         });
+
     options.EnableAnnotations();
 });
 
@@ -79,12 +93,12 @@ builder.Services.AddSwaggerGen(options =>
 // Shared Bounded Context
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-// TODO: Uncomment as you build your IAM Bounded Context
+// TODO: IAM Bounded Context
 // builder.Services.AddScoped<IUserRepository, UserRepository>();
 // builder.Services.AddScoped<IUserCommandService, UserCommandService>();
 // builder.Services.AddScoped<IUserQueryService, UserQueryService>();
 
-// TODO: Uncomment as you build your Subscription & Service Management Bounded Context (BC09)
+// TODO: Subscriptions Bounded Context (BC09)
 // builder.Services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanRepository>();
 // builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
 // builder.Services.AddScoped<ISubscriptionPlanCommandService, SubscriptionPlanCommandService>();
@@ -104,28 +118,28 @@ builder.Services.AddScoped<IShowRepository, ShowRepository>();
 builder.Services.AddScoped<IShowCommandService, ShowCommandService>();
 builder.Services.AddScoped<IShowQueryService, ShowQueryService>();
 
-// TODO: Uncomment as you build your Room & Resource Readiness Bounded Context (BC03)
+// TODO: Room & Resource Readiness Bounded Context (BC03)
 // builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 // builder.Services.AddScoped<IRoomInspectionRepository, RoomInspectionRepository>();
 // builder.Services.AddScoped<IRoomBlockRepository, RoomBlockRepository>();
 // builder.Services.AddScoped<IRoomCommandService, RoomCommandService>();
 // builder.Services.AddScoped<IRoomQueryService, RoomQueryService>();
 
-// TODO: Uncomment as you build your Ticketing Integration Bounded Context (BC04)
+// TODO: Ticketing Integration Bounded Context (BC04)
 // builder.Services.AddScoped<ITicketingIntegrationRepository, TicketingIntegrationRepository>();
 // builder.Services.AddScoped<ISyncLogRepository, SyncLogRepository>();
 // builder.Services.AddScoped<IShowOccupancyRepository, ShowOccupancyRepository>();
 // builder.Services.AddScoped<ITicketingCommandService, TicketingCommandService>();
 // builder.Services.AddScoped<ITicketingQueryService, TicketingQueryService>();
 
-// TODO: Uncomment as you build your Seat Allocation & Control Bounded Context (BC05)
+// TODO: Seat Allocation & Control Bounded Context (BC05)
 // builder.Services.AddScoped<ISeatAllocationRepository, SeatAllocationRepository>();
 // builder.Services.AddScoped<IShowSeatRepository, ShowSeatRepository>();
 // builder.Services.AddScoped<IManualInterventionRepository, ManualInterventionRepository>();
 // builder.Services.AddScoped<ISeatAllocationCommandService, SeatAllocationCommandService>();
 // builder.Services.AddScoped<ISeatAllocationQueryService, SeatAllocationQueryService>();
 
-// TODO: Uncomment as you build your 4D Execution & Synchronization Bounded Context (BC06)
+// TODO: 4D Execution & Synchronization Bounded Context (BC06)
 // builder.Services.AddScoped<IShowExecutionRepository, ShowExecutionRepository>();
 // builder.Services.AddScoped<ISensorySequenceRepository, SensorySequenceRepository>();
 // builder.Services.AddScoped<ISynchronizationEventRepository, SynchronizationEventRepository>();
@@ -133,7 +147,7 @@ builder.Services.AddScoped<IShowQueryService, ShowQueryService>();
 // builder.Services.AddScoped<IShowExecutionCommandService, ShowExecutionCommandService>();
 // builder.Services.AddScoped<IShowExecutionQueryService, ShowExecutionQueryService>();
 
-// TODO: Uncomment as you build your Resource Testing & Maintenance Bounded Context (BC07)
+// TODO: Resource Testing & Maintenance Bounded Context (BC07)
 // builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
 // builder.Services.AddScoped<IIncidentRepository, IncidentRepository>();
 // builder.Services.AddScoped<IMaintenanceOrderRepository, MaintenanceOrderRepository>();
@@ -141,30 +155,31 @@ builder.Services.AddScoped<IShowQueryService, ShowQueryService>();
 // builder.Services.AddScoped<IMaintenanceCommandService, MaintenanceCommandService>();
 // builder.Services.AddScoped<IMaintenanceQueryService, MaintenanceQueryService>();
 
-// TODO: Uncomment as you build your Operational Analytics & Reporting Bounded Context (BC08)
-// builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
-// builder.Services.AddScoped<IOperationalMetricRepository, OperationalMetricRepository>();
-// builder.Services.AddScoped<IRoomPerformanceRepository, RoomPerformanceRepository>();
-// builder.Services.AddScoped<IAnalyticsQueryService, AnalyticsQueryService>();
+// Analytics Bounded Context (BC08)
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+builder.Services.AddScoped<IOperationalReportRepository, OperationalReportRepository>();
+builder.Services.AddScoped<IDashboardCommandService, DashboardCommandService>();
+builder.Services.AddScoped<IDashboardQueryService, DashboardQueryService>();
+builder.Services.AddScoped<IOperationalReportCommandService, OperationalReportCommandService>();
+builder.Services.AddScoped<IOperationalReportQueryService, OperationalReportQueryService>();
 
 // Mediator Configuration
+builder.Services.AddScoped(
+    typeof(ICommandPipelineBehavior<>),
+    typeof(LoggingCommandBehavior<>));
 
-// Add Mediator Injection Configuration
-builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
-
-// Add Cortex Mediator for Event Handling
 builder.Services.AddCortexMediator(
     configuration: builder.Configuration,
     handlerAssemblyMarkerTypes: new[] { typeof(Program) },
     configure: options =>
     {
-        options.AddOpenCommandPipelineBehavior(typeof(LoggingCommandBehavior<>));
-        //options.AddDefaultBehaviors();
+        options.AddOpenCommandPipelineBehavior(
+            typeof(LoggingCommandBehavior<>));
     });
 
 var app = builder.Build();
 
-// Verify if the database exists and create it if it doesn't
+// Database Initialization
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -173,7 +188,7 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
 }
 
-// Configure the HTTP request pipeline.
+// HTTP Request Pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
