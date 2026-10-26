@@ -46,6 +46,7 @@
       <Folder Include="Movies\Application\ACL\" />
       <Folder Include="Scheduling\Application\Internal\DomainServices\" />
       <Folder Include="Scheduling\Infrastructure\External\" />
+      <Folder Include="Subscriptions\" />
     </ItemGroup>
 
 </Project>

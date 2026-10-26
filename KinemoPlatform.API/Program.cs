@@ -22,6 +22,14 @@ using KinemoPlatform.API.Scheduling.Domain.Repositories;
 using KinemoPlatform.API.Scheduling.Domain.Services;
 using KinemoPlatform.API.Scheduling.Infrastructure.Persistence.EFC.Repositories;
 
+using KinemoPlatform.API.Subscriptions.Application.Internal.CommandServices;
+using KinemoPlatform.API.Subscriptions.Application.Internal.QueryServices;
+using KinemoPlatform.API.Subscriptions.Domain.Repositories;
+using KinemoPlatform.API.Subscriptions.Domain.Services;
+using KinemoPlatform.API.Subscriptions.Infrastructure.Persistence.EFC.Repositories;
+
+var builder = WebApplication.CreateBuilder(args);
+
 using KinemoPlatform.API.Analytics.Application.Internal.CommandServices;
 using KinemoPlatform.API.Analytics.Application.Internal.QueryServices;
 using KinemoPlatform.API.Analytics.Domain.Repositories;
@@ -118,6 +126,12 @@ builder.Services.AddScoped<IShowRepository, ShowRepository>();
 builder.Services.AddScoped<IShowCommandService, ShowCommandService>();
 builder.Services.AddScoped<IShowQueryService, ShowQueryService>();
 
+// Subscriptions Bounded Context (BC09)
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+builder.Services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanRepository>();
+builder.Services.AddScoped<ISubscriptionCommandService, SubscriptionCommandService>();
+builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>();
+builder.Services.AddScoped<ISubscriptionPlanQueryService, SubscriptionPlanQueryService>();
 // TODO: Room & Resource Readiness Bounded Context (BC03)
 // builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 // builder.Services.AddScoped<IRoomInspectionRepository, RoomInspectionRepository>();
