@@ -22,6 +22,13 @@ using KinemoPlatform.API.Scheduling.Domain.Repositories;
 using KinemoPlatform.API.Scheduling.Domain.Services;
 using KinemoPlatform.API.Scheduling.Infrastructure.Persistence.EFC.Repositories;
 
+using KinemoPlatform.API.Ticketing.Application.Internal.CommandServices;
+using KinemoPlatform.API.Ticketing.Application.Internal.QueryServices;
+using KinemoPlatform.API.Ticketing.Domain.ExternalServices;
+using KinemoPlatform.API.Ticketing.Domain.Repositories;
+using KinemoPlatform.API.Ticketing.Domain.Services;
+using KinemoPlatform.API.Ticketing.Infrastructure.External;
+using KinemoPlatform.API.Ticketing.Infrastructure.Persistence.EFC.Repositories;
 using KinemoPlatform.API.Rooms.Application.Internal.CommandServices;
 using KinemoPlatform.API.Rooms.Application.Internal.QueryServices;
 using KinemoPlatform.API.Rooms.Domain.Repositories;
@@ -149,6 +156,12 @@ builder.Services.AddScoped<ISubscriptionPlanQueryService, SubscriptionPlanQueryS
 // builder.Services.AddScoped<IRoomCommandService, RoomCommandService>();
 // builder.Services.AddScoped<IRoomQueryService, RoomQueryService>();
 
+// Ticketing Bounded Context (BC04)
+
+builder.Services.AddScoped<ITicketingRepository, TicketingRepository>();
+builder.Services.AddScoped<ITicketingCommandService, TicketingCommandService>();
+builder.Services.AddScoped<ITicketingQueryService, TicketingQueryService>();
+builder.Services.AddScoped<IExternalTicketingClient, MockExternalTicketingClient>();
 // TODO: Ticketing Integration Bounded Context (BC04)
 // builder.Services.AddScoped<ITicketingIntegrationRepository, TicketingIntegrationRepository>();
 // builder.Services.AddScoped<ISyncLogRepository, SyncLogRepository>();
