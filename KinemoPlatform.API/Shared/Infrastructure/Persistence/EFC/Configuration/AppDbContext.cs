@@ -60,14 +60,12 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // Scheduling Bounded Context (BC02)
         builder.ApplySchedulingConfiguration();
        
-        // Scheduling Bounded Context (BC03)
+        // Rooms Bounded Context (BC03)
         builder.ApplyRoomsConfiguration();
 
         // TODO: Uncomment as you build other bounded contexts
         // builder.ApplyIAMConfiguration();              // IAM
         // builder.ApplySubscriptionsConfiguration();    // BC09
-        
-        builder.ApplyRoomsConfiguration();            // BC03
         // builder.ApplyTicketingConfiguration();        // BC04
         // builder.ApplySeatsConfiguration();            // BC05
         // builder.ApplyExecutionConfiguration();        // BC06
