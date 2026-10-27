@@ -43,12 +43,11 @@ using KinemoPlatform.API.Ticketing.Infrastructure.External;
 using KinemoPlatform.API.Ticketing.Infrastructure.Persistence.EFC.Repositories;
 
 // BC05: Seats
-
-// using KinemoPlatform.API.Seats.Application.Internal.CommandServices;
-// using KinemoPlatform.API.Seats.Application.Internal.QueryServices;
-// using KinemoPlatform.API.Seats.Domain.Repositories;
-// using KinemoPlatform.API.Seats.Domain.Services;
-// using KinemoPlatform.API.Seats.Infrastructure.Persistence.EFC.Repositories;
+using KinemoPlatform.API.Seats.Application.Internal.CommandServices;
+using KinemoPlatform.API.Seats.Application.Internal.QueryServices;
+using KinemoPlatform.API.Seats.Domain.Repositories;
+using KinemoPlatform.API.Seats.Domain.Services;
+using KinemoPlatform.API.Seats.Infrastructure.Persistence.EFC.Repositories;
 
 
 // BC06: Execution
@@ -157,9 +156,9 @@ builder.Services.AddScoped<ITicketingQueryService, TicketingQueryService>();
 builder.Services.AddScoped<IExternalTicketingClient, MockExternalTicketingClient>();
 
 // BC05: Seats
-// builder.Services.AddScoped<ISeatAllocationRepository, SeatAllocationRepository>();
-// builder.Services.AddScoped<ISeatAllocationCommandService, SeatAllocationCommandService>();
-// builder.Services.AddScoped<ISeatAllocationQueryService, SeatAllocationQueryService>();
+builder.Services.AddScoped<ISeatAllocationRepository, SeatAllocationRepository>();
+builder.Services.AddScoped<ISeatAllocationCommandService, SeatAllocationCommandService>();
+builder.Services.AddScoped<ISeatAllocationQueryService, SeatAllocationQueryService>();
 
 // BC06: Execution
 // builder.Services.AddScoped<IExecutionRepository, ExecutionRepository>();
