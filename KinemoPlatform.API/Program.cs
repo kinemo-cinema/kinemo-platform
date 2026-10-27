@@ -59,11 +59,11 @@ using KinemoPlatform.API.Ticketing.Infrastructure.Persistence.EFC.Repositories;
 // using KinemoPlatform.API.Execution.Infrastructure.Persistence.EFC.Repositories;
 
 // BC07: Maintenance
-// using KinemoPlatform.API.Maintenance.Application.Internal.CommandServices;
-// using KinemoPlatform.API.Maintenance.Application.Internal.QueryServices;
-// using KinemoPlatform.API.Maintenance.Domain.Repositories;
-// using KinemoPlatform.API.Maintenance.Domain.Services;
-// using KinemoPlatform.API.Maintenance.Infrastructure.Persistence.EFC.Repositories;
+using KinemoPlatform.API.Maintenance.Application.Internal.CommandServices;
+using KinemoPlatform.API.Maintenance.Application.Internal.QueryServices;
+using KinemoPlatform.API.Maintenance.Domain.Repositories;
+using KinemoPlatform.API.Maintenance.Domain.Services;
+using KinemoPlatform.API.Maintenance.Infrastructure.Persistence.EFC.Repositories;
 
 // BC08: Analytics
 using KinemoPlatform.API.Analytics.Application.Internal.CommandServices;
@@ -167,12 +167,12 @@ builder.Services.AddScoped<IExternalTicketingClient, MockExternalTicketingClient
 // builder.Services.AddScoped<IShowExecutionQueryService, ShowExecutionQueryService>();
 
 // BC07: Maintenance
-// builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
-// builder.Services.AddScoped<IMaintenanceOrderRepository, MaintenanceOrderRepository>();
-// builder.Services.AddScoped<IEquipmentCommandService, EquipmentCommandService>();
-// builder.Services.AddScoped<IEquipmentQueryService, EquipmentQueryService>();
-// builder.Services.AddScoped<IMaintenanceOrderCommandService, MaintenanceOrderCommandService>();
-// builder.Services.AddScoped<IMaintenanceOrderQueryService, MaintenanceOrderQueryService>();
+builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+builder.Services.AddScoped<IMaintenanceOrderRepository, MaintenanceOrderRepository>();
+builder.Services.AddScoped<IEquipmentCommandService, EquipmentCommandService>();
+builder.Services.AddScoped<IEquipmentQueryService, EquipmentQueryService>();
+builder.Services.AddScoped<IMaintenanceOrderCommandService, MaintenanceOrderCommandService>();
+builder.Services.AddScoped<IMaintenanceOrderQueryService, MaintenanceOrderQueryService>();
 
 // BC08: Analytics
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
