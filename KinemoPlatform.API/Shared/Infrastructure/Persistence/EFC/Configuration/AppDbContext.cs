@@ -11,7 +11,7 @@ using KinemoPlatform.API.Ticketing.Infrastructure.Persistence.EFC.Configuration.
 // BC06: Execution
 // using KinemoPlatform.API.Execution.Infrastructure.Persistence.EFC.Configuration.Extensions;
 // BC07: Maintenance
-// using KinemoPlatform.API.Maintenance.Infrastructure.Persistence.EFC.Configuration.Extensions;
+using KinemoPlatform.API.Maintenance.Infrastructure.Persistence.EFC.Configuration.Extensions;
 // BC08: Analytics
 using KinemoPlatform.API.Analytics.Infrastructure.Persistence.EFC.Configuration.Extensions;
 // BC09: Subscriptions
@@ -67,7 +67,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.ApplyTicketingConfiguration();        // BC04
         // builder.ApplySeatsConfiguration();            // BC05
         // builder.ApplyExecutionConfiguration();        // BC06
-        // builder.ApplyMaintenanceConfiguration();      // BC07
+        builder.ApplyMaintenanceConfiguration();      // BC07
         builder.ApplyAnalyticsConfiguration();        // BC08
         builder.ApplySubscriptionsConfiguration();    // BC09
 
