@@ -51,11 +51,11 @@ using KinemoPlatform.API.Seats.Infrastructure.Persistence.EFC.Repositories;
 
 
 // BC06: Execution
-// using KinemoPlatform.API.Execution.Application.Internal.CommandServices;
-// using KinemoPlatform.API.Execution.Application.Internal.QueryServices;
-// using KinemoPlatform.API.Execution.Domain.Repositories;
-// using KinemoPlatform.API.Execution.Domain.Services;
-// using KinemoPlatform.API.Execution.Infrastructure.Persistence.EFC.Repositories;
+using KinemoPlatform.API.Execution.Application.Internal.CommandServices;
+using KinemoPlatform.API.Execution.Application.Internal.QueryServices;
+using KinemoPlatform.API.Execution.Domain.Repositories;
+using KinemoPlatform.API.Execution.Domain.Services;
+using KinemoPlatform.API.Execution.Infrastructure.Persistence.EFC.Repositories;
 
 // BC07: Maintenance
 using KinemoPlatform.API.Maintenance.Application.Internal.CommandServices;
@@ -161,9 +161,9 @@ builder.Services.AddScoped<ISeatAllocationCommandService, SeatAllocationCommandS
 builder.Services.AddScoped<ISeatAllocationQueryService, SeatAllocationQueryService>();
 
 // BC06: Execution
-// builder.Services.AddScoped<IExecutionRepository, ExecutionRepository>();
-// builder.Services.AddScoped<IShowExecutionCommandService, ShowExecutionCommandService>();
-// builder.Services.AddScoped<IShowExecutionQueryService, ShowExecutionQueryService>();
+builder.Services.AddScoped<IExecutionRepository, ExecutionRepository>();
+builder.Services.AddScoped<IShowExecutionCommandService, ShowExecutionCommandService>();
+builder.Services.AddScoped<IShowExecutionQueryService, ShowExecutionQueryService>();
 
 // BC07: Maintenance
 builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
