@@ -1,25 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <LangVersion>preview</LangVersion>
-        <EnablePreviewFeatures>true</EnablePreviewFeatures>
-      <UserSecretsId>56c8b742-b53a-4e3e-b5f3-bbca70ac5aaf</UserSecretsId>
-  </PropertyGroup>
+        <LangVersion>14.0</LangVersion>
+        <UserSecretsId>56c8b742-b53a-4e3e-b5f3-bbca70ac5aaf</UserSecretsId>
+    </PropertyGroup>
 
     <ItemGroup>
         <!-- EntityFrameworkCore Database Persistence related packages -->
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.10" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.13" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.13" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.13">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
 
         <!-- MySQL Database Persistence related packages -->
-        <PackageReference Include="MySql.EntityFrameworkCore" Version="9.0.9" />
+        <PackageReference Include="MySql.EntityFrameworkCore" Version="10.0.9" />
 
         <!-- Naming convention conversion related packages -->
-        <PackageReference Include="Humanizer" Version="2.14.1" />
+        <PackageReference Include="Humanizer" Version="3.0.10" />
 
         <!-- OpenAPI documentation related packages -->
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10" />
@@ -36,14 +38,6 @@
 
         <!-- Mediator pattern related packages -->
         <PackageReference Include="Cortex.Mediator" Version="2.1.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Analytics\" />
-      <Folder Include="Movies\Application\ACL\" />
-      <Folder Include="Scheduling\Application\Internal\DomainServices\" />
-      <Folder Include="Scheduling\Infrastructure\External\" />
-      <Folder Include="Subscriptions\" />
     </ItemGroup>
 
 </Project>
