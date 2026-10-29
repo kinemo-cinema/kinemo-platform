@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+    <resheader name="version"><value>2.0</value></resheader>
+    <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+    <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+    <!-- Spanish. Any key missing here falls back to the default English file. -->
+    <data name="InvalidModelStateTitle" xml:space="preserve"><value>La solicitud contiene valores no válidos.</value></data>
+    <data name="UnexpectedServerError" xml:space="preserve"><value>Ocurrió un error inesperado.</value></data>
+    <data name="UnexpectedErrorProcessingRequest" xml:space="preserve"><value>El servidor no pudo procesar la solicitud. Inténtalo de nuevo más tarde.</value></data>
+</root>
