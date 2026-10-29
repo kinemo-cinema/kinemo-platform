@@ -5,22 +5,22 @@ using KinemoPlatform.API.Execution.Domain.Services;
 using KinemoPlatform.API.Execution.Interfaces.REST.Resources;
 using KinemoPlatform.API.Execution.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace KinemoPlatform.API.Execution.Interfaces.REST.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-[SwaggerTag("Available Execution Endpoints.")]
+[Tags("Execution")]
 public class ExecutionsController(
     IShowExecutionCommandService commandService,
     IShowExecutionQueryService queryService) : ControllerBase
 {
     [HttpPost]
-    [SwaggerOperation(Summary = "Start Execution", Description = "Start a new 4D show execution (US13).", OperationId = "StartExecution")]
-    [SwaggerResponse(StatusCodes.Status201Created, "The execution was started.", typeof(ShowExecutionResource))]
-    [SwaggerResponse(StatusCodes.Status409Conflict, "An active execution already exists for this show.")]
+    [EndpointSummary("Start Execution")]
+    [EndpointDescription("Start a new 4D show execution (US13).")]
+    [ProducesResponseType(typeof(ShowExecutionResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> StartExecution([FromBody] StartExecutionResource resource)
     {
         try
@@ -39,9 +39,9 @@ public class ExecutionsController(
     }
 
     [HttpGet("{executionId:int}")]
-    [SwaggerOperation(Summary = "Get Execution by Id", OperationId = "GetExecutionById")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The execution was found.", typeof(ShowExecutionResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The execution was not found.")]
+    [EndpointSummary("Get Execution by Id")]
+    [ProducesResponseType(typeof(ShowExecutionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExecutionById([FromRoute] int executionId)
     {
         var execution = await queryService.Handle(new GetExecutionByIdQuery(executionId));
@@ -50,9 +50,9 @@ public class ExecutionsController(
     }
 
     [HttpGet("show/{showId:int}")]
-    [SwaggerOperation(Summary = "Get Active Execution by Show ID", OperationId = "GetExecutionByShowId")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The execution was found.", typeof(ShowExecutionResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "No active execution found.")]
+    [EndpointSummary("Get Active Execution by Show ID")]
+    [ProducesResponseType(typeof(ShowExecutionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExecutionByShowId([FromRoute] int showId)
     {
         var execution = await queryService.Handle(new GetExecutionByShowIdQuery(showId));
@@ -61,9 +61,10 @@ public class ExecutionsController(
     }
 
     [HttpPost("{executionId:int}/pause")]
-    [SwaggerOperation(Summary = "Pause Execution", Description = "Pause an active execution (US16).", OperationId = "PauseExecution")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The execution was paused.", typeof(ShowExecutionResource))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "Execution is not in progress.")]
+    [EndpointSummary("Pause Execution")]
+    [EndpointDescription("Pause an active execution (US16).")]
+    [ProducesResponseType(typeof(ShowExecutionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> PauseExecution([FromRoute] int executionId)
     {
         try
@@ -79,9 +80,10 @@ public class ExecutionsController(
     }
 
     [HttpPost("{executionId:int}/resume")]
-    [SwaggerOperation(Summary = "Resume Execution", Description = "Resume a paused execution (US16).", OperationId = "ResumeExecution")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The execution was resumed.", typeof(ShowExecutionResource))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "Execution is not paused.")]
+    [EndpointSummary("Resume Execution")]
+    [EndpointDescription("Resume a paused execution (US16).")]
+    [ProducesResponseType(typeof(ShowExecutionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ResumeExecution([FromRoute] int executionId)
     {
         try
@@ -97,9 +99,10 @@ public class ExecutionsController(
     }
 
     [HttpPost("{executionId:int}/finish")]
-    [SwaggerOperation(Summary = "Finish Execution", Description = "Finish an execution normally (US15).", OperationId = "FinishExecution")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The execution was finished.", typeof(ShowExecutionResource))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "Execution is already finished or stopped.")]
+    [EndpointSummary("Finish Execution")]
+    [EndpointDescription("Finish an execution normally (US15).")]
+    [ProducesResponseType(typeof(ShowExecutionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> FinishExecution([FromRoute] int executionId)
     {
         try
@@ -115,9 +118,10 @@ public class ExecutionsController(
     }
 
     [HttpPost("{executionId:int}/emergency-stop")]
-    [SwaggerOperation(Summary = "Emergency Stop", Description = "Trigger an emergency stop (US14).", OperationId = "TriggerEmergencyStop")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The execution was emergency stopped.", typeof(ShowExecutionResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The execution was not found.")]
+    [EndpointSummary("Emergency Stop")]
+    [EndpointDescription("Trigger an emergency stop (US14).")]
+    [ProducesResponseType(typeof(ShowExecutionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> TriggerEmergencyStop([FromRoute] int executionId, [FromBody] TriggerEmergencyStopResource resource)
     {
         try

@@ -5,22 +5,21 @@ using KinemoPlatform.API.Rooms.Domain.Services;
 using KinemoPlatform.API.Rooms.Interfaces.REST.Resources;
 using KinemoPlatform.API.Rooms.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace KinemoPlatform.API.Rooms.Interfaces.REST.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-[SwaggerTag("Available Room Endpoints.")]
+[Tags("Room")]
 public class RoomsController(
     IRoomCommandService roomCommandService,
     IRoomQueryService roomQueryService) : ControllerBase
 {
     [HttpGet("{roomId:int}")]
-    [SwaggerOperation(Summary = "Get Room by Id", OperationId = "GetRoomById")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The room was found.", typeof(RoomResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The room was not found.")]
+    [EndpointSummary("Get Room by Id")]
+    [ProducesResponseType(typeof(RoomResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetRoomById([FromRoute] int roomId)
     {
         var room = await roomQueryService.Handle(new GetRoomByIdQuery(roomId));
@@ -29,8 +28,8 @@ public class RoomsController(
     }
 
     [HttpGet]
-    [SwaggerOperation(Summary = "Get All Rooms", OperationId = "GetAllRooms")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The rooms were found.", typeof(IEnumerable<RoomResource>))]
+    [EndpointSummary("Get All Rooms")]
+    [ProducesResponseType(typeof(IEnumerable<RoomResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllRooms()
     {
         var rooms = await roomQueryService.Handle(new GetAllRoomsQuery());
@@ -38,9 +37,9 @@ public class RoomsController(
     }
 
     [HttpPost]
-    [SwaggerOperation(Summary = "Create Room", OperationId = "CreateRoom")]
-    [SwaggerResponse(StatusCodes.Status201Created, "The room was created.", typeof(RoomResource))]
-    [SwaggerResponse(StatusCodes.Status409Conflict, "A room with the same name already exists.")]
+    [EndpointSummary("Create Room")]
+    [ProducesResponseType(typeof(RoomResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateRoom([FromBody] CreateRoomResource resource)
     {
         try
@@ -59,9 +58,10 @@ public class RoomsController(
     }
 
     [HttpPost("{roomId:int}/preparation")]
-    [SwaggerOperation(Summary = "Prepare Room", Description = "Perform a readiness inspection on the room.", OperationId = "PrepareRoom")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The room was prepared.", typeof(RoomResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The room was not found.")]
+    [EndpointSummary("Prepare Room")]
+    [EndpointDescription("Perform a readiness inspection on the room.")]
+    [ProducesResponseType(typeof(RoomResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> PrepareRoom([FromRoute] int roomId, [FromBody] PrepareRoomResource resource)
     {
         try
@@ -78,9 +78,10 @@ public class RoomsController(
     }
 
     [HttpPost("{roomId:int}/blocking")]
-    [SwaggerOperation(Summary = "Block Room", Description = "Block a room for maintenance.", OperationId = "BlockRoom")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The room was blocked.", typeof(RoomResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The room was not found.")]
+    [EndpointSummary("Block Room")]
+    [EndpointDescription("Block a room for maintenance.")]
+    [ProducesResponseType(typeof(RoomResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> BlockRoom([FromRoute] int roomId, [FromBody] BlockRoomResource resource)
     {
         try
@@ -97,9 +98,10 @@ public class RoomsController(
     }
 
     [HttpPost("{roomId:int}/release")]
-    [SwaggerOperation(Summary = "Release Room", Description = "Release a room from maintenance.", OperationId = "ReleaseRoom")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The room was released.", typeof(RoomResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The room was not found.")]
+    [EndpointSummary("Release Room")]
+    [EndpointDescription("Release a room from maintenance.")]
+    [ProducesResponseType(typeof(RoomResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ReleaseRoom([FromRoute] int roomId)
     {
         try

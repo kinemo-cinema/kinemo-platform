@@ -3,21 +3,21 @@ using KinemoPlatform.API.Maintenance.Domain.Services;
 using KinemoPlatform.API.Maintenance.Interfaces.REST.Resources;
 using KinemoPlatform.API.Maintenance.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace KinemoPlatform.API.Maintenance.Interfaces.REST.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-[SwaggerTag("Available Maintenance Order Endpoints.")]
+[Tags("Maintenance Order")]
 public class MaintenanceOrdersController(
     IMaintenanceOrderCommandService commandService,
     IMaintenanceOrderQueryService queryService) : ControllerBase
 {
     [HttpPost]
-    [SwaggerOperation(Summary = "Schedule Maintenance", Description = "Schedule preventive or corrective maintenance (US23).", OperationId = "ScheduleMaintenance")]
-    [SwaggerResponse(StatusCodes.Status201Created, "The maintenance order was created.", typeof(MaintenanceOrderResource))]
+    [EndpointSummary("Schedule Maintenance")]
+    [EndpointDescription("Schedule preventive or corrective maintenance (US23).")]
+    [ProducesResponseType(typeof(MaintenanceOrderResource), StatusCodes.Status201Created)]
     public async Task<IActionResult> ScheduleMaintenance([FromBody] ScheduleMaintenanceResource resource)
     {
         try
@@ -36,8 +36,9 @@ public class MaintenanceOrdersController(
     }
 
     [HttpPost("{orderId:int}/completion")]
-    [SwaggerOperation(Summary = "Complete Maintenance", Description = "Mark an order as completed and resolve its incident (US21).", OperationId = "CompleteMaintenance")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The maintenance was completed.", typeof(MaintenanceOrderResource))]
+    [EndpointSummary("Complete Maintenance")]
+    [EndpointDescription("Mark an order as completed and resolve its incident (US21).")]
+    [ProducesResponseType(typeof(MaintenanceOrderResource), StatusCodes.Status200OK)]
     public async Task<IActionResult> CompleteMaintenance([FromRoute] int orderId, [FromBody] CompleteMaintenanceResource resource)
     {
         try
@@ -54,8 +55,9 @@ public class MaintenanceOrdersController(
     }
 
     [HttpGet("equipment/{equipmentId:int}")]
-    [SwaggerOperation(Summary = "Get Orders by Equipment", Description = "Get the maintenance history for a piece of equipment (US22).", OperationId = "GetOrdersByEquipmentId")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The orders were found.", typeof(IEnumerable<MaintenanceOrderResource>))]
+    [EndpointSummary("Get Orders by Equipment")]
+    [EndpointDescription("Get the maintenance history for a piece of equipment (US22).")]
+    [ProducesResponseType(typeof(IEnumerable<MaintenanceOrderResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetOrdersByEquipmentId([FromRoute] int equipmentId)
     {
         var orders = await queryService.HandleGetByEquipmentId(equipmentId);
