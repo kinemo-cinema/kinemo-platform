@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using EntityFrameworkCore.CreatedUpdatedDate.Contracts;
+﻿using KinemoPlatform.API.Shared.Domain.Model;
 
 namespace KinemoPlatform.API.Movies.Domain.Model.Entities;
 
-public partial class SensoryContent : IEntityWithCreatedUpdatedDate
+public partial class SensoryContent : IAuditableEntity
 {
-    [Column("CreatedAt")] public DateTimeOffset? CreatedDate { get; set; }
-    [Column("UpdatedAt")] public DateTimeOffset? UpdatedDate { get; set; }
+    public DateTimeOffset? CreatedAt { get; set; }
+    public DateTimeOffset? UpdatedAt { get; set; }
 }
