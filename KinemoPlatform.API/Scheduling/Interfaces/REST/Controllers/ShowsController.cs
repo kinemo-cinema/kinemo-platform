@@ -5,22 +5,21 @@ using KinemoPlatform.API.Scheduling.Domain.Services;
 using KinemoPlatform.API.Scheduling.Interfaces.REST.Resources;
 using KinemoPlatform.API.Scheduling.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace KinemoPlatform.API.Scheduling.Interfaces.REST.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-[SwaggerTag("Available Show Endpoints.")]
+[Tags("Show")]
 public class ShowsController(
     IShowCommandService showCommandService,
     IShowQueryService showQueryService) : ControllerBase
 {
     [HttpGet("{showId:int}")]
-    [SwaggerOperation(Summary = "Get Show by Id", OperationId = "GetShowById")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The show was found.", typeof(ShowResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The show was not found.")]
+    [EndpointSummary("Get Show by Id")]
+    [ProducesResponseType(typeof(ShowResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetShowById([FromRoute] int showId)
     {
         var show = await showQueryService.Handle(new GetShowByIdQuery(showId));
@@ -29,8 +28,8 @@ public class ShowsController(
     }
 
     [HttpGet]
-    [SwaggerOperation(Summary = "Get All Shows", OperationId = "GetAllShows")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The shows were found.", typeof(IEnumerable<ShowResource>))]
+    [EndpointSummary("Get All Shows")]
+    [ProducesResponseType(typeof(IEnumerable<ShowResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllShows()
     {
         var shows = await showQueryService.Handle(new GetAllShowsQuery());
@@ -38,8 +37,9 @@ public class ShowsController(
     }
 
     [HttpGet("daily")]
-    [SwaggerOperation(Summary = "Get Daily Schedule", Description = "Get all shows for a specific date (US09).", OperationId = "GetDailySchedule")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The daily schedule was found.", typeof(IEnumerable<ShowResource>))]
+    [EndpointSummary("Get Daily Schedule")]
+    [EndpointDescription("Get all shows for a specific date (US09).")]
+    [ProducesResponseType(typeof(IEnumerable<ShowResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetDailySchedule([FromQuery] DateTimeOffset date)
     {
         var shows = await showQueryService.Handle(new GetDailyScheduleQuery(date));
@@ -47,9 +47,10 @@ public class ShowsController(
     }
 
     [HttpPost]
-    [SwaggerOperation(Summary = "Schedule Show", Description = "Program a new show (US07).", OperationId = "ScheduleShow")]
-    [SwaggerResponse(StatusCodes.Status201Created, "The show was scheduled.", typeof(ShowResource))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "The room is already booked for this time slot.")]
+    [EndpointSummary("Schedule Show")]
+    [EndpointDescription("Program a new show (US07).")]
+    [ProducesResponseType(typeof(ShowResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ScheduleShow([FromBody] ScheduleShowResource resource)
     {
         try
@@ -68,10 +69,11 @@ public class ShowsController(
     }
 
     [HttpPatch("{showId:int}")]
-    [SwaggerOperation(Summary = "Edit Show", Description = "Update the time slot of an existing show (US08).", OperationId = "EditShow")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The show was updated.", typeof(ShowResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The show was not found.")]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "The new time slot overlaps with another show.")]
+    [EndpointSummary("Edit Show")]
+    [EndpointDescription("Update the time slot of an existing show (US08).")]
+    [ProducesResponseType(typeof(ShowResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> EditShow([FromRoute] int showId, [FromBody] EditShowResource resource)
     {
         try
@@ -88,9 +90,10 @@ public class ShowsController(
     }
 
     [HttpPost("{showId:int}/cancellation")]
-    [SwaggerOperation(Summary = "Cancel Show", Description = "Cancel a scheduled show (US08).", OperationId = "CancelShow")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The show was cancelled.", typeof(ShowResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The show was not found.")]
+    [EndpointSummary("Cancel Show")]
+    [EndpointDescription("Cancel a scheduled show (US08).")]
+    [ProducesResponseType(typeof(ShowResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CancelShow([FromRoute] int showId)
     {
         try
