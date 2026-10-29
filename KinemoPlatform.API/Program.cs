@@ -1,7 +1,8 @@
 using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
+using Scalar.AspNetCore;
 
 // Shared Bounded Context
 using KinemoPlatform.API.Shared.Domain.Repositories;
@@ -89,7 +90,26 @@ builder.Services.AddControllers(options =>
             new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
 
-builder.Services.AddOpenApi();
+// Generate the OpenAPI document with ASP.NET Core's built-in support (served at /openapi/v1.json).
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer((document, _, _) =>
+    {
+        document.Info = new OpenApiInfo
+        {
+            Title = "KinemoPlatform.API",
+            Version = "v1",
+            Description = "Kinemo Platform API — 4D Cinema Experience Management",
+            TermsOfService = new Uri("https://kinemo-platform.com/tos"),
+            Contact = new OpenApiContact { Name = "Kinemo Studios", Email = "contact@kinemo.com" },
+            License = new OpenApiLicense
+            {
+                Name = "Apache 2.0", Url = new Uri("https://www.apache.org/licenses/LICENSE-2.0.html")
+            }
+        };
+        return Task.CompletedTask;
+    });
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 if (connectionString == null) throw new InvalidOperationException("Connection string not found.");
@@ -110,24 +130,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     }
 });
 
-builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "KinemoPlatform.API",
-        Version = "v1",
-        Description = "Kinemo Platform API — 4D Cinema Experience Management",
-        TermsOfService = new Uri("https://kinemo-platform.com/tos"),
-        Contact = new OpenApiContact { Name = "Kinemo Studios", Email = "contact@kinemo.com" },
-        License = new OpenApiLicense
-        {
-            Name = "Apache 2.0", Url = new Uri("https://www.apache.org/licenses/LICENSE-2.0.html")
-        }
-    });
-    options.EnableAnnotations();
-});
 
 // Dependency Injection
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -210,14 +213,14 @@ using (var scope = app.Services.CreateScope())
 }
 
 // HTTP Request Pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 app.UseHttpsRedirection();
 app.UseAuthorization();
+
+// OpenAPI document (/openapi/v1.json) and Scalar API reference (/scalar).
+// Available in every environment so the deployed API can be explored; wrap these two calls in
+// 'if (app.Environment.IsDevelopment())' to restrict them to local development.
+app.MapOpenApi();
+app.MapScalarApiReference();
 app.MapControllers();
 
 app.Run();
