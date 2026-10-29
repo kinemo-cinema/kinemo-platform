@@ -28,15 +28,15 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     }
 
     // inheritedDoc
-    public async Task AddAsync(TEntity entity)
+    public virtual async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        await Context.Set<TEntity>().AddAsync(entity);
+        await Context.Set<TEntity>().AddAsync(entity, cancellationToken);
     }
 
     // inheritedDoc
-    public async Task<TEntity?> FindByIdAsync(int id)
+    public virtual async Task<TEntity?> FindByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await Context.Set<TEntity>().FindAsync(id);
+        return await Context.Set<TEntity>().FindAsync([id], cancellationToken);
     }
 
     // inheritedDoc
@@ -52,8 +52,8 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     }
 
     // inheritedDoc
-    public async Task<IEnumerable<TEntity>> ListAsync()
+    public virtual async Task<IEnumerable<TEntity>> ListAsync(CancellationToken cancellationToken = default)
     {
-        return await Context.Set<TEntity>().ToListAsync();
+        return await Context.Set<TEntity>().ToListAsync(cancellationToken);
     }
 }

@@ -23,11 +23,11 @@ public class SeatAllocationRepository(AppDbContext context)
     }
 
     // Override standard FindByIdAsync to include the relationships
-    public new async Task<SeatAllocation?> FindByIdAsync(int id)
+    public override async Task<SeatAllocation?> FindByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return await Context.Set<SeatAllocation>()
             .Include(a => a.ShowSeats)
             .Include(a => a.Interventions)
-            .FirstOrDefaultAsync(a => a.Id == id);
+            .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
     }
 }
