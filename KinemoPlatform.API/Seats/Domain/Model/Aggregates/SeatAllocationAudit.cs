@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using EntityFrameworkCore.CreatedUpdatedDate.Contracts;
-using KinemoPlatform.API.Shared.Domain.Model;
+﻿using KinemoPlatform.API.Shared.Domain.Model;
 
 
 namespace KinemoPlatform.API.Seats.Domain.Model.Aggregates;
