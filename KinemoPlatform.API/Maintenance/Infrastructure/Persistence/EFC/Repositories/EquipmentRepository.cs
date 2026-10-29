@@ -24,12 +24,12 @@ public class EquipmentRepository(AppDbContext context)
     }
 
     // Override to include incidents and tests when listing all equipment
-    public new async Task<IEnumerable<Equipment>> ListAsync()
+    public override async Task<IEnumerable<Equipment>> ListAsync(CancellationToken cancellationToken = default)
     {
         return await Context.Set<Equipment>()
             .Include(e => e.Incidents)
             .Include(e => e.Tests)
             .ThenInclude(t => t.ChannelTests)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

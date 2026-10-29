@@ -48,18 +48,18 @@ public class MovieRepository(AppDbContext context)
     }
 
     // <inheritdoc />
-    public new async Task<Movie?> FindByIdAsync(int id)
+    public override async Task<Movie?> FindByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return await Context.Set<Movie>()
             .Include(m => m.SensoryContent)
-            .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
     }
 
     // <inheritdoc />
-    public new async Task<IEnumerable<Movie>> ListAsync()
+    public override async Task<IEnumerable<Movie>> ListAsync(CancellationToken cancellationToken = default)
     {
         return await Context.Set<Movie>()
             .Include(m => m.SensoryContent)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

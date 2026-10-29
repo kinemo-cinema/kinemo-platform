@@ -26,17 +26,18 @@ public class RoomRepository(AppDbContext context)
     }
 
     // Override to include details by default when fetching a single room
-    public new async Task<Room?> FindByIdAsync(int id)
+    public override async Task<Room?> FindByIdAsync(int id, CancellationToken cancellationToken = default)
     {
+        // TODO(rooms-result-pattern): pass cancellationToken once FindByIdWithDetailsAsync accepts it.
         return await FindByIdWithDetailsAsync(id);
     }
 
     // Override to include details when listing all rooms (useful for the UI)
-    public new async Task<IEnumerable<Room>> ListAsync()
+    public override async Task<IEnumerable<Room>> ListAsync(CancellationToken cancellationToken = default)
     {
         return await Context.Set<Room>()
             .Include(r => r.Inspections)
             .Include(r => r.Blocks)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

@@ -9,5 +9,5 @@ public interface IUnitOfWork
     ///     Save changes to the repository
     /// </summary>
     /// <returns></returns>
-    Task CompleteAsync();
+    Task CompleteAsync(CancellationToken cancellationToken = default);
 }
