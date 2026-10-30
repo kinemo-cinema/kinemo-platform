@@ -1,7 +1,7 @@
 ﻿using KinemoPlatform.API.Movies.Domain.Model.Aggregates;
 using KinemoPlatform.API.Movies.Domain.Model.Commands;
 
-namespace KinemoPlatform.API.Movies.Domain.Services;
+namespace KinemoPlatform.API.Movies.Application.Services;
 
 /// <summary>
 ///     Represents the movie command service in the Kinemo Platform.

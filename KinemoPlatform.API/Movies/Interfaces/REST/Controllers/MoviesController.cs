@@ -1,4 +1,5 @@
 ﻿using System.Net.Mime;
+using KinemoPlatform.API.Movies.Application.Services;
 using KinemoPlatform.API.Movies.Domain.Model.Commands;
 using KinemoPlatform.API.Movies.Domain.Model.Queries;              // ← ADDED
 using KinemoPlatform.API.Movies.Domain.Model.ValueObjects;

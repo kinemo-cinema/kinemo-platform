@@ -76,6 +76,7 @@ using KinemoPlatform.API.Analytics.Application.Internal.QueryServices;
 using KinemoPlatform.API.Analytics.Domain.Repositories;
 using KinemoPlatform.API.Analytics.Domain.Services;
 using KinemoPlatform.API.Analytics.Infrastructure.Persistence.EFC.Repositories;
+using KinemoPlatform.API.Movies.Application.Services;
 
 // BC09: Subscriptions
 using KinemoPlatform.API.Subscriptions.Application.Internal.CommandServices;

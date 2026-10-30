@@ -2,7 +2,7 @@
 using KinemoPlatform.API.Movies.Domain.Model.Entities;
 using KinemoPlatform.API.Movies.Domain.Model.Queries;
 
-namespace KinemoPlatform.API.Movies.Domain.Services;
+namespace KinemoPlatform.API.Movies.Application.Services;
 
 /// <summary>
 ///     Represents the movie query service in the Kinemo Platform.

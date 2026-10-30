@@ -1,4 +1,5 @@
 ﻿using Cortex.Mediator;
+using KinemoPlatform.API.Movies.Application.Services;
 using KinemoPlatform.API.Movies.Domain.Model.Aggregates;
 using KinemoPlatform.API.Movies.Domain.Model.Commands;
 using KinemoPlatform.API.Movies.Domain.Model.Events;

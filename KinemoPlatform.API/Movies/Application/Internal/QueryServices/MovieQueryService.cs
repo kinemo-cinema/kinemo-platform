@@ -1,4 +1,5 @@
-﻿using KinemoPlatform.API.Movies.Domain.Model.Aggregates;
+﻿using KinemoPlatform.API.Movies.Application.Services;
+using KinemoPlatform.API.Movies.Domain.Model.Aggregates;
 using KinemoPlatform.API.Movies.Domain.Model.Entities;
 using KinemoPlatform.API.Movies.Domain.Model.Queries;
 using KinemoPlatform.API.Movies.Domain.Repositories;
