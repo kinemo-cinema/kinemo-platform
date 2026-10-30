@@ -251,12 +251,12 @@ builder.Services.AddCortexMediator(
 
 var app = builder.Build();
 
-// Database Initialization
+// Apply pending migrations on startup (safe to call even when the schema is already up to date)
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
-    context.Database.EnsureCreated();
+    context.Database.Migrate();
 }
 
 // HTTP Request Pipeline
