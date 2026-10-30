@@ -1,6 +1,9 @@
 using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Microsoft.OpenApi;
 using Scalar.AspNetCore;
 
@@ -10,6 +13,7 @@ using KinemoPlatform.API.Shared.Infrastructure.Interfaces.ASP.Configuration;
 using KinemoPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration;
 using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
 using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
+using KinemoPlatform.API.Resources;
 
 // BC01: Movies
 using KinemoPlatform.API.Movies.Application.Internal.CommandServices;
@@ -81,6 +85,9 @@ using KinemoPlatform.API.Subscriptions.Infrastructure.Persistence.EFC.Repositori
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Localization: messages come from Resources/SharedResource*.resx
+builder.Services.AddLocalization();
+
 // Add services to the container.
 builder.Services.AddControllers(options =>
         options.Conventions.Add(new KebabCaseRouteNamingConvention()))
@@ -88,7 +95,44 @@ builder.Services.AddControllers(options =>
     {
         options.JsonSerializerOptions.Converters.Add(
             new System.Text.Json.Serialization.JsonStringEnumConverter());
+    })
+    // Validation attributes (e.g. [Required(ErrorMessage = "RequiredTitle")]) resolve their message as a resource key.
+    .AddDataAnnotationsLocalization(options =>
+        options.DataAnnotationLocalizerProvider = (_, factory) => factory.Create(typeof(SharedResource)))
+    // Invalid request bodies produce a localized RFC 7807 (application/problem+json) validation response.
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var localizer = context.HttpContext.RequestServices
+                .GetRequiredService<IStringLocalizer<SharedResource>>();
+            var problemDetailsFactory = context.HttpContext.RequestServices
+                .GetRequiredService<ProblemDetailsFactory>();
+            var problemDetails = problemDetailsFactory.CreateValidationProblemDetails(
+                context.HttpContext,
+                context.ModelState,
+                statusCode: StatusCodes.Status400BadRequest,
+                title: localizer["InvalidModelStateTitle"].Value);
+
+            var result = new BadRequestObjectResult(problemDetails);
+            result.ContentTypes.Add("application/problem+json");
+            return result;
+        };
     });
+
+// RFC 7807 ProblemDetails for unhandled exceptions (500) and error status codes.
+builder.Services.AddProblemDetails(options =>
+{
+    options.CustomizeProblemDetails = context =>
+    {
+        if (context.ProblemDetails.Status is null or >= 500)
+        {
+            var localizer = context.HttpContext.RequestServices.GetRequiredService<IStringLocalizer<SharedResource>>();
+            context.ProblemDetails.Title ??= localizer["UnexpectedServerError"].Value;
+            context.ProblemDetails.Detail ??= localizer["UnexpectedErrorProcessingRequest"].Value;
+        }
+    };
+});
 
 // Generate the OpenAPI document with ASP.NET Core's built-in support (served at /openapi/v1.json).
 builder.Services.AddOpenApi(options =>
@@ -213,6 +257,20 @@ using (var scope = app.Services.CreateScope())
 }
 
 // HTTP Request Pipeline
+
+// Turns unhandled exceptions into ProblemDetails responses instead of leaking stack traces.
+app.UseExceptionHandler();
+
+// Localization must run before OpenAPI so the generated documentation follows the request culture.
+// "en" is the default; requests for regional variants (es-PE, en-GB, ...) fall back to their parent culture.
+string[] supportedCultures = ["en", "en-US", "es", "es-419"];
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture(supportedCultures[0])
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
+app.UseRequestLocalization(localizationOptions);
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 
