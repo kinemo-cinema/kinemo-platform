@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+    <resheader name="version"><value>2.0</value></resheader>
+    <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+    <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+    <!-- Default (English). Keys <Controller>.<Action>.Response<StatusCode> feed the OpenAPI response descriptions. -->
+    <data name="InvalidModelStateTitle" xml:space="preserve"><value>The request contains invalid values.</value></data>
+    <data name="UnexpectedServerError" xml:space="preserve"><value>An unexpected error occurred.</value></data>
+    <data name="UnexpectedErrorProcessingRequest" xml:space="preserve"><value>The server could not process the request. Please try again later.</value></data>
+    <data name="Analytics.GenerateDashboard.Response201" xml:space="preserve"><value>The dashboard was generated.</value></data>
+    <data name="Analytics.GenerateReport.Response201" xml:space="preserve"><value>The report was generated.</value></data>
+    <data name="Analytics.GetDashboardById.Response200" xml:space="preserve"><value>The dashboard was found.</value></data>
+    <data name="Analytics.GetDashboardById.Response404" xml:space="preserve"><value>The dashboard was not found.</value></data>
+    <data name="Analytics.GetLatestDashboard.Response200" xml:space="preserve"><value>The latest dashboard was found.</value></data>
+    <data name="Analytics.GetLatestDashboard.Response404" xml:space="preserve"><value>No dashboards exist.</value></data>
+    <data name="Analytics.GetReportById.Response200" xml:space="preserve"><value>The report was found.</value></data>
+    <data name="Analytics.GetReportById.Response404" xml:space="preserve"><value>The report was not found.</value></data>
+    <data name="Equipment.GetAllEquipment.Response200" xml:space="preserve"><value>The equipment was found.</value></data>
+    <data name="Equipment.GetEquipmentById.Response200" xml:space="preserve"><value>The equipment was found.</value></data>
+    <data name="Equipment.GetEquipmentById.Response404" xml:space="preserve"><value>The equipment was not found.</value></data>
+    <data name="Equipment.RegisterEquipment.Response201" xml:space="preserve"><value>The equipment was registered.</value></data>
+    <data name="Equipment.RegisterEquipment.Response409" xml:space="preserve"><value>Equipment with the same name already exists in this room.</value></data>
+    <data name="Equipment.ReportIncident.Response200" xml:space="preserve"><value>The incident was registered.</value></data>
+    <data name="Equipment.RunTest.Response200" xml:space="preserve"><value>The test was executed.</value></data>
+    <data name="Executions.FinishExecution.Response200" xml:space="preserve"><value>The execution was finished.</value></data>
+    <data name="Executions.FinishExecution.Response400" xml:space="preserve"><value>Execution is already finished or stopped.</value></data>
+    <data name="Executions.GetExecutionById.Response200" xml:space="preserve"><value>The execution was found.</value></data>
+    <data name="Executions.GetExecutionById.Response404" xml:space="preserve"><value>The execution was not found.</value></data>
+    <data name="Executions.GetExecutionByShowId.Response200" xml:space="preserve"><value>The execution was found.</value></data>
+    <data name="Executions.GetExecutionByShowId.Response404" xml:space="preserve"><value>No active execution found.</value></data>
+    <data name="Executions.PauseExecution.Response200" xml:space="preserve"><value>The execution was paused.</value></data>
+    <data name="Executions.PauseExecution.Response400" xml:space="preserve"><value>Execution is not in progress.</value></data>
+    <data name="Executions.ResumeExecution.Response200" xml:space="preserve"><value>The execution was resumed.</value></data>
+    <data name="Executions.ResumeExecution.Response400" xml:space="preserve"><value>Execution is not paused.</value></data>
+    <data name="Executions.StartExecution.Response201" xml:space="preserve"><value>The execution was started.</value></data>
+    <data name="Executions.StartExecution.Response409" xml:space="preserve"><value>An active execution already exists for this show.</value></data>
+    <data name="Executions.TriggerEmergencyStop.Response200" xml:space="preserve"><value>The execution was emergency stopped.</value></data>
+    <data name="Executions.TriggerEmergencyStop.Response404" xml:space="preserve"><value>The execution was not found.</value></data>
+    <data name="MaintenanceOrders.CompleteMaintenance.Response200" xml:space="preserve"><value>The maintenance was completed.</value></data>
+    <data name="MaintenanceOrders.GetOrdersByEquipmentId.Response200" xml:space="preserve"><value>The orders were found.</value></data>
+    <data name="MaintenanceOrders.ScheduleMaintenance.Response201" xml:space="preserve"><value>The maintenance order was created.</value></data>
+    <data name="Movies.AssociateSensoryFile.Response201" xml:space="preserve"><value>The sensory file was associated.</value></data>
+    <data name="Movies.AssociateSensoryFile.Response400" xml:space="preserve"><value>The uploaded file is invalid.</value></data>
+    <data name="Movies.AssociateSensoryFile.Response404" xml:space="preserve"><value>The movie was not found.</value></data>
+    <data name="Movies.ConfigureEffectsProfile.Response200" xml:space="preserve"><value>The effects profile was updated.</value></data>
+    <data name="Movies.ConfigureEffectsProfile.Response404" xml:space="preserve"><value>The movie was not found.</value></data>
+    <data name="Movies.CreateMovie.Response201" xml:space="preserve"><value>The movie was created.</value></data>
+    <data name="Movies.CreateMovie.Response400" xml:space="preserve"><value>The request body is invalid.</value></data>
+    <data name="Movies.CreateMovie.Response409" xml:space="preserve"><value>A movie with the same title already exists.</value></data>
+    <data name="Movies.DeactivateMovie.Response200" xml:space="preserve"><value>The movie was deactivated.</value></data>
+    <data name="Movies.DeactivateMovie.Response404" xml:space="preserve"><value>The movie was not found.</value></data>
+    <data name="Movies.GetAllMovies.Response200" xml:space="preserve"><value>The movies were found.</value></data>
+    <data name="Movies.GetMovieById.Response200" xml:space="preserve"><value>The movie was found.</value></data>
+    <data name="Movies.GetMovieById.Response404" xml:space="preserve"><value>The movie was not found.</value></data>
+    <data name="Movies.GetSensoryContent.Response200" xml:space="preserve"><value>The sensory content was found.</value></data>
+    <data name="Movies.GetSensoryContent.Response404" xml:space="preserve"><value>The movie or sensory content was not found.</value></data>
+    <data name="Movies.SearchMovies.Response200" xml:space="preserve"><value>The matching movies were found.</value></data>
+    <data name="Movies.UpdateMovie.Response200" xml:space="preserve"><value>The movie was updated.</value></data>
+    <data name="Movies.UpdateMovie.Response404" xml:space="preserve"><value>The movie was not found.</value></data>
+    <data name="Rooms.BlockRoom.Response200" xml:space="preserve"><value>The room was blocked.</value></data>
+    <data name="Rooms.BlockRoom.Response404" xml:space="preserve"><value>The room was not found.</value></data>
+    <data name="Rooms.CreateRoom.Response201" xml:space="preserve"><value>The room was created.</value></data>
+    <data name="Rooms.CreateRoom.Response409" xml:space="preserve"><value>A room with the same name already exists.</value></data>
+    <data name="Rooms.GetAllRooms.Response200" xml:space="preserve"><value>The rooms were found.</value></data>
+    <data name="Rooms.GetRoomById.Response200" xml:space="preserve"><value>The room was found.</value></data>
+    <data name="Rooms.GetRoomById.Response404" xml:space="preserve"><value>The room was not found.</value></data>
+    <data name="Rooms.PrepareRoom.Response200" xml:space="preserve"><value>The room was prepared.</value></data>
+    <data name="Rooms.PrepareRoom.Response404" xml:space="preserve"><value>The room was not found.</value></data>
+    <data name="Rooms.ReleaseRoom.Response200" xml:space="preserve"><value>The room was released.</value></data>
+    <data name="Rooms.ReleaseRoom.Response404" xml:space="preserve"><value>The room was not found.</value></data>
+    <data name="SeatAllocations.AssignSeat.Response200" xml:space="preserve"><value>The seat status was updated.</value></data>
+    <data name="SeatAllocations.AssignSeat.Response404" xml:space="preserve"><value>The seat or allocation was not found.</value></data>
+    <data name="SeatAllocations.GetAllocationByShowId.Response200" xml:space="preserve"><value>The seat map was found.</value></data>
+    <data name="SeatAllocations.GetAllocationByShowId.Response404" xml:space="preserve"><value>The seat map was not found.</value></data>
+    <data name="SeatAllocations.GetShowSeat.Response200" xml:space="preserve"><value>The seat was found.</value></data>
+    <data name="SeatAllocations.GetShowSeat.Response404" xml:space="preserve"><value>The seat was not found.</value></data>
+    <data name="SeatAllocations.InitializeSeats.Response201" xml:space="preserve"><value>The seat map was generated.</value></data>
+    <data name="SeatAllocations.InitializeSeats.Response409" xml:space="preserve"><value>A seat allocation for this show already exists.</value></data>
+    <data name="SeatAllocations.MarkSeatOutOfService.Response200" xml:space="preserve"><value>The seat was marked out of service.</value></data>
+    <data name="SeatAllocations.MarkSeatOutOfService.Response404" xml:space="preserve"><value>The seat or allocation was not found.</value></data>
+    <data name="Shows.CancelShow.Response200" xml:space="preserve"><value>The show was cancelled.</value></data>
+    <data name="Shows.CancelShow.Response404" xml:space="preserve"><value>The show was not found.</value></data>
+    <data name="Shows.EditShow.Response200" xml:space="preserve"><value>The show was updated.</value></data>
+    <data name="Shows.EditShow.Response400" xml:space="preserve"><value>The new time slot overlaps with another show.</value></data>
+    <data name="Shows.EditShow.Response404" xml:space="preserve"><value>The show was not found.</value></data>
+    <data name="Shows.GetAllShows.Response200" xml:space="preserve"><value>The shows were found.</value></data>
+    <data name="Shows.GetDailySchedule.Response200" xml:space="preserve"><value>The daily schedule was found.</value></data>
+    <data name="Shows.GetShowById.Response200" xml:space="preserve"><value>The show was found.</value></data>
+    <data name="Shows.GetShowById.Response404" xml:space="preserve"><value>The show was not found.</value></data>
+    <data name="Shows.ScheduleShow.Response201" xml:space="preserve"><value>The show was scheduled.</value></data>
+    <data name="Shows.ScheduleShow.Response400" xml:space="preserve"><value>The room is already booked for this time slot.</value></data>
+    <data name="SubscriptionPlans.GetAllPlans.Response200" xml:space="preserve"><value>The plans were found.</value></data>
+    <data name="Subscriptions.ChangePlan.Response200" xml:space="preserve"><value>The plan was changed.</value></data>
+    <data name="Subscriptions.ChangePlan.Response400" xml:space="preserve"><value>The new plan does not exist or is the same as the current one.</value></data>
+    <data name="Subscriptions.CreateSubscription.Response201" xml:space="preserve"><value>The subscription was created.</value></data>
+    <data name="Subscriptions.CreateSubscription.Response400" xml:space="preserve"><value>The plan does not exist.</value></data>
+    <data name="Subscriptions.GetSubscriptionByCinemaId.Response200" xml:space="preserve"><value>The subscription was found.</value></data>
+    <data name="Subscriptions.GetSubscriptionByCinemaId.Response404" xml:space="preserve"><value>No subscription found for this cinema.</value></data>
+    <data name="Subscriptions.GetSubscriptionById.Response200" xml:space="preserve"><value>The subscription was found.</value></data>
+    <data name="Subscriptions.GetSubscriptionById.Response404" xml:space="preserve"><value>The subscription was not found.</value></data>
+    <data name="Subscriptions.ProcessPayment.Response200" xml:space="preserve"><value>The payment was processed.</value></data>
+    <data name="Ticketing.CreateIntegration.Response201" xml:space="preserve"><value>The integration was created.</value></data>
+    <data name="Ticketing.GetIntegrationById.Response200" xml:space="preserve"><value>The integration was found.</value></data>
+    <data name="Ticketing.GetIntegrationById.Response404" xml:space="preserve"><value>The integration was not found.</value></data>
+    <data name="Ticketing.GetOccupancyByShowId.Response200" xml:space="preserve"><value>The occupancy was found.</value></data>
+    <data name="Ticketing.GetOccupancyByShowId.Response404" xml:space="preserve"><value>The occupancy was not found.</value></data>
+    <data name="Ticketing.SyncOccupancy.Response200" xml:space="preserve"><value>The synchronization was executed (check logs for success/failure).</value></data>
+    <data name="Ticketing.SyncOccupancy.Response404" xml:space="preserve"><value>The integration was not found.</value></data>
+</root>
