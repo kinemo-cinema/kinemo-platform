@@ -12,6 +12,7 @@ using KinemoPlatform.API.Shared.Domain.Repositories;
 using KinemoPlatform.API.Shared.Infrastructure.Interfaces.ASP.Configuration;
 using KinemoPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration;
 using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
+using KinemoPlatform.API.Shared.Infrastructure.Interfaces.ASP.Documentation;
 using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
 using KinemoPlatform.API.Resources;
 
@@ -137,6 +138,7 @@ builder.Services.AddProblemDetails(options =>
 // Generate the OpenAPI document with ASP.NET Core's built-in support (served at /openapi/v1.json).
 builder.Services.AddOpenApi(options =>
 {
+    options.AddOperationTransformer(LocalizedOpenApiTransformer.TransformOperationAsync);
     options.AddDocumentTransformer((document, _, _) =>
     {
         document.Info = new OpenApiInfo
