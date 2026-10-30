@@ -157,25 +157,26 @@ builder.Services.AddOpenApi(options =>
     });
 });
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-if (connectionString == null) throw new InvalidOperationException("Connection string not found.");
+// Database: the connection string may contain %ENVIRONMENT_VARIABLES% (see appsettings.Production.json).
+var connectionStringTemplate = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrWhiteSpace(connectionStringTemplate))
+    throw new InvalidOperationException("Database connection string is not set in the configuration.");
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 {
-    if (builder.Environment.IsDevelopment())
-    {
-        options.UseMySQL(connectionString)
-            .LogTo(Console.WriteLine, LogLevel.Information)
-            .EnableSensitiveDataLogging()
-            .EnableDetailedErrors();
-    }
-    else if (builder.Environment.IsProduction())
-    {
-        options.UseMySQL(connectionString)
-            .LogTo(Console.WriteLine, LogLevel.Error);
-    }
-});
+    var connectionString = Environment.ExpandEnvironmentVariables(connectionStringTemplate);
+    if (string.IsNullOrWhiteSpace(connectionString))
+        throw new InvalidOperationException("Database connection string is not set in the configuration.");
 
+    // The provider is configured for every environment; only diagnostics differ.
+    // EF Core logs go through the application's ILogger pipeline (see the "Logging" section of appsettings).
+    options.UseMySQL(connectionString)
+        .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>())
+        .EnableDetailedErrors();
+
+    if (builder.Environment.IsDevelopment())
+        options.EnableSensitiveDataLogging();
+});
 
 
 // Dependency Injection
