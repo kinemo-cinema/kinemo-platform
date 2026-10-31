@@ -118,4 +118,16 @@
     <data name="InvalidMovieDuration" xml:space="preserve"><value>The duration must be between {1} and {2} minutes.</value></data>
     <data name="InvalidMovieGenre" xml:space="preserve"><value>The genre is not a valid movie genre.</value></data>
     <data name="InvalidIntensityLevel" xml:space="preserve"><value>The intensity level must be Low, Medium or High.</value></data>
+    <data name="RoomNotFound" xml:space="preserve"><value>The room was not found.</value></data>
+    <data name="RoomNameDuplicated" xml:space="preserve"><value>A room with this name already exists.</value></data>
+    <data name="RequiredRoomName" xml:space="preserve"><value>The room name is required.</value></data>
+    <data name="InvalidRoomNameLength" xml:space="preserve"><value>The room name must not exceed {1} characters.</value></data>
+    <data name="InvalidRoomCapacity" xml:space="preserve"><value>The capacity must be between {1} and {2} seats.</value></data>
+    <data name="RequiredObservations" xml:space="preserve"><value>The observations are required.</value></data>
+    <data name="InvalidObservationsLength" xml:space="preserve"><value>The observations must not exceed {1} characters.</value></data>
+    <data name="RequiredBlockReason" xml:space="preserve"><value>The block reason is required.</value></data>
+    <data name="InvalidBlockReasonLength" xml:space="preserve"><value>The block reason must not exceed {1} characters.</value></data>
+    <data name="Rooms.CreateRoom.Response400" xml:space="preserve"><value>The request body is invalid.</value></data>
+    <data name="Rooms.PrepareRoom.Response400" xml:space="preserve"><value>The request body is invalid.</value></data>
+    <data name="Rooms.BlockRoom.Response400" xml:space="preserve"><value>The request body is invalid.</value></data>
 </root>

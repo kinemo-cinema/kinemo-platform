@@ -36,7 +36,6 @@ using KinemoPlatform.API.Scheduling.Infrastructure.Persistence.EFC.Repositories;
 using KinemoPlatform.API.Rooms.Application.Internal.CommandServices;
 using KinemoPlatform.API.Rooms.Application.Internal.QueryServices;
 using KinemoPlatform.API.Rooms.Domain.Repositories;
-using KinemoPlatform.API.Rooms.Domain.Services;
 using KinemoPlatform.API.Rooms.Infrastructure.Persistence.EFC.Repositories;
 
 // BC04: Ticketing
@@ -77,6 +76,7 @@ using KinemoPlatform.API.Analytics.Domain.Repositories;
 using KinemoPlatform.API.Analytics.Domain.Services;
 using KinemoPlatform.API.Analytics.Infrastructure.Persistence.EFC.Repositories;
 using KinemoPlatform.API.Movies.Application.Services;
+using KinemoPlatform.API.Rooms.Application.Services;
 
 // BC09: Subscriptions
 using KinemoPlatform.API.Subscriptions.Application.Internal.CommandServices;

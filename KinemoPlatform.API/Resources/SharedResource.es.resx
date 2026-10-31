@@ -60,4 +60,36 @@
     <data name="Movies.ConfigureEffectsProfile.Description" xml:space="preserve"><value>Cambia el nivel de intensidad sensorial aplicado a los efectos de una película (US06).</value></data>
     <data name="Movies.ConfigureEffectsProfile.Response200" xml:space="preserve"><value>Se actualizó el perfil de efectos.</value></data>
     <data name="Movies.ConfigureEffectsProfile.Response404" xml:space="preserve"><value>No se encontró la película.</value></data>
+    <data name="RoomNotFound" xml:space="preserve"><value>No se encontró la sala.</value></data>
+    <data name="RoomNameDuplicated" xml:space="preserve"><value>Ya existe una sala con este nombre.</value></data>
+    <data name="RequiredRoomName" xml:space="preserve"><value>El nombre de la sala es obligatorio.</value></data>
+    <data name="InvalidRoomNameLength" xml:space="preserve"><value>El nombre de la sala no debe superar los {1} caracteres.</value></data>
+    <data name="InvalidRoomCapacity" xml:space="preserve"><value>La capacidad debe estar entre {1} y {2} asientos.</value></data>
+    <data name="RequiredObservations" xml:space="preserve"><value>Las observaciones son obligatorias.</value></data>
+    <data name="InvalidObservationsLength" xml:space="preserve"><value>Las observaciones no deben superar los {1} caracteres.</value></data>
+    <data name="RequiredBlockReason" xml:space="preserve"><value>El motivo del bloqueo es obligatorio.</value></data>
+    <data name="InvalidBlockReasonLength" xml:space="preserve"><value>El motivo del bloqueo no debe superar los {1} caracteres.</value></data>
+    <data name="Rooms.GetRoomById.Summary" xml:space="preserve"><value>Obtener sala por id</value></data>
+    <data name="Rooms.GetRoomById.Response200" xml:space="preserve"><value>Se encontró la sala.</value></data>
+    <data name="Rooms.GetRoomById.Response404" xml:space="preserve"><value>No se encontró la sala.</value></data>
+    <data name="Rooms.GetAllRooms.Summary" xml:space="preserve"><value>Obtener todas las salas</value></data>
+    <data name="Rooms.GetAllRooms.Response200" xml:space="preserve"><value>Se encontraron las salas.</value></data>
+    <data name="Rooms.CreateRoom.Summary" xml:space="preserve"><value>Crear sala</value></data>
+    <data name="Rooms.CreateRoom.Response201" xml:space="preserve"><value>Se creó la sala.</value></data>
+    <data name="Rooms.CreateRoom.Response400" xml:space="preserve"><value>El cuerpo de la solicitud no es válido.</value></data>
+    <data name="Rooms.CreateRoom.Response409" xml:space="preserve"><value>Ya existe una sala con el mismo nombre.</value></data>
+    <data name="Rooms.PrepareRoom.Summary" xml:space="preserve"><value>Preparar sala</value></data>
+    <data name="Rooms.PrepareRoom.Description" xml:space="preserve"><value>Realiza una inspección de preparación de la sala.</value></data>
+    <data name="Rooms.PrepareRoom.Response200" xml:space="preserve"><value>Se preparó la sala.</value></data>
+    <data name="Rooms.PrepareRoom.Response400" xml:space="preserve"><value>El cuerpo de la solicitud no es válido.</value></data>
+    <data name="Rooms.PrepareRoom.Response404" xml:space="preserve"><value>No se encontró la sala.</value></data>
+    <data name="Rooms.BlockRoom.Summary" xml:space="preserve"><value>Bloquear sala</value></data>
+    <data name="Rooms.BlockRoom.Description" xml:space="preserve"><value>Bloquea una sala por mantenimiento.</value></data>
+    <data name="Rooms.BlockRoom.Response200" xml:space="preserve"><value>Se bloqueó la sala.</value></data>
+    <data name="Rooms.BlockRoom.Response400" xml:space="preserve"><value>El cuerpo de la solicitud no es válido.</value></data>
+    <data name="Rooms.BlockRoom.Response404" xml:space="preserve"><value>No se encontró la sala.</value></data>
+    <data name="Rooms.ReleaseRoom.Summary" xml:space="preserve"><value>Liberar sala</value></data>
+    <data name="Rooms.ReleaseRoom.Description" xml:space="preserve"><value>Libera una sala del mantenimiento.</value></data>
+    <data name="Rooms.ReleaseRoom.Response200" xml:space="preserve"><value>Se liberó la sala.</value></data>
+    <data name="Rooms.ReleaseRoom.Response404" xml:space="preserve"><value>No se encontró la sala.</value></data>
 </root>
