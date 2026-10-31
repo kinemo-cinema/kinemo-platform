@@ -18,10 +18,13 @@ public interface IMovieQueryService
     /// <param name="query">
     ///     The <see cref="GetMovieByIdQuery" /> to handle.
     /// </param>
+    /// <param name="cancellationToken">
+    ///    Token to cancel the asynchronous operation.
+    /// </param>
     /// <returns>
     ///     The matching <see cref="Movie" />, or null if not found.
     /// </returns>
-    Task<Movie?> Handle(GetMovieByIdQuery query);
+    Task<Movie?> Handle(GetMovieByIdQuery query, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Handle the get all movies query (US03).
@@ -29,10 +32,14 @@ public interface IMovieQueryService
     /// <param name="query">
     ///     The <see cref="GetAllMoviesQuery" /> to handle.
     /// </param>
+    /// <param name="cancellationToken">
+    ///   Token to cancel the asynchronous operation.
+    /// </param>
     /// <returns>
     ///     A collection of all movies in the catalog.
     /// </returns>
-    Task<IEnumerable<Movie>> Handle(GetAllMoviesQuery query);
+    Task<IEnumerable<Movie>> Handle(GetAllMoviesQuery query, CancellationToken cancellationToken = default);
+
 
     /// <summary>
     ///     Handle the search movies query (US05).
@@ -40,10 +47,13 @@ public interface IMovieQueryService
     /// <param name="query">
     ///     The <see cref="SearchMoviesQuery" /> to handle.
     /// </param>
+    /// <param name="cancellationToken">
+    ///    Token to cancel the asynchronous operation.
+    /// </param>
     /// <returns>
     ///     A collection of movies matching the optional filters.
     /// </returns>
-    Task<IEnumerable<Movie>> Handle(SearchMoviesQuery query);
+    Task<IEnumerable<Movie>> Handle(SearchMoviesQuery query, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Handle the get sensory content by movie id query.
@@ -51,9 +61,12 @@ public interface IMovieQueryService
     /// <param name="query">
     ///     The <see cref="GetSensoryContentByMovieIdQuery" /> to handle.
     /// </param>
+    /// <param name="cancellationToken">
+    ///    Token to cancel the asynchronous operation.
+    /// </param>
     /// <returns>
     ///     The <see cref="SensoryContent" /> associated with the movie,
     ///     or null if the movie was not found.
     /// </returns>
-    Task<SensoryContent?> Handle(GetSensoryContentByMovieIdQuery query);
+    Task<SensoryContent?> Handle(GetSensoryContentByMovieIdQuery query, CancellationToken cancellationToken = default);
 }

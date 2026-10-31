@@ -3,7 +3,6 @@ using KinemoPlatform.API.Movies.Domain.Model.Aggregates;
 using KinemoPlatform.API.Movies.Domain.Model.Entities;
 using KinemoPlatform.API.Movies.Domain.Model.Queries;
 using KinemoPlatform.API.Movies.Domain.Repositories;
-using KinemoPlatform.API.Movies.Domain.Services;
 
 namespace KinemoPlatform.API.Movies.Application.Internal.QueryServices;
 
@@ -16,27 +15,27 @@ namespace KinemoPlatform.API.Movies.Application.Internal.QueryServices;
 public class MovieQueryService(IMovieRepository movieRepository) : IMovieQueryService
 {
     /// <inheritdoc />
-    public async Task<Movie?> Handle(GetMovieByIdQuery query)
+    public async Task<Movie?> Handle(GetMovieByIdQuery query, CancellationToken cancellationToken = default)
     {
-        return await movieRepository.FindByIdAsync(query.MovieId);
+        return await movieRepository.FindByIdAsync(query.MovieId, cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<Movie>> Handle(GetAllMoviesQuery query)
+    public async Task<IEnumerable<Movie>> Handle(GetAllMoviesQuery query, CancellationToken cancellationToken = default)
     {
-        return await movieRepository.ListAsync();
+        return await movieRepository.ListAsync(cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<Movie>> Handle(SearchMoviesQuery query)
+    public async Task<IEnumerable<Movie>> Handle(SearchMoviesQuery query, CancellationToken cancellationToken = default)
     {
-        return await movieRepository.FindByTitleOrGenreAsync(query.Title, query.Genre);
+        return await movieRepository.FindByTitleOrGenreAsync(query.Title, query.Genre, cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<SensoryContent?> Handle(GetSensoryContentByMovieIdQuery query)
+    public async Task<SensoryContent?> Handle(GetSensoryContentByMovieIdQuery query, CancellationToken cancellationToken = default)
     {
-        var movie = await movieRepository.FindByIdWithSensoryContentAsync(query.MovieId);
+        var movie = await movieRepository.FindByIdWithSensoryContentAsync(query.MovieId, cancellationToken);
         return movie?.SensoryContent;
     }
 }
