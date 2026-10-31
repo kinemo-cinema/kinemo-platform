@@ -82,14 +82,14 @@
     <data name="Shows.CancelShow.Response200" xml:space="preserve"><value>The show was cancelled.</value></data>
     <data name="Shows.CancelShow.Response404" xml:space="preserve"><value>The show was not found.</value></data>
     <data name="Shows.EditShow.Response200" xml:space="preserve"><value>The show was updated.</value></data>
-    <data name="Shows.EditShow.Response400" xml:space="preserve"><value>The new time slot overlaps with another show.</value></data>
+    <data name="Shows.EditShow.Response400" xml:space="preserve"><value>The request is invalid (for example, the end time is not after the start time).</value></data>
     <data name="Shows.EditShow.Response404" xml:space="preserve"><value>The show was not found.</value></data>
     <data name="Shows.GetAllShows.Response200" xml:space="preserve"><value>The shows were found.</value></data>
     <data name="Shows.GetDailySchedule.Response200" xml:space="preserve"><value>The daily schedule was found.</value></data>
     <data name="Shows.GetShowById.Response200" xml:space="preserve"><value>The show was found.</value></data>
     <data name="Shows.GetShowById.Response404" xml:space="preserve"><value>The show was not found.</value></data>
     <data name="Shows.ScheduleShow.Response201" xml:space="preserve"><value>The show was scheduled.</value></data>
-    <data name="Shows.ScheduleShow.Response400" xml:space="preserve"><value>The room is already booked for this time slot.</value></data>
+    <data name="Shows.ScheduleShow.Response400" xml:space="preserve"><value>The request is invalid (for example, the end time is not after the start time).</value></data>
     <data name="SubscriptionPlans.GetAllPlans.Response200" xml:space="preserve"><value>The plans were found.</value></data>
     <data name="Subscriptions.ChangePlan.Response200" xml:space="preserve"><value>The plan was changed.</value></data>
     <data name="Subscriptions.ChangePlan.Response400" xml:space="preserve"><value>The new plan does not exist or is the same as the current one.</value></data>
@@ -130,4 +130,10 @@
     <data name="Rooms.CreateRoom.Response400" xml:space="preserve"><value>The request body is invalid.</value></data>
     <data name="Rooms.PrepareRoom.Response400" xml:space="preserve"><value>The request body is invalid.</value></data>
     <data name="Rooms.BlockRoom.Response400" xml:space="preserve"><value>The request body is invalid.</value></data>
+    <data name="Shows.ScheduleShow.Response409" xml:space="preserve"><value>The room is already booked for this time slot.</value></data>
+    <data name="Shows.EditShow.Response409" xml:space="preserve"><value>The new time slot overlaps with another show.</value></data>
+    <data name="ShowNotFound" xml:space="preserve"><value>The show was not found.</value></data>
+    <data name="ShowRoomAlreadyBooked" xml:space="preserve"><value>The room is already booked for the selected time slot.</value></data>
+    <data name="ShowTimeSlotOverlaps" xml:space="preserve"><value>The new time slot overlaps with another show in this room.</value></data>
+    <data name="ShowInvalidTimeSlot" xml:space="preserve"><value>The end time must be after the start time.</value></data>
 </root>

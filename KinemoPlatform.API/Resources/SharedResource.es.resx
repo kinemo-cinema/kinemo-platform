@@ -92,4 +92,8 @@
     <data name="Rooms.ReleaseRoom.Description" xml:space="preserve"><value>Libera una sala del mantenimiento.</value></data>
     <data name="Rooms.ReleaseRoom.Response200" xml:space="preserve"><value>Se liberó la sala.</value></data>
     <data name="Rooms.ReleaseRoom.Response404" xml:space="preserve"><value>No se encontró la sala.</value></data>
+    <data name="ShowNotFound" xml:space="preserve"><value>No se encontró la función.</value></data>
+    <data name="ShowRoomAlreadyBooked" xml:space="preserve"><value>La sala ya está reservada para el horario seleccionado.</value></data>
+    <data name="ShowTimeSlotOverlaps" xml:space="preserve"><value>El nuevo horario se superpone con otra función en esta sala.</value></data>
+    <data name="ShowInvalidTimeSlot" xml:space="preserve"><value>La hora de fin debe ser posterior a la hora de inicio.</value></data>
 </root>
