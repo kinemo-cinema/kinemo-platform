@@ -8,4 +8,56 @@
     <data name="InvalidModelStateTitle" xml:space="preserve"><value>La solicitud contiene valores no válidos.</value></data>
     <data name="UnexpectedServerError" xml:space="preserve"><value>Ocurrió un error inesperado.</value></data>
     <data name="UnexpectedErrorProcessingRequest" xml:space="preserve"><value>El servidor no pudo procesar la solicitud. Inténtalo de nuevo más tarde.</value></data>
+	  <data name="MovieNotFound" xml:space="preserve"><value>La película no fue encontrada.</value></data>
+    <data name="MovieTitleDuplicated" xml:space="preserve"><value>Una película con este título ya existe.</value></data>
+    <data name="SensoryFileRequired" xml:space="preserve"><value>Se requiere un archivo sensorial no vacío.</value></data>
+    <data name="Movies.UpdateMovie.Response400" xml:space="preserve"><value>El cuerpo de la solicitud es inválido.</value></data>
+    <data name="Movies.UpdateMovie.Response409" xml:space="preserve"><value>Otra película ya utiliza el título solicitado.</value></data>
+    <data name="Movies.ConfigureEffectsProfile.Response400" xml:space="preserve"><value>El cuerpo de la solicitud es inválido.</value></data>
+    <data name="Movies.GetSensoryContent.Response200" xml:space="preserve">
+	    <value />
+    </data>
+    <data name="Analytics.GenerateDashboard.Response201" xml:space="preserve">
+	    <value />
+    </data>
+    <data name="RequiredMovieTitle" xml:space="preserve"><value>El título de la película es obligatorio.</value></data>
+    <data name="InvalidMovieTitleLength" xml:space="preserve"><value>El título de la película no debe superar los {1} caracteres.</value></data>
+    <data name="InvalidMovieDuration" xml:space="preserve"><value>La duración debe estar entre {1} y {2} minutos.</value></data>
+    <data name="InvalidMovieGenre" xml:space="preserve"><value>El género no es un género de película válido.</value></data>
+    <data name="InvalidIntensityLevel" xml:space="preserve"><value>El nivel de intensidad debe ser Low, Medium o High.</value></data>
+    <data name="Movies.GetMovieById.Summary" xml:space="preserve"><value>Obtener película por id</value></data>
+    <data name="Movies.GetMovieById.Description" xml:space="preserve"><value>Obtiene una película por su identificador único.</value></data>
+    <data name="Movies.GetMovieById.Response200" xml:space="preserve"><value>Se encontró la película.</value></data>
+    <data name="Movies.GetMovieById.Response404" xml:space="preserve"><value>No se encontró la película.</value></data>
+    <data name="Movies.GetAllMovies.Summary" xml:space="preserve"><value>Obtener todas las películas</value></data>
+    <data name="Movies.GetAllMovies.Description" xml:space="preserve"><value>Obtiene todas las películas registradas en el catálogo.</value></data>
+    <data name="Movies.GetAllMovies.Response200" xml:space="preserve"><value>Se encontraron las películas.</value></data>
+    <data name="Movies.SearchMovies.Summary" xml:space="preserve"><value>Buscar películas</value></data>
+    <data name="Movies.SearchMovies.Description" xml:space="preserve"><value>Busca películas por título parcial y/o género (ambos opcionales).</value></data>
+    <data name="Movies.SearchMovies.Response200" xml:space="preserve"><value>Se encontraron las películas que coinciden.</value></data>
+    <data name="Movies.CreateMovie.Summary" xml:space="preserve"><value>Crear película</value></data>
+    <data name="Movies.CreateMovie.Description" xml:space="preserve"><value>Registra una nueva película 4D en la plataforma.</value></data>
+    <data name="Movies.CreateMovie.Response201" xml:space="preserve"><value>Se creó la película.</value></data>
+    <data name="Movies.CreateMovie.Response400" xml:space="preserve"><value>El cuerpo de la solicitud no es válido.</value></data>
+    <data name="Movies.CreateMovie.Response409" xml:space="preserve"><value>Ya existe una película con el mismo título.</value></data>
+    <data name="Movies.UpdateMovie.Summary" xml:space="preserve"><value>Actualizar película</value></data>
+    <data name="Movies.UpdateMovie.Description" xml:space="preserve"><value>Actualiza la información básica de una película existente.</value></data>
+    <data name="Movies.UpdateMovie.Response200" xml:space="preserve"><value>Se actualizó la película.</value></data>
+    <data name="Movies.UpdateMovie.Response404" xml:space="preserve"><value>No se encontró la película.</value></data>
+    <data name="Movies.DeactivateMovie.Summary" xml:space="preserve"><value>Desactivar película</value></data>
+    <data name="Movies.DeactivateMovie.Description" xml:space="preserve"><value>Marca una película como inactiva para que no pueda programarse en nuevas funciones (US04).</value></data>
+    <data name="Movies.DeactivateMovie.Response200" xml:space="preserve"><value>Se desactivó la película.</value></data>
+    <data name="Movies.DeactivateMovie.Response404" xml:space="preserve"><value>No se encontró la película.</value></data>
+    <data name="Movies.GetSensoryContent.Summary" xml:space="preserve"><value>Obtener contenido sensorial</value></data>
+    <data name="Movies.GetSensoryContent.Description" xml:space="preserve"><value>Obtiene la configuración de contenido sensorial asociada a una película.</value></data>
+    <data name="Movies.GetSensoryContent.Response404" xml:space="preserve"><value>No se encontró la película o el contenido sensorial.</value></data>
+    <data name="Movies.AssociateSensoryFile.Summary" xml:space="preserve"><value>Asociar archivo sensorial</value></data>
+    <data name="Movies.AssociateSensoryFile.Description" xml:space="preserve"><value>Sube un archivo sensorial y lo asocia al contenido sensorial de una película (US02).</value></data>
+    <data name="Movies.AssociateSensoryFile.Response201" xml:space="preserve"><value>Se asoció el archivo sensorial.</value></data>
+    <data name="Movies.AssociateSensoryFile.Response400" xml:space="preserve"><value>El archivo subido no es válido.</value></data>
+    <data name="Movies.AssociateSensoryFile.Response404" xml:space="preserve"><value>No se encontró la película.</value></data>
+    <data name="Movies.ConfigureEffectsProfile.Summary" xml:space="preserve"><value>Configurar perfil de efectos</value></data>
+    <data name="Movies.ConfigureEffectsProfile.Description" xml:space="preserve"><value>Cambia el nivel de intensidad sensorial aplicado a los efectos de una película (US06).</value></data>
+    <data name="Movies.ConfigureEffectsProfile.Response200" xml:space="preserve"><value>Se actualizó el perfil de efectos.</value></data>
+    <data name="Movies.ConfigureEffectsProfile.Response404" xml:space="preserve"><value>No se encontró la película.</value></data>
 </root>

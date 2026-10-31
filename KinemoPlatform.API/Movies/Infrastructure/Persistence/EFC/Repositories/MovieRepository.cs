@@ -17,13 +17,14 @@ public class MovieRepository(AppDbContext context)
     : BaseRepository<Movie>(context), IMovieRepository
 {
     /// <inheritdoc />
-    public async Task<bool> ExistsByTitleAsync(string title)
+    public async Task<bool> ExistsByTitleAsync(string title, CancellationToken cancellationToken = default)
     {
-        return await Context.Set<Movie>().AnyAsync(m => m.Title == title);
+        return await Context.Set<Movie>().AnyAsync(m => m.Title == title, cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<Movie>> FindByTitleOrGenreAsync(string? title, EMovieGenre? genre)
+    public async Task<IEnumerable<Movie>> FindByTitleOrGenreAsync(string? title, EMovieGenre? genre,
+        CancellationToken cancellationToken = default)
     {
         var query = Context.Set<Movie>().AsQueryable();
 
@@ -33,18 +34,18 @@ public class MovieRepository(AppDbContext context)
         if (genre.HasValue)
             query = query.Where(m => m.Genre == genre.Value);
 
-        return await query.ToListAsync();
+        return await query.ToListAsync(cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<Movie?> FindByIdWithSensoryContentAsync(int id)
+    public async Task<Movie?> FindByIdWithSensoryContentAsync(int id, CancellationToken cancellationToken = default)
     {
         return await Context.Set<Movie>()
             .Include(m => m.SensoryContent)
                 .ThenInclude(sc => sc.Tracks)
             .Include(m => m.SensoryContent)
                 .ThenInclude(sc => sc.History)
-            .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
     }
 
     // <inheritdoc />

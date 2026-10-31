@@ -1,4 +1,5 @@
 ﻿using KinemoPlatform.API.Movies.Domain.Model.ValueObjects;
+using System.ComponentModel.DataAnnotations;
 
 namespace KinemoPlatform.API.Movies.Interfaces.REST.Resources;
 
@@ -9,4 +10,6 @@ namespace KinemoPlatform.API.Movies.Interfaces.REST.Resources;
 ///     The new <see cref="ESensoryIntensityLevel" /> to apply to the
 ///     sensory content of the movie.
 /// </param>
-public record ConfigureEffectsProfileResource(ESensoryIntensityLevel IntensityLevel);
+public record ConfigureEffectsProfileResource(
+    [EnumDataType(typeof(ESensoryIntensityLevel), ErrorMessage = "InvalidIntensityLevel")]
+    ESensoryIntensityLevel IntensityLevel);
