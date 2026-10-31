@@ -1,7 +1,7 @@
 ﻿using System.Net.Mime;
+using KinemoPlatform.API.Rooms.Application.Services;
 using KinemoPlatform.API.Rooms.Domain.Model.Commands;
 using KinemoPlatform.API.Rooms.Domain.Model.Queries;
-using KinemoPlatform.API.Rooms.Domain.Services;
 using KinemoPlatform.API.Rooms.Interfaces.REST.Resources;
 using KinemoPlatform.API.Rooms.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;

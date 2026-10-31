@@ -1,7 +1,7 @@
-﻿using KinemoPlatform.API.Rooms.Domain.Model.Aggregates;
+﻿using KinemoPlatform.API.Rooms.Application.Services;
+using KinemoPlatform.API.Rooms.Domain.Model.Aggregates;
 using KinemoPlatform.API.Rooms.Domain.Model.Queries;
 using KinemoPlatform.API.Rooms.Domain.Repositories;
-using KinemoPlatform.API.Rooms.Domain.Services;
 
 namespace KinemoPlatform.API.Rooms.Application.Internal.QueryServices;
 

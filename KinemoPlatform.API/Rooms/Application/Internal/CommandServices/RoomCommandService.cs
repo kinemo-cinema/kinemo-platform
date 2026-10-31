@@ -1,9 +1,9 @@
 ﻿using Cortex.Mediator;
+using KinemoPlatform.API.Rooms.Application.Services;
 using KinemoPlatform.API.Rooms.Domain.Model.Aggregates;
 using KinemoPlatform.API.Rooms.Domain.Model.Commands;
 using KinemoPlatform.API.Rooms.Domain.Model.Events;
 using KinemoPlatform.API.Rooms.Domain.Repositories;
-using KinemoPlatform.API.Rooms.Domain.Services;
 using KinemoPlatform.API.Shared.Domain.Repositories;
 
 namespace KinemoPlatform.API.Rooms.Application.Internal.CommandServices;
