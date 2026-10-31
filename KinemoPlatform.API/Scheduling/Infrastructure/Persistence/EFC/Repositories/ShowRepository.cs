@@ -14,7 +14,8 @@ public class ShowRepository(AppDbContext context)
         int roomId, 
         DateTimeOffset startDateTime, 
         DateTimeOffset endDateTime, 
-        int? excludeShowId = null)
+        int? excludeShowId = null,
+        CancellationToken cancellationToken = default)
     {
         var query = Context.Set<Show>()
             .Where(s => s.RoomId == roomId)
@@ -28,14 +29,15 @@ public class ShowRepository(AppDbContext context)
         // Overlap logic: New show starts before existing ends AND new show ends after existing starts
         return await query.AnyAsync(s => 
             startDateTime < s.TimeSlot.EndDateTime && 
-            endDateTime > s.TimeSlot.StartDateTime);
+            endDateTime > s.TimeSlot.StartDateTime,
+            cancellationToken);
     }
 
-    public async Task<IEnumerable<Show>> FindByDateAsync(DateTimeOffset date)
+    public async Task<IEnumerable<Show>> FindByDateAsync(DateTimeOffset date, CancellationToken cancellationToken = default)
     {
         return await Context.Set<Show>()
             .Where(s => s.TimeSlot.StartDateTime.Date == date.Date)
             .OrderBy(s => s.TimeSlot.StartDateTime)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }
