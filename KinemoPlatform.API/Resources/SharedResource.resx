@@ -136,4 +136,6 @@
     <data name="ShowRoomAlreadyBooked" xml:space="preserve"><value>The room is already booked for the selected time slot.</value></data>
     <data name="ShowTimeSlotOverlaps" xml:space="preserve"><value>The new time slot overlaps with another show in this room.</value></data>
     <data name="ShowInvalidTimeSlot" xml:space="preserve"><value>The end time must be after the start time.</value></data>
+    <data name="InvalidShowMovieId" xml:space="preserve"><value>The movie id must be a positive number.</value></data>
+    <data name="InvalidShowRoomId" xml:space="preserve"><value>The room id must be a positive number.</value></data>
 </root>
