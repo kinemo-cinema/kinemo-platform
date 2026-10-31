@@ -118,4 +118,6 @@
     <data name="InvalidMovieDuration" xml:space="preserve"><value>The duration must be between {1} and {2} minutes.</value></data>
     <data name="InvalidMovieGenre" xml:space="preserve"><value>The genre is not a valid movie genre.</value></data>
     <data name="InvalidIntensityLevel" xml:space="preserve"><value>The intensity level must be Low, Medium or High.</value></data>
+    <data name="RoomNotFound" xml:space="preserve"><value>The room was not found.</value></data>
+    <data name="RoomNameDuplicated" xml:space="preserve"><value>A room with this name already exists.</value></data>
 </root>

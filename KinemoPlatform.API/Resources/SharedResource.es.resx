@@ -60,4 +60,6 @@
     <data name="Movies.ConfigureEffectsProfile.Description" xml:space="preserve"><value>Cambia el nivel de intensidad sensorial aplicado a los efectos de una película (US06).</value></data>
     <data name="Movies.ConfigureEffectsProfile.Response200" xml:space="preserve"><value>Se actualizó el perfil de efectos.</value></data>
     <data name="Movies.ConfigureEffectsProfile.Response404" xml:space="preserve"><value>No se encontró la película.</value></data>
+    <data name="RoomNotFound" xml:space="preserve"><value>No se encontró la sala.</value></data>
+    <data name="RoomNameDuplicated" xml:space="preserve"><value>Ya existe una sala con este nombre.</value></data>
 </root>
