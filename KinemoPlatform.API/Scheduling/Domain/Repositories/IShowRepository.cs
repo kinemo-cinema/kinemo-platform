@@ -12,8 +12,16 @@ public interface IShowRepository : IBaseRepository<Show>
     /// <param name="startDateTime">The start time of the new show.</param>
     /// <param name="endDateTime">The end time of the new show.</param>
     /// <param name="excludeShowId">Optional show ID to exclude from the check (used when editing an existing show).</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>True if an overlapping show exists, false otherwise.</returns>
-    Task<bool> ExistsOverlappingShowAsync(int roomId, DateTimeOffset startDateTime, DateTimeOffset endDateTime, int? excludeShowId = null);
+    Task<bool> ExistsOverlappingShowAsync(int roomId, DateTimeOffset startDateTime, DateTimeOffset endDateTime,
+        int? excludeShowId = null, CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Show>> FindByDateAsync(DateTimeOffset date);
+    /// <summary>
+    ///     Finds all shows scheduled for a specific date.
+    /// </summary>
+    /// <param name="date">The date for which to find shows.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>A list of shows scheduled for the specified date.</returns>
+    Task<IEnumerable<Show>> FindByDateAsync(DateTimeOffset date, CancellationToken cancellationToken = default);
 }

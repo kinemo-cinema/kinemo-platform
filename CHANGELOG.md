@@ -28,6 +28,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - Repositories that hid base members with `new` now `override` them.
 - EF Core logs flow through `ILogger`; the MySQL provider is configured once for every environment.
 - Database schema is created with EF Core migrations applied on startup instead of `EnsureCreated()`.
+- Scheduling: a double-booked room or an overlapping time slot now returns `409 Conflict` instead of `400`; `400` is reserved for invalid requests.
 
 ### Removed
 
@@ -38,3 +39,5 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 - `UpdateMovie` returns 409 instead of an unhandled database error when the new title already exists.
 - `.http` sample request pointed to a non-existent endpoint.
+- `EditShow` returned `400` for an unknown show instead of the documented `404`.
+- Shows whose end time is not after their start time are rejected instead of being saved.

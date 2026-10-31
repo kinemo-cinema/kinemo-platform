@@ -92,4 +92,33 @@
     <data name="Rooms.ReleaseRoom.Description" xml:space="preserve"><value>Libera una sala del mantenimiento.</value></data>
     <data name="Rooms.ReleaseRoom.Response200" xml:space="preserve"><value>Se liberó la sala.</value></data>
     <data name="Rooms.ReleaseRoom.Response404" xml:space="preserve"><value>No se encontró la sala.</value></data>
+    <data name="ShowNotFound" xml:space="preserve"><value>No se encontró la función.</value></data>
+    <data name="ShowRoomAlreadyBooked" xml:space="preserve"><value>La sala ya está reservada para el horario seleccionado.</value></data>
+    <data name="ShowTimeSlotOverlaps" xml:space="preserve"><value>El nuevo horario se superpone con otra función en esta sala.</value></data>
+    <data name="ShowInvalidTimeSlot" xml:space="preserve"><value>La hora de fin debe ser posterior a la hora de inicio.</value></data>
+    <data name="InvalidShowMovieId" xml:space="preserve"><value>El id de la película debe ser un número positivo.</value></data>
+    <data name="InvalidShowRoomId" xml:space="preserve"><value>El id de la sala debe ser un número positivo.</value></data>
+    <data name="Shows.GetShowById.Summary" xml:space="preserve"><value>Obtener función por id</value></data>
+    <data name="Shows.GetShowById.Response200" xml:space="preserve"><value>Se encontró la función.</value></data>
+    <data name="Shows.GetShowById.Response404" xml:space="preserve"><value>No se encontró la función.</value></data>
+    <data name="Shows.GetAllShows.Summary" xml:space="preserve"><value>Obtener todas las funciones</value></data>
+    <data name="Shows.GetAllShows.Response200" xml:space="preserve"><value>Se encontraron las funciones.</value></data>
+    <data name="Shows.GetDailySchedule.Summary" xml:space="preserve"><value>Obtener programación diaria</value></data>
+    <data name="Shows.GetDailySchedule.Description" xml:space="preserve"><value>Obtiene todas las funciones de una fecha específica (US09).</value></data>
+    <data name="Shows.GetDailySchedule.Response200" xml:space="preserve"><value>Se encontró la programación diaria.</value></data>
+    <data name="Shows.ScheduleShow.Summary" xml:space="preserve"><value>Programar función</value></data>
+    <data name="Shows.ScheduleShow.Description" xml:space="preserve"><value>Programa una nueva función (US07).</value></data>
+    <data name="Shows.ScheduleShow.Response201" xml:space="preserve"><value>Se programó la función.</value></data>
+    <data name="Shows.ScheduleShow.Response400" xml:space="preserve"><value>La solicitud no es válida (por ejemplo, la hora de fin no es posterior a la de inicio).</value></data>
+    <data name="Shows.ScheduleShow.Response409" xml:space="preserve"><value>La sala ya está reservada en este horario.</value></data>
+    <data name="Shows.EditShow.Summary" xml:space="preserve"><value>Editar función</value></data>
+    <data name="Shows.EditShow.Description" xml:space="preserve"><value>Actualiza el horario de una función existente (US08).</value></data>
+    <data name="Shows.EditShow.Response200" xml:space="preserve"><value>Se actualizó la función.</value></data>
+    <data name="Shows.EditShow.Response400" xml:space="preserve"><value>La solicitud no es válida (por ejemplo, la hora de fin no es posterior a la de inicio).</value></data>
+    <data name="Shows.EditShow.Response404" xml:space="preserve"><value>No se encontró la función.</value></data>
+    <data name="Shows.EditShow.Response409" xml:space="preserve"><value>El nuevo horario se superpone con otra función.</value></data>
+    <data name="Shows.CancelShow.Summary" xml:space="preserve"><value>Cancelar función</value></data>
+    <data name="Shows.CancelShow.Description" xml:space="preserve"><value>Cancela una función programada (US08).</value></data>
+    <data name="Shows.CancelShow.Response200" xml:space="preserve"><value>Se canceló la función.</value></data>
+    <data name="Shows.CancelShow.Response404" xml:space="preserve"><value>No se encontró la función.</value></data>
 </root>
