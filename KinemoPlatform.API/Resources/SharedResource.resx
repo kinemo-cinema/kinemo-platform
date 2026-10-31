@@ -112,5 +112,10 @@
     <data name="SensoryFileRequired" xml:space="preserve"><value>A non-empty sensory file is required.</value></data>
     <data name="Movies.UpdateMovie.Response400" xml:space="preserve"><value>The request body is invalid.</value></data>
     <data name="Movies.UpdateMovie.Response409" xml:space="preserve"><value>Another movie already uses the requested title.</value></data>
-    <data name="Movies.ConfigureEffectsProfile.Response400" xml:space="preserve"><value>The request body is invalid.</value></data> 
+    <data name="Movies.ConfigureEffectsProfile.Response400" xml:space="preserve"><value>The request body is invalid.</value></data>
+    <data name="RequiredMovieTitle" xml:space="preserve"><value>The movie title is required.</value></data>
+    <data name="InvalidMovieTitleLength" xml:space="preserve"><value>The movie title must not exceed {1} characters.</value></data>
+    <data name="InvalidMovieDuration" xml:space="preserve"><value>The duration must be between {1} and {2} minutes.</value></data>
+    <data name="InvalidMovieGenre" xml:space="preserve"><value>The genre is not a valid movie genre.</value></data>
+    <data name="InvalidIntensityLevel" xml:space="preserve"><value>The intensity level must be Low, Medium or High.</value></data>
 </root>
