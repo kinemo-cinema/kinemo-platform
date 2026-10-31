@@ -2,7 +2,7 @@
 using KinemoPlatform.API.Ticketing.Domain.Model.Entities;
 using KinemoPlatform.API.Ticketing.Domain.Model.Queries;
 
-namespace KinemoPlatform.API.Ticketing.Domain.Services;
+namespace KinemoPlatform.API.Ticketing.Application.Services;
 
 public interface ITicketingQueryService
 {

@@ -1,6 +1,6 @@
 ﻿using System.Net.Mime;
+using KinemoPlatform.API.Ticketing.Application.Services;
 using KinemoPlatform.API.Ticketing.Domain.Model.Queries;
-using KinemoPlatform.API.Ticketing.Domain.Services;
 using KinemoPlatform.API.Ticketing.Interfaces.REST.Resources;
 using KinemoPlatform.API.Ticketing.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;

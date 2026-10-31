@@ -1,8 +1,8 @@
-﻿using KinemoPlatform.API.Ticketing.Domain.Model.Aggregates;
+﻿using KinemoPlatform.API.Ticketing.Application.Services;
+using KinemoPlatform.API.Ticketing.Domain.Model.Aggregates;
 using KinemoPlatform.API.Ticketing.Domain.Model.Entities;
 using KinemoPlatform.API.Ticketing.Domain.Model.Queries;
 using KinemoPlatform.API.Ticketing.Domain.Repositories;
-using KinemoPlatform.API.Ticketing.Domain.Services;
 
 namespace KinemoPlatform.API.Ticketing.Application.Internal.QueryServices;
 

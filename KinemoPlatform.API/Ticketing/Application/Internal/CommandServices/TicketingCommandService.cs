@@ -1,11 +1,11 @@
 ﻿using Cortex.Mediator;
 using KinemoPlatform.API.Shared.Domain.Repositories;
+using KinemoPlatform.API.Ticketing.Application.Services;
 using KinemoPlatform.API.Ticketing.Domain.ExternalServices;
 using KinemoPlatform.API.Ticketing.Domain.Model.Aggregates;
 using KinemoPlatform.API.Ticketing.Domain.Model.Commands;
 using KinemoPlatform.API.Ticketing.Domain.Model.Events;
 using KinemoPlatform.API.Ticketing.Domain.Repositories;
-using KinemoPlatform.API.Ticketing.Domain.Services;
 
 namespace KinemoPlatform.API.Ticketing.Application.Internal.CommandServices;
 

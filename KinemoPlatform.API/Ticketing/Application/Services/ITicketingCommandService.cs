@@ -1,7 +1,7 @@
 ﻿using KinemoPlatform.API.Ticketing.Domain.Model.Aggregates;
 using KinemoPlatform.API.Ticketing.Domain.Model.Commands;
 
-namespace KinemoPlatform.API.Ticketing.Domain.Services;
+namespace KinemoPlatform.API.Ticketing.Application.Services;
 
 public interface ITicketingCommandService
 {
