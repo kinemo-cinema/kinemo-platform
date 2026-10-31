@@ -43,6 +43,7 @@ public class RoomsController(
     [EndpointSummary("Create Room")]
     [ProducesResponseType(typeof(RoomResource), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateRoom([FromBody] CreateRoomResource resource,
         CancellationToken cancellationToken)
     {
@@ -58,6 +59,7 @@ public class RoomsController(
     [EndpointDescription("Perform a readiness inspection on the room.")]
     [ProducesResponseType(typeof(RoomResource), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> PrepareRoom([FromRoute] int roomId, [FromBody] PrepareRoomResource resource,
         CancellationToken cancellationToken)
     {
@@ -72,6 +74,7 @@ public class RoomsController(
     [EndpointDescription("Block a room for maintenance.")]
     [ProducesResponseType(typeof(RoomResource), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> BlockRoom([FromRoute] int roomId, [FromBody] BlockRoomResource resource,
         CancellationToken cancellationToken)
     {
