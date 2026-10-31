@@ -41,6 +41,7 @@
 
     <ItemGroup>
       <Folder Include="Rooms\Domain\Services\" />
+      <Folder Include="Scheduling\Domain\Services\" />
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using System.Net.Mime;
+using KinemoPlatform.API.Scheduling.Application.Services;
 using KinemoPlatform.API.Scheduling.Domain.Model.Commands;
 using KinemoPlatform.API.Scheduling.Domain.Model.Queries;
-using KinemoPlatform.API.Scheduling.Domain.Services;
 using KinemoPlatform.API.Scheduling.Interfaces.REST.Resources;
 using KinemoPlatform.API.Scheduling.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;

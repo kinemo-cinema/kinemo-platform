@@ -1,7 +1,7 @@
-﻿using KinemoPlatform.API.Scheduling.Domain.Model.Aggregates;
+﻿using KinemoPlatform.API.Scheduling.Application.Services;
+using KinemoPlatform.API.Scheduling.Domain.Model.Aggregates;
 using KinemoPlatform.API.Scheduling.Domain.Model.Queries;
 using KinemoPlatform.API.Scheduling.Domain.Repositories;
-using KinemoPlatform.API.Scheduling.Domain.Services;
 
 namespace KinemoPlatform.API.Scheduling.Application.Internal.QueryServices;
 

@@ -1,7 +1,7 @@
 ﻿using KinemoPlatform.API.Scheduling.Domain.Model.Aggregates;
 using KinemoPlatform.API.Scheduling.Domain.Model.Queries;
 
-namespace KinemoPlatform.API.Scheduling.Domain.Services;
+namespace KinemoPlatform.API.Scheduling.Application.Services;
 
 /// <summary>
 ///     Represents the show query service in the Kinemo Platform.

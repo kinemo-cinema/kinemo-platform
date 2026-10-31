@@ -1,9 +1,9 @@
 ﻿using Cortex.Mediator;
+using KinemoPlatform.API.Scheduling.Application.Services;
 using KinemoPlatform.API.Scheduling.Domain.Model.Aggregates;
 using KinemoPlatform.API.Scheduling.Domain.Model.Commands;
 using KinemoPlatform.API.Scheduling.Domain.Model.Events;
 using KinemoPlatform.API.Scheduling.Domain.Repositories;
-using KinemoPlatform.API.Scheduling.Domain.Services;
 using KinemoPlatform.API.Shared.Domain.Repositories;
 
 namespace KinemoPlatform.API.Scheduling.Application.Internal.CommandServices;

@@ -29,7 +29,6 @@ using KinemoPlatform.API.Movies.Infrastructure.Persistence.EFC.Repositories;
 using KinemoPlatform.API.Scheduling.Application.Internal.CommandServices;
 using KinemoPlatform.API.Scheduling.Application.Internal.QueryServices;
 using KinemoPlatform.API.Scheduling.Domain.Repositories;
-using KinemoPlatform.API.Scheduling.Domain.Services;
 using KinemoPlatform.API.Scheduling.Infrastructure.Persistence.EFC.Repositories;
 
 // BC03: Rooms
@@ -77,6 +76,7 @@ using KinemoPlatform.API.Analytics.Domain.Services;
 using KinemoPlatform.API.Analytics.Infrastructure.Persistence.EFC.Repositories;
 using KinemoPlatform.API.Movies.Application.Services;
 using KinemoPlatform.API.Rooms.Application.Services;
+using KinemoPlatform.API.Scheduling.Application.Services;
 
 // BC09: Subscriptions
 using KinemoPlatform.API.Subscriptions.Application.Internal.CommandServices;
