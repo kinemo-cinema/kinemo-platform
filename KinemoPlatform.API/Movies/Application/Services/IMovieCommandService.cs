@@ -1,5 +1,7 @@
-﻿using KinemoPlatform.API.Movies.Domain.Model.Aggregates;
+﻿using KinemoPlatform.API.Movies.Application.Errors;
+using KinemoPlatform.API.Movies.Domain.Model.Aggregates;
 using KinemoPlatform.API.Movies.Domain.Model.Commands;
+using KinemoPlatform.API.Shared.Application.Patterns;
 
 namespace KinemoPlatform.API.Movies.Application.Services;
 
@@ -17,10 +19,13 @@ public interface IMovieCommandService
     /// <param name="command">
     ///     The <see cref="CreateMovieCommand" /> to handle.
     /// </param>
+    /// <param name="cancellationToken">
+    ///     Token to cancel the asynchronous operation.
+    /// </param>
     /// <returns>
-    ///     The created <see cref="Movie" />, or null if the operation failed.
+    ///     A success result with the affected <see cref="Movie" />, or a failure with an <see cref="EMovieError" />.
     /// </returns>
-    Task<Movie?> Handle(CreateMovieCommand command);
+    Task<Result<Movie, EMovieError>> Handle(CreateMovieCommand command, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Handle the update movie command.
@@ -28,10 +33,13 @@ public interface IMovieCommandService
     /// <param name="command">
     ///     The <see cref="UpdateMovieCommand" /> to handle.
     /// </param>
+    /// <param name="cancellationToken">
+    ///     Token to cancel the asynchronous operation.
+    /// </param>
     /// <returns>
-    ///     The updated <see cref="Movie" />, or null if the movie was not found.
+    ///     A success result with the affected <see cref="Movie" />, or a failure with an <see cref="EMovieError" />.
     /// </returns>
-    Task<Movie?> Handle(UpdateMovieCommand command);
+    Task<Result<Movie, EMovieError>> Handle(UpdateMovieCommand command, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Handle the deactivate movie command (US04).
@@ -39,10 +47,13 @@ public interface IMovieCommandService
     /// <param name="command">
     ///     The <see cref="DeactivateMovieCommand" /> to handle.
     /// </param>
+    /// <param name="cancellationToken">
+    ///     Token to cancel the asynchronous operation.
+    /// </param>
     /// <returns>
-    ///     The deactivated <see cref="Movie" />, or null if not found.
+    ///     A success result with the affected <see cref="Movie" />, or a failure with an <see cref="EMovieError" />.
     /// </returns>
-    Task<Movie?> Handle(DeactivateMovieCommand command);
+    Task<Result<Movie, EMovieError>> Handle(DeactivateMovieCommand command, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Handle the associate sensory file command (US02).
@@ -50,10 +61,13 @@ public interface IMovieCommandService
     /// <param name="command">
     ///     The <see cref="AssociateSensoryFileCommand" /> to handle.
     /// </param>
+    /// <param name="cancellationToken">
+    ///     Token to cancel the asynchronous operation.
+    /// </param>
     /// <returns>
-    ///     The updated <see cref="Movie" />, or null if the movie was not found.
+    ///     A success result with the affected <see cref="Movie" />, or a failure with an <see cref="EMovieError" />.
     /// </returns>
-    Task<Movie?> Handle(AssociateSensoryFileCommand command);
+    Task<Result<Movie, EMovieError>> Handle(AssociateSensoryFileCommand command, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Handle the configure effects profile command (US06).
@@ -61,8 +75,11 @@ public interface IMovieCommandService
     /// <param name="command">
     ///     The <see cref="ConfigureEffectsProfileCommand" /> to handle.
     /// </param>
+    /// <param name="cancellationToken">
+    ///     Token to cancel the asynchronous operation.
+    /// </param>
     /// <returns>
-    ///     The updated <see cref="Movie" />, or null if the movie was not found.
+    ///     A success result with the affected <see cref="Movie" />, or a failure with an <see cref="EMovieError" />.
     /// </returns>
-    Task<Movie?> Handle(ConfigureEffectsProfileCommand command);
+    Task<Result<Movie, EMovieError>> Handle(ConfigureEffectsProfileCommand command, CancellationToken cancellationToken = default);
 }

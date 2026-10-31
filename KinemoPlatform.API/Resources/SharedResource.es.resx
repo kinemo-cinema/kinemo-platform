@@ -8,4 +8,13 @@
     <data name="InvalidModelStateTitle" xml:space="preserve"><value>La solicitud contiene valores no válidos.</value></data>
     <data name="UnexpectedServerError" xml:space="preserve"><value>Ocurrió un error inesperado.</value></data>
     <data name="UnexpectedErrorProcessingRequest" xml:space="preserve"><value>El servidor no pudo procesar la solicitud. Inténtalo de nuevo más tarde.</value></data>
+	  <data name="MovieNotFound" xml:space="preserve"><value>La película no fue encontrada.</value></data>
+    <data name="MovieTitleDuplicated" xml:space="preserve"><value>Una película con este título ya existe.</value></data>
+    <data name="SensoryFileRequired" xml:space="preserve"><value>Se requiere un archivo sensorial no vacío.</value></data>
+    <data name="Movies.UpdateMovie.Response400" xml:space="preserve"><value>El cuerpo de la solicitud es inválido.</value></data>
+    <data name="Movies.UpdateMovie.Response409" xml:space="preserve"><value>Otra película ya utiliza el título solicitado.</value></data>
+    <data name="Movies.ConfigureEffectsProfile.Response400" xml:space="preserve"><value>El cuerpo de la solicitud es inválido.</value></data>
+    <data name="Movies.GetSensoryContent.Response200" xml:space="preserve">
+	    <value />
+    </data>
 </root>

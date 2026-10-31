@@ -107,4 +107,10 @@
     <data name="Ticketing.GetOccupancyByShowId.Response404" xml:space="preserve"><value>The occupancy was not found.</value></data>
     <data name="Ticketing.SyncOccupancy.Response200" xml:space="preserve"><value>The synchronization was executed (check logs for success/failure).</value></data>
     <data name="Ticketing.SyncOccupancy.Response404" xml:space="preserve"><value>The integration was not found.</value></data>
+    <data name="MovieNotFound" xml:space="preserve"><value>The movie was not found.</value></data>
+    <data name="MovieTitleDuplicated" xml:space="preserve"><value>A movie with this title already exists.</value></data>
+    <data name="SensoryFileRequired" xml:space="preserve"><value>A non-empty sensory file is required.</value></data>
+    <data name="Movies.UpdateMovie.Response400" xml:space="preserve"><value>The request body is invalid.</value></data>
+    <data name="Movies.UpdateMovie.Response409" xml:space="preserve"><value>Another movie already uses the requested title.</value></data>
+    <data name="Movies.ConfigureEffectsProfile.Response400" xml:space="preserve"><value>The request body is invalid.</value></data> 
 </root>
