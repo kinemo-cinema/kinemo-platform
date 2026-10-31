@@ -12,24 +12,22 @@ namespace KinemoPlatform.API.Rooms.Infrastructure.Persistence.EFC.Repositories;
 public class RoomRepository(AppDbContext context) 
     : BaseRepository<Room>(context), IRoomRepository
 {
-    public async Task<bool> ExistsByNameAsync(string name)
+    public async Task<bool> ExistsByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        return await Context.Set<Room>().AnyAsync(r => r.Name == name);
+        return await Context.Set<Room>().AnyAsync(r => r.Name == name, cancellationToken);
     }
 
-    public async Task<Room?> FindByIdWithDetailsAsync(int roomId)
+    public async Task<Room?> FindByIdWithDetailsAsync(int roomId, CancellationToken cancellationToken = default)
     {
         return await Context.Set<Room>()
             .Include(r => r.Inspections)
             .Include(r => r.Blocks)
-            .FirstOrDefaultAsync(r => r.Id == roomId);
+            .FirstOrDefaultAsync(r => r.Id == roomId, cancellationToken);
     }
 
-    // Override to include details by default when fetching a single room
     public override async Task<Room?> FindByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        // TODO(rooms-result-pattern): pass cancellationToken once FindByIdWithDetailsAsync accepts it.
-        return await FindByIdWithDetailsAsync(id);
+            return await FindByIdWithDetailsAsync(id, cancellationToken);
     }
 
     // Override to include details when listing all rooms (useful for the UI)
