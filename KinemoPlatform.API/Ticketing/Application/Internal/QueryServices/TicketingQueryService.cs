@@ -8,13 +8,13 @@ namespace KinemoPlatform.API.Ticketing.Application.Internal.QueryServices;
 
 public class TicketingQueryService(ITicketingRepository ticketingRepository) : ITicketingQueryService
 {
-    public async Task<TicketingIntegration?> Handle(GetIntegrationByIdQuery query)
+    public async Task<TicketingIntegration?> Handle(GetIntegrationByIdQuery query, CancellationToken cancellationToken = default)
     {
-        return await ticketingRepository.FindByIdWithDetailsAsync(query.IntegrationId);
+        return await ticketingRepository.FindByIdWithDetailsAsync(query.IntegrationId, cancellationToken);
     }
 
-    public async Task<ShowOccupancy?> Handle(GetOccupancyByShowIdQuery query)
+    public async Task<ShowOccupancy?> Handle(GetOccupancyByShowIdQuery query, CancellationToken cancellationToken = default)
     {
-        return await ticketingRepository.FindOccupancyByShowIdAsync(query.ShowId);
+        return await ticketingRepository.FindOccupancyByShowIdAsync(query.ShowId, cancellationToken);
     }
 }

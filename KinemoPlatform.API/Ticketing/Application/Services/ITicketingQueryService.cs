@@ -6,7 +6,7 @@ namespace KinemoPlatform.API.Ticketing.Application.Services;
 
 public interface ITicketingQueryService
 {
-    Task<TicketingIntegration?> Handle(GetIntegrationByIdQuery query);
+    Task<TicketingIntegration?> Handle(GetIntegrationByIdQuery query, CancellationToken cancellationToken = default);
     
-    Task<ShowOccupancy?> Handle(GetOccupancyByShowIdQuery query);
+    Task<ShowOccupancy?> Handle(GetOccupancyByShowIdQuery query, CancellationToken cancellationToken = default);
 }
