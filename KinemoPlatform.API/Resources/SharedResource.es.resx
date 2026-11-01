@@ -121,4 +121,5 @@
     <data name="Shows.CancelShow.Description" xml:space="preserve"><value>Cancela una función programada (US08).</value></data>
     <data name="Shows.CancelShow.Response200" xml:space="preserve"><value>Se canceló la función.</value></data>
     <data name="Shows.CancelShow.Response404" xml:space="preserve"><value>No se encontró la función.</value></data>
+    <data name="TicketingIntegrationNotFound" xml:space="preserve"><value>No se encontró la integración de ticketing.</value></data>
 </root>

@@ -138,4 +138,5 @@
     <data name="ShowInvalidTimeSlot" xml:space="preserve"><value>The end time must be after the start time.</value></data>
     <data name="InvalidShowMovieId" xml:space="preserve"><value>The movie id must be a positive number.</value></data>
     <data name="InvalidShowRoomId" xml:space="preserve"><value>The room id must be a positive number.</value></data>
+    <data name="TicketingIntegrationNotFound" xml:space="preserve"><value>The ticketing integration was not found.</value></data>
 </root>
