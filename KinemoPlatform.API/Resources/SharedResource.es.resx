@@ -122,4 +122,24 @@
     <data name="Shows.CancelShow.Response200" xml:space="preserve"><value>Se canceló la función.</value></data>
     <data name="Shows.CancelShow.Response404" xml:space="preserve"><value>No se encontró la función.</value></data>
     <data name="TicketingIntegrationNotFound" xml:space="preserve"><value>No se encontró la integración de ticketing.</value></data>
+    <data name="InvalidCinemaId" xml:space="preserve"><value>El id del cine debe ser un número positivo.</value></data>
+    <data name="RequiredProviderName" xml:space="preserve"><value>El nombre del proveedor es obligatorio.</value></data>
+    <data name="InvalidProviderNameLength" xml:space="preserve"><value>El nombre del proveedor no debe superar los {1} caracteres.</value></data>
+    <data name="InvalidTicketingShowId" xml:space="preserve"><value>El id de la función debe ser un número positivo.</value></data>
+    <data name="Ticketing.CreateIntegration.Summary" xml:space="preserve"><value>Crear integración</value></data>
+    <data name="Ticketing.CreateIntegration.Description" xml:space="preserve"><value>Registra una nueva integración externa de ticketing.</value></data>
+    <data name="Ticketing.CreateIntegration.Response201" xml:space="preserve"><value>Se creó la integración.</value></data>
+    <data name="Ticketing.CreateIntegration.Response400" xml:space="preserve"><value>El cuerpo de la solicitud no es válido.</value></data>
+    <data name="Ticketing.GetIntegrationById.Summary" xml:space="preserve"><value>Obtener integración por id</value></data>
+    <data name="Ticketing.GetIntegrationById.Response200" xml:space="preserve"><value>Se encontró la integración.</value></data>
+    <data name="Ticketing.GetIntegrationById.Response404" xml:space="preserve"><value>No se encontró la integración.</value></data>
+    <data name="Ticketing.SyncOccupancy.Summary" xml:space="preserve"><value>Sincronizar ocupación de la función</value></data>
+    <data name="Ticketing.SyncOccupancy.Description" xml:space="preserve"><value>Obtiene los datos de ocupación más recientes de una función desde el proveedor externo.</value></data>
+    <data name="Ticketing.SyncOccupancy.Response200" xml:space="preserve"><value>Se ejecutó la sincronización (revise el registro para ver si tuvo éxito o falló).</value></data>
+    <data name="Ticketing.SyncOccupancy.Response400" xml:space="preserve"><value>El cuerpo de la solicitud no es válido.</value></data>
+    <data name="Ticketing.SyncOccupancy.Response404" xml:space="preserve"><value>No se encontró la integración.</value></data>
+    <data name="Ticketing.GetOccupancyByShowId.Summary" xml:space="preserve"><value>Obtener ocupación de la función</value></data>
+    <data name="Ticketing.GetOccupancyByShowId.Description" xml:space="preserve"><value>Recupera la ocupación almacenada actualmente para una función específica.</value></data>
+    <data name="Ticketing.GetOccupancyByShowId.Response200" xml:space="preserve"><value>Se encontró la ocupación.</value></data>
+    <data name="Ticketing.GetOccupancyByShowId.Response404" xml:space="preserve"><value>No se encontró la ocupación.</value></data>
 </root>

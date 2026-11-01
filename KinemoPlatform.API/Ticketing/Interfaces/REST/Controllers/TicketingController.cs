@@ -22,6 +22,7 @@ public class TicketingController(
     [EndpointSummary("Create Integration")]
     [EndpointDescription("Register a new external ticketing integration.")]
     [ProducesResponseType(typeof(TicketingIntegrationResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateIntegration([FromBody] CreateIntegrationResource resource,
         CancellationToken cancellationToken)
     {
