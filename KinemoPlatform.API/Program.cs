@@ -42,7 +42,6 @@ using KinemoPlatform.API.Ticketing.Application.Internal.CommandServices;
 using KinemoPlatform.API.Ticketing.Application.Internal.QueryServices;
 using KinemoPlatform.API.Ticketing.Domain.ExternalServices;
 using KinemoPlatform.API.Ticketing.Domain.Repositories;
-using KinemoPlatform.API.Ticketing.Domain.Services;
 using KinemoPlatform.API.Ticketing.Infrastructure.External;
 using KinemoPlatform.API.Ticketing.Infrastructure.Persistence.EFC.Repositories;
 
@@ -84,6 +83,7 @@ using KinemoPlatform.API.Subscriptions.Application.Internal.QueryServices;
 using KinemoPlatform.API.Subscriptions.Domain.Repositories;
 using KinemoPlatform.API.Subscriptions.Domain.Services;
 using KinemoPlatform.API.Subscriptions.Infrastructure.Persistence.EFC.Repositories;
+using KinemoPlatform.API.Ticketing.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

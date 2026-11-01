@@ -12,10 +12,11 @@ public interface ITicketingRepository : IBaseRepository<TicketingIntegration>
     /// <summary>
     ///     Retrieves an integration by its ID, eagerly loading sync logs and occupancies.
     /// </summary>
-    Task<TicketingIntegration?> FindByIdWithDetailsAsync(int integrationId);
+    Task<TicketingIntegration?> FindByIdWithDetailsAsync(int integrationId, CancellationToken cancellationToken = default);
+
 
     /// <summary>
     ///     Retrieves the occupancy record for a specific show.
     /// </summary>
-    Task<ShowOccupancy?> FindOccupancyByShowIdAsync(int showId);
+    Task<ShowOccupancy?> FindOccupancyByShowIdAsync(int showId, CancellationToken cancellationToken = default);
 }
