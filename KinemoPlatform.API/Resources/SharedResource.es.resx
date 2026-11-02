@@ -142,4 +142,8 @@
     <data name="Ticketing.GetOccupancyByShowId.Description" xml:space="preserve"><value>Recupera la ocupación almacenada actualmente para una función específica.</value></data>
     <data name="Ticketing.GetOccupancyByShowId.Response200" xml:space="preserve"><value>Se encontró la ocupación.</value></data>
     <data name="Ticketing.GetOccupancyByShowId.Response404" xml:space="preserve"><value>No se encontró la ocupación.</value></data>
+    <data name="SeatAllocationAlreadyExists" xml:space="preserve"><value>Ya existe una asignación de asientos para esta función.</value></data>
+    <data name="SeatAllocationNotFound" xml:space="preserve"><value>No se encontró la asignación de asientos de esta función.</value></data>
+    <data name="SeatNotFound" xml:space="preserve"><value>No se encontró el asiento en esta asignación.</value></data>
+    <data name="SeatStatusNotSupported" xml:space="preserve"><value>Este estado no se puede asignar manualmente.</value></data>
 </root>
