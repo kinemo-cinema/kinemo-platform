@@ -2,7 +2,7 @@
 using KinemoPlatform.API.Seats.Domain.Model.Entities;
 using KinemoPlatform.API.Seats.Domain.Model.Queries;
 
-namespace KinemoPlatform.API.Seats.Domain.Services;
+namespace KinemoPlatform.API.Seats.Application.Services;
 
 /// <summary>
 ///     Represents the seat allocation query service in the Kinemo Platform.
@@ -17,5 +17,6 @@ public interface ISeatAllocationQueryService
     /// <summary>
     ///     Handles retrieving a specific seat within a show.
     /// </summary>
-    Task<ShowSeat?> Handle(GetShowSeatQuery query);
+    Task<SeatAllocation?> Handle(GetSeatAllocationByShowIdQuery query, CancellationToken cancellationToken = default);
+    Task<ShowSeat?> Handle(GetShowSeatQuery query, CancellationToken cancellationToken = default);
 }

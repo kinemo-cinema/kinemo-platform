@@ -20,5 +20,6 @@ public interface ISeatAllocationRepository : IBaseRepository<SeatAllocation>
     /// </summary>
     /// <param name="showId">The ID of the show.</param>
     /// <returns>The seat allocation with its related entities, or null if not found.</returns>
-    Task<SeatAllocation?> FindByShowIdWithDetailsAsync(int showId);
+    Task<bool> ExistsByShowIdAsync(int showId, CancellationToken cancellationToken = default);
+    Task<SeatAllocation?> FindByShowIdWithDetailsAsync(int showId, CancellationToken cancellationToken = default);
 }

@@ -37,6 +37,30 @@ public partial class SeatAllocation
     public ICollection<ManualIntervention> Interventions { get; }
 
     /// <summary>
+    ///     Whether this allocation contains a seat with the given number.
+    /// </summary>
+    /// <param name="seatNumber">The seat number to look for.</param>
+    /// <returns>True when the seat exists.</returns>
+    public bool HasSeat(int seatNumber)
+    {
+        return ShowSeats.Any(s => s.SeatNumber == seatNumber);
+    }
+
+    /// <summary>
+    ///     Whether a status can be assigned manually with <see cref="AssignSeat" />.
+    /// </summary>
+    /// <remarks>
+    ///     Keep in sync with the cases handled by <see cref="AssignSeat" />. Callers should check this (and
+    ///     <see cref="HasSeat" />) before assigning, so invalid input never has to be handled as an exception.
+    /// </remarks>
+    /// <param name="status">The status to check.</param>
+    /// <returns>True when the status is supported for manual assignment.</returns>
+    public static bool IsManuallyAssignable(ESeatStatus status)
+    {
+        return status is ESeatStatus.Sold or ESeatStatus.Enabled or ESeatStatus.Disabled or ESeatStatus.OutOfService;
+    }
+
+    /// <summary>
     ///     Changes the status of a specific seat.
     /// </summary>
     public void AssignSeat(int seatNumber, ESeatStatus newStatus)

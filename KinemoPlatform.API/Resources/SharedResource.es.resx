@@ -142,4 +142,34 @@
     <data name="Ticketing.GetOccupancyByShowId.Description" xml:space="preserve"><value>Recupera la ocupación almacenada actualmente para una función específica.</value></data>
     <data name="Ticketing.GetOccupancyByShowId.Response200" xml:space="preserve"><value>Se encontró la ocupación.</value></data>
     <data name="Ticketing.GetOccupancyByShowId.Response404" xml:space="preserve"><value>No se encontró la ocupación.</value></data>
+    <data name="SeatAllocationAlreadyExists" xml:space="preserve"><value>Ya existe una asignación de asientos para esta función.</value></data>
+    <data name="SeatAllocationNotFound" xml:space="preserve"><value>No se encontró la asignación de asientos de esta función.</value></data>
+    <data name="SeatNotFound" xml:space="preserve"><value>No se encontró el asiento en esta asignación.</value></data>
+    <data name="SeatStatusNotSupported" xml:space="preserve"><value>Este estado no se puede asignar manualmente.</value></data>
+    <data name="InvalidSeatShowId" xml:space="preserve"><value>El id de la función debe ser un número positivo.</value></data>
+    <data name="InvalidTotalSeats" xml:space="preserve"><value>El total de asientos debe estar entre {1} y {2}.</value></data>
+    <data name="InvalidSeatStatus" xml:space="preserve"><value>El estado del asiento no es válido.</value></data>
+    <data name="RequiredOutOfServiceReason" xml:space="preserve"><value>El motivo es obligatorio.</value></data>
+    <data name="InvalidOutOfServiceReasonLength" xml:space="preserve"><value>El motivo no debe superar los {1} caracteres.</value></data>
+    <data name="SeatAllocations.InitializeSeats.Summary" xml:space="preserve"><value>Inicializar asientos</value></data>
+    <data name="SeatAllocations.InitializeSeats.Description" xml:space="preserve"><value>Genera el mapa de asientos de una función específica.</value></data>
+    <data name="SeatAllocations.InitializeSeats.Response201" xml:space="preserve"><value>Se generó el mapa de asientos.</value></data>
+    <data name="SeatAllocations.InitializeSeats.Response400" xml:space="preserve"><value>El cuerpo de la solicitud no es válido.</value></data>
+    <data name="SeatAllocations.InitializeSeats.Response409" xml:space="preserve"><value>Ya existe una asignación de asientos para esta función.</value></data>
+    <data name="SeatAllocations.GetAllocationByShowId.Summary" xml:space="preserve"><value>Obtener asignación de asientos por id de función</value></data>
+    <data name="SeatAllocations.GetAllocationByShowId.Response200" xml:space="preserve"><value>Se encontró el mapa de asientos.</value></data>
+    <data name="SeatAllocations.GetAllocationByShowId.Response404" xml:space="preserve"><value>No se encontró el mapa de asientos.</value></data>
+    <data name="SeatAllocations.GetShowSeat.Summary" xml:space="preserve"><value>Obtener un asiento específico</value></data>
+    <data name="SeatAllocations.GetShowSeat.Response200" xml:space="preserve"><value>Se encontró el asiento.</value></data>
+    <data name="SeatAllocations.GetShowSeat.Response404" xml:space="preserve"><value>No se encontró el asiento.</value></data>
+    <data name="SeatAllocations.AssignSeat.Summary" xml:space="preserve"><value>Asignar estado de asiento</value></data>
+    <data name="SeatAllocations.AssignSeat.Description" xml:space="preserve"><value>Cambia manualmente el estado de un asiento (por ejemplo, vendido, habilitado, deshabilitado).</value></data>
+    <data name="SeatAllocations.AssignSeat.Response200" xml:space="preserve"><value>Se actualizó el estado del asiento.</value></data>
+    <data name="SeatAllocations.AssignSeat.Response400" xml:space="preserve"><value>La solicitud no es válida o el estado no se puede asignar manualmente.</value></data>
+    <data name="SeatAllocations.AssignSeat.Response404" xml:space="preserve"><value>No se encontró el asiento o la asignación.</value></data>
+    <data name="SeatAllocations.MarkSeatOutOfService.Summary" xml:space="preserve"><value>Marcar asiento fuera de servicio</value></data>
+    <data name="SeatAllocations.MarkSeatOutOfService.Description" xml:space="preserve"><value>Registra un asiento dañado para que no pueda usarse (US12).</value></data>
+    <data name="SeatAllocations.MarkSeatOutOfService.Response200" xml:space="preserve"><value>Se marcó el asiento fuera de servicio.</value></data>
+    <data name="SeatAllocations.MarkSeatOutOfService.Response400" xml:space="preserve"><value>El cuerpo de la solicitud no es válido.</value></data>
+    <data name="SeatAllocations.MarkSeatOutOfService.Response404" xml:space="preserve"><value>No se encontró el asiento o la asignación.</value></data>
 </root>
