@@ -17,5 +17,6 @@ public interface ISeatAllocationQueryService
     /// <summary>
     ///     Handles retrieving a specific seat within a show.
     /// </summary>
-    Task<ShowSeat?> Handle(GetShowSeatQuery query);
+    Task<SeatAllocation?> Handle(GetSeatAllocationByShowIdQuery query, CancellationToken cancellationToken = default);
+    Task<ShowSeat?> Handle(GetShowSeatQuery query, CancellationToken cancellationToken = default);
 }
