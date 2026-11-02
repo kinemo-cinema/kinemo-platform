@@ -142,4 +142,53 @@
     <data name="Ticketing.GetOccupancyByShowId.Description" xml:space="preserve"><value>Recupera la ocupación almacenada actualmente para una función específica.</value></data>
     <data name="Ticketing.GetOccupancyByShowId.Response200" xml:space="preserve"><value>Se encontró la ocupación.</value></data>
     <data name="Ticketing.GetOccupancyByShowId.Response404" xml:space="preserve"><value>No se encontró la ocupación.</value></data>
+    <data name="EquipmentNotFound" xml:space="preserve"><value>No se encontró el equipo.</value></data>
+    <data name="EquipmentNameDuplicated" xml:space="preserve"><value>Ya existe un equipo con este nombre en esta sala.</value></data>
+    <data name="MaintenanceOrderNotFound" xml:space="preserve"><value>No se encontró la orden de mantenimiento.</value></data>
+    <data name="InvalidEquipmentRoomId" xml:space="preserve"><value>El id de la sala debe ser un número positivo.</value></data>
+    <data name="RequiredEquipmentName" xml:space="preserve"><value>El nombre del equipo es obligatorio.</value></data>
+    <data name="InvalidEquipmentNameLength" xml:space="preserve"><value>El nombre del equipo no debe superar los {1} caracteres.</value></data>
+    <data name="InvalidEquipmentType" xml:space="preserve"><value>El tipo de equipo no es válido.</value></data>
+    <data name="InvalidUsefulLifeHours" xml:space="preserve"><value>La vida útil debe estar entre {1} y {2} horas.</value></data>
+    <data name="RequiredIncidentDescription" xml:space="preserve"><value>La descripción de la incidencia es obligatoria.</value></data>
+    <data name="InvalidIncidentDescriptionLength" xml:space="preserve"><value>La descripción de la incidencia no debe superar los {1} caracteres.</value></data>
+    <data name="InvalidIncidentSeverity" xml:space="preserve"><value>La gravedad de la incidencia no es válida.</value></data>
+    <data name="InvalidEffectChannel" xml:space="preserve"><value>El canal de efectos no es válido.</value></data>
+    <data name="InvalidMaintenanceEquipmentId" xml:space="preserve"><value>El id del equipo debe ser un número positivo.</value></data>
+    <data name="InvalidMaintenanceIncidentId" xml:space="preserve"><value>El id de la incidencia debe ser un número positivo.</value></data>
+    <data name="InvalidMaintenanceType" xml:space="preserve"><value>El tipo de mantenimiento no es válido.</value></data>
+    <data name="RequiredCompletionNotes" xml:space="preserve"><value>Las notas de finalización son obligatorias.</value></data>
+    <data name="InvalidCompletionNotesLength" xml:space="preserve"><value>Las notas de finalización no deben superar los {1} caracteres.</value></data>
+    <data name="Equipment.RegisterEquipment.Summary" xml:space="preserve"><value>Registrar equipo</value></data>
+    <data name="Equipment.RegisterEquipment.Description" xml:space="preserve"><value>Registra un nuevo componente de hardware en una sala (US19).</value></data>
+    <data name="Equipment.RegisterEquipment.Response201" xml:space="preserve"><value>Se registró el equipo.</value></data>
+    <data name="Equipment.RegisterEquipment.Response400" xml:space="preserve"><value>El cuerpo de la solicitud no es válido.</value></data>
+    <data name="Equipment.RegisterEquipment.Response409" xml:space="preserve"><value>Ya existe un equipo con el mismo nombre en esta sala.</value></data>
+    <data name="Equipment.GetAllEquipment.Summary" xml:space="preserve"><value>Obtener todos los equipos</value></data>
+    <data name="Equipment.GetAllEquipment.Response200" xml:space="preserve"><value>Se encontraron los equipos.</value></data>
+    <data name="Equipment.GetEquipmentById.Summary" xml:space="preserve"><value>Obtener equipo por id</value></data>
+    <data name="Equipment.GetEquipmentById.Response200" xml:space="preserve"><value>Se encontró el equipo.</value></data>
+    <data name="Equipment.GetEquipmentById.Response404" xml:space="preserve"><value>No se encontró el equipo.</value></data>
+    <data name="Equipment.ReportIncident.Summary" xml:space="preserve"><value>Reportar incidencia</value></data>
+    <data name="Equipment.ReportIncident.Description" xml:space="preserve"><value>Reporta un componente averiado (US20).</value></data>
+    <data name="Equipment.ReportIncident.Response200" xml:space="preserve"><value>Se registró la incidencia.</value></data>
+    <data name="Equipment.ReportIncident.Response400" xml:space="preserve"><value>El cuerpo de la solicitud no es válido.</value></data>
+    <data name="Equipment.ReportIncident.Response404" xml:space="preserve"><value>No se encontró el equipo.</value></data>
+    <data name="Equipment.RunTest.Summary" xml:space="preserve"><value>Ejecutar prueba</value></data>
+    <data name="Equipment.RunTest.Description" xml:space="preserve"><value>Ejecuta una prueba de diagnóstico en un canal específico (US17).</value></data>
+    <data name="Equipment.RunTest.Response200" xml:space="preserve"><value>Se ejecutó la prueba.</value></data>
+    <data name="Equipment.RunTest.Response400" xml:space="preserve"><value>El cuerpo de la solicitud no es válido.</value></data>
+    <data name="Equipment.RunTest.Response404" xml:space="preserve"><value>No se encontró el equipo.</value></data>
+    <data name="MaintenanceOrders.ScheduleMaintenance.Summary" xml:space="preserve"><value>Programar mantenimiento</value></data>
+    <data name="MaintenanceOrders.ScheduleMaintenance.Description" xml:space="preserve"><value>Programa un mantenimiento preventivo o correctivo (US23).</value></data>
+    <data name="MaintenanceOrders.ScheduleMaintenance.Response201" xml:space="preserve"><value>Se creó la orden de mantenimiento.</value></data>
+    <data name="MaintenanceOrders.ScheduleMaintenance.Response400" xml:space="preserve"><value>La solicitud no es válida o el equipo no existe.</value></data>
+    <data name="MaintenanceOrders.CompleteMaintenance.Summary" xml:space="preserve"><value>Completar mantenimiento</value></data>
+    <data name="MaintenanceOrders.CompleteMaintenance.Description" xml:space="preserve"><value>Marca una orden como completada y resuelve su incidencia (US21).</value></data>
+    <data name="MaintenanceOrders.CompleteMaintenance.Response200" xml:space="preserve"><value>Se completó el mantenimiento.</value></data>
+    <data name="MaintenanceOrders.CompleteMaintenance.Response400" xml:space="preserve"><value>El cuerpo de la solicitud no es válido.</value></data>
+    <data name="MaintenanceOrders.CompleteMaintenance.Response404" xml:space="preserve"><value>No se encontró la orden de mantenimiento.</value></data>
+    <data name="MaintenanceOrders.GetOrdersByEquipmentId.Summary" xml:space="preserve"><value>Obtener órdenes por equipo</value></data>
+    <data name="MaintenanceOrders.GetOrdersByEquipmentId.Description" xml:space="preserve"><value>Obtiene el historial de mantenimiento de un equipo (US22).</value></data>
+    <data name="MaintenanceOrders.GetOrdersByEquipmentId.Response200" xml:space="preserve"><value>Se encontraron las órdenes.</value></data>
 </root>
