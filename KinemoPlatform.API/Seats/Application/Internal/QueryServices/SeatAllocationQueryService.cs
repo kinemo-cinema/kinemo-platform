@@ -2,7 +2,7 @@
 using KinemoPlatform.API.Seats.Domain.Model.Entities;
 using KinemoPlatform.API.Seats.Domain.Model.Queries;
 using KinemoPlatform.API.Seats.Domain.Repositories;
-using KinemoPlatform.API.Seats.Domain.Services;
+using KinemoPlatform.API.Seats.Application.Services;
 
 namespace KinemoPlatform.API.Seats.Application.Internal.QueryServices;
 

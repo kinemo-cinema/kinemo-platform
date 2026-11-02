@@ -2,7 +2,7 @@
 using KinemoPlatform.API.Seats.Domain.Model.Entities;
 using KinemoPlatform.API.Seats.Domain.Model.Queries;
 
-namespace KinemoPlatform.API.Seats.Domain.Services;
+namespace KinemoPlatform.API.Seats.Application.Services;
 
 /// <summary>
 ///     Represents the seat allocation query service in the Kinemo Platform.

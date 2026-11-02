@@ -3,7 +3,7 @@ using KinemoPlatform.API.Seats.Domain.Model.Aggregates;
 using KinemoPlatform.API.Seats.Domain.Model.Commands;
 using KinemoPlatform.API.Seats.Domain.Model.Events;
 using KinemoPlatform.API.Seats.Domain.Repositories;
-using KinemoPlatform.API.Seats.Domain.Services;
+using KinemoPlatform.API.Seats.Application.Services;
 using KinemoPlatform.API.Shared.Domain.Repositories;
 
 namespace KinemoPlatform.API.Seats.Application.Internal.CommandServices;

@@ -1,6 +1,6 @@
 ﻿using System.Net.Mime;
 using KinemoPlatform.API.Seats.Domain.Model.Queries;
-using KinemoPlatform.API.Seats.Domain.Services;
+using KinemoPlatform.API.Seats.Application.Services;
 using KinemoPlatform.API.Seats.Interfaces.REST.Resources;
 using KinemoPlatform.API.Seats.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;

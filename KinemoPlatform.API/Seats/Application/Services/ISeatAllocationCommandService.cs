@@ -1,7 +1,7 @@
 ﻿using KinemoPlatform.API.Seats.Domain.Model.Aggregates;
 using KinemoPlatform.API.Seats.Domain.Model.Commands;
 
-namespace KinemoPlatform.API.Seats.Domain.Services;
+namespace KinemoPlatform.API.Seats.Application.Services;
 
 /// <summary>
 ///     Represents the seat allocation command service in the Kinemo Platform.
