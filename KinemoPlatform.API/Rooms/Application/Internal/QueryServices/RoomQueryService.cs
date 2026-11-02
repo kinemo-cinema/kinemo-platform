@@ -1,7 +1,7 @@
-﻿using KinemoPlatform.API.Rooms.Domain.Model.Aggregates;
+﻿using KinemoPlatform.API.Rooms.Application.Services;
+using KinemoPlatform.API.Rooms.Domain.Model.Aggregates;
 using KinemoPlatform.API.Rooms.Domain.Model.Queries;
 using KinemoPlatform.API.Rooms.Domain.Repositories;
-using KinemoPlatform.API.Rooms.Domain.Services;
 
 namespace KinemoPlatform.API.Rooms.Application.Internal.QueryServices;
 
@@ -10,14 +10,14 @@ namespace KinemoPlatform.API.Rooms.Application.Internal.QueryServices;
 /// </summary>
 public class RoomQueryService(IRoomRepository roomRepository) : IRoomQueryService
 {
-    public async Task<Room?> Handle(GetRoomByIdQuery query)
+    public async Task<Room?> Handle(GetRoomByIdQuery query, CancellationToken cancellationToken = default)
     {
         // Use the details method to eagerly load inspections and blocks
-        return await roomRepository.FindByIdWithDetailsAsync(query.RoomId);
+        return await roomRepository.FindByIdWithDetailsAsync(query.RoomId, cancellationToken);
     }
 
-    public async Task<IEnumerable<Room>> Handle(GetAllRoomsQuery query)
+    public async Task<IEnumerable<Room>> Handle(GetAllRoomsQuery query, CancellationToken cancellationToken = default)
     {
-        return await roomRepository.ListAsync();
+        return await roomRepository.ListAsync(cancellationToken);
     }
 }

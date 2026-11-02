@@ -1,3 +1,6 @@
-﻿namespace KinemoPlatform.API.Ticketing.Interfaces.REST.Resources;
+﻿using System.ComponentModel.DataAnnotations;
+namespace KinemoPlatform.API.Ticketing.Interfaces.REST.Resources;
 
-public record SyncOccupancyResource(int ShowId);
+public record SyncOccupancyResource(
+    [Range(1, int.MaxValue, ErrorMessage = "InvalidTicketingShowId")]
+    int ShowId);

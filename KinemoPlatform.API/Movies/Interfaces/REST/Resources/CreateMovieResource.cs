@@ -1,4 +1,5 @@
 ﻿using KinemoPlatform.API.Movies.Domain.Model.ValueObjects;
+using System.ComponentModel.DataAnnotations;
 
 namespace KinemoPlatform.API.Movies.Interfaces.REST.Resources;
 
@@ -15,6 +16,10 @@ namespace KinemoPlatform.API.Movies.Interfaces.REST.Resources;
 ///     The <see cref="EMovieGenre" /> genre of the movie.
 /// </param>
 public record CreateMovieResource(
+    [Required(ErrorMessage = "RequiredMovieTitle")]
+    [StringLength(200, ErrorMessage = "InvalidMovieTitleLength")]
     string Title,
+    [Range(1, 600, ErrorMessage = "InvalidMovieDuration")]
     int DurationMinutes,
+    [EnumDataType(typeof(EMovieGenre), ErrorMessage = "InvalidMovieGenre")]
     EMovieGenre Genre);

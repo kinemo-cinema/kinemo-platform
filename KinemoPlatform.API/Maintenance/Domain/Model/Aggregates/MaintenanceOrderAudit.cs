@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using EntityFrameworkCore.CreatedUpdatedDate.Contracts;
+﻿using KinemoPlatform.API.Shared.Domain.Model;
 
 namespace KinemoPlatform.API.Maintenance.Domain.Model.Aggregates;
 
-public partial class MaintenanceOrder : IEntityWithCreatedUpdatedDate
+public partial class MaintenanceOrder : IAuditableEntity
 {
-    [Column("CreatedAt")] public DateTimeOffset? CreatedDate { get; set; }
-    [Column("UpdatedAt")] public DateTimeOffset? UpdatedDate { get; set; }
+    public DateTimeOffset? CreatedAt { get; set; }
+    public DateTimeOffset? UpdatedAt { get; set; }
 }

@@ -4,14 +4,13 @@ using KinemoPlatform.API.Analytics.Domain.Services;
 using KinemoPlatform.API.Analytics.Interfaces.REST.Resources;
 using KinemoPlatform.API.Analytics.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace KinemoPlatform.API.Analytics.Interfaces.REST.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-[SwaggerTag("Available Analytics Endpoints.")]
+[Tags("Analytics")]
 public class AnalyticsController(
     IDashboardCommandService dashboardCommandService,
     IDashboardQueryService dashboardQueryService,
@@ -22,8 +21,9 @@ public class AnalyticsController(
     // Dashboard Endpoints
     // ---------------------------------------------------------------------
     [HttpPost("dashboards")]
-    [SwaggerOperation(Summary = "Generate Dashboard", Description = "Generate a new operational dashboard for a specific period.", OperationId = "GenerateDashboard")]
-    [SwaggerResponse(StatusCodes.Status201Created, "The dashboard was generated.", typeof(DashboardResource))]
+    [EndpointSummary("Generate Dashboard")]
+    [EndpointDescription("Generate a new operational dashboard for a specific period.")]
+    [ProducesResponseType(typeof(DashboardResource), StatusCodes.Status201Created)]
     public async Task<IActionResult> GenerateDashboard([FromBody] GenerateDashboardResource resource)
     {
         var command = GenerateDashboardCommandFromResourceAssembler.ToCommandFromResource(resource);
@@ -35,9 +35,9 @@ public class AnalyticsController(
     }
 
     [HttpGet("dashboards/{dashboardId:int}")]
-    [SwaggerOperation(Summary = "Get Dashboard by Id", OperationId = "GetDashboardById")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The dashboard was found.", typeof(DashboardResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The dashboard was not found.")]
+    [EndpointSummary("Get Dashboard by Id")]
+    [ProducesResponseType(typeof(DashboardResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDashboardById([FromRoute] int dashboardId)
     {
         var dashboard = await dashboardQueryService.Handle(new GetDashboardByIdQuery(dashboardId));
@@ -46,9 +46,9 @@ public class AnalyticsController(
     }
 
     [HttpGet("dashboards/latest")]
-    [SwaggerOperation(Summary = "Get Latest Dashboard", OperationId = "GetLatestDashboard")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The latest dashboard was found.", typeof(DashboardResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "No dashboards exist.")]
+    [EndpointSummary("Get Latest Dashboard")]
+    [ProducesResponseType(typeof(DashboardResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetLatestDashboard()
     {
         var dashboard = await dashboardQueryService.Handle(new GetLatestDashboardQuery());
@@ -60,8 +60,9 @@ public class AnalyticsController(
     // Report Endpoints
     // ---------------------------------------------------------------------
     [HttpPost("reports")]
-    [SwaggerOperation(Summary = "Generate Report", Description = "Generate an operational report.", OperationId = "GenerateReport")]
-    [SwaggerResponse(StatusCodes.Status201Created, "The report was generated.", typeof(OperationalReportResource))]
+    [EndpointSummary("Generate Report")]
+    [EndpointDescription("Generate an operational report.")]
+    [ProducesResponseType(typeof(OperationalReportResource), StatusCodes.Status201Created)]
     public async Task<IActionResult> GenerateReport([FromBody] GenerateReportResource resource)
     {
         var command = GenerateReportCommandFromResourceAssembler.ToCommandFromResource(resource);
@@ -73,9 +74,9 @@ public class AnalyticsController(
     }
 
     [HttpGet("reports/{reportId:int}")]
-    [SwaggerOperation(Summary = "Get Report by Id", OperationId = "GetReportById")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The report was found.", typeof(OperationalReportResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The report was not found.")]
+    [EndpointSummary("Get Report by Id")]
+    [ProducesResponseType(typeof(OperationalReportResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetReportById([FromRoute] int reportId)
     {
         var report = await reportQueryService.Handle(new GetReportByIdQuery(reportId));

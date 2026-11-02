@@ -13,10 +13,11 @@ namespace KinemoPlatform.API.Ticketing.Infrastructure.External;
 /// </remarks>
 public class MockExternalTicketingClient : IExternalTicketingClient
 {
-    public async Task<ExternalOccupancyData?> GetOccupancyAsync(string providerName, int showId)
+    public async Task<ExternalOccupancyData?> GetOccupancyAsync(string providerName, int showId,
+        CancellationToken cancellationToken = default)
     {
         // Simulate network latency (e.g., 500ms)
-        await Task.Delay(500);
+        await Task.Delay(500, cancellationToken);
 
         // Simulate a failure for invalid show IDs (e.g., 999)
         if (showId == 999)

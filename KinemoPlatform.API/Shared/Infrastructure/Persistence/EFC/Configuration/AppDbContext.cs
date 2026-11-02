@@ -18,7 +18,7 @@ using KinemoPlatform.API.Analytics.Infrastructure.Persistence.EFC.Configuration.
 using KinemoPlatform.API.Subscriptions.Infrastructure.Persistence.EFC.Configuration.Extensions;
 
 using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
-using EntityFrameworkCore.CreatedUpdatedDate.Extensions;
+using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Interceptors;
 using Microsoft.EntityFrameworkCore;
 
 namespace KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
@@ -41,9 +41,15 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     /// <param name="builder">
     ///     The option builder for the database context
     /// </param>
+    ///
+    
+    // The interceptor is stateless, so a single shared instance is used. Creating a new one per
+    // DbContext would force EF Core to build a new internal service provider every time.
+    private static readonly AuditableEntityInterceptor AuditInterceptor = new();
+    
     protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
-        builder.AddCreatedUpdatedInterceptor();
+        builder.AddInterceptors(AuditInterceptor);
         base.OnConfiguring(builder);
     }
 

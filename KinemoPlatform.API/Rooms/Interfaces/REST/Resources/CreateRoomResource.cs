@@ -1,3 +1,9 @@
-﻿namespace KinemoPlatform.API.Rooms.Interfaces.REST.Resources;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record CreateRoomResource(string Name, int Capacity);
+namespace KinemoPlatform.API.Rooms.Interfaces.REST.Resources;
+
+public record CreateRoomResource([Required(ErrorMessage = "RequiredRoomName")]
+    [StringLength(100, ErrorMessage = "InvalidRoomNameLength")]
+    string Name,
+    [Range(1, 1000, ErrorMessage = "InvalidRoomCapacity")]
+    int Capacity);

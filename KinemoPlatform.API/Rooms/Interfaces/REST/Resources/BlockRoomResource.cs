@@ -1,3 +1,9 @@
-﻿namespace KinemoPlatform.API.Rooms.Interfaces.REST.Resources;
+﻿using System.ComponentModel.DataAnnotations;
+namespace KinemoPlatform.API.Rooms.Interfaces.REST.Resources;
 
-public record BlockRoomResource(string Reason, DateTimeOffset StartDateTime, DateTimeOffset EndDateTime);
+public record BlockRoomResource(
+    [Required(ErrorMessage = "RequiredBlockReason")]
+    [StringLength(500, ErrorMessage = "InvalidBlockReasonLength")]
+    string Reason,
+    DateTimeOffset StartDateTime,
+    DateTimeOffset EndDateTime);
