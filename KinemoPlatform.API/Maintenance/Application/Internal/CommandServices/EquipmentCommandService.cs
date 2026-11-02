@@ -3,7 +3,7 @@ using KinemoPlatform.API.Maintenance.Domain.Model.Aggregates;
 using KinemoPlatform.API.Maintenance.Domain.Model.Commands;
 using KinemoPlatform.API.Maintenance.Domain.Model.Events;
 using KinemoPlatform.API.Maintenance.Domain.Repositories;
-using KinemoPlatform.API.Maintenance.Domain.Services;
+using KinemoPlatform.API.Maintenance.Application.Services;
 using KinemoPlatform.API.Shared.Domain.Repositories;
 
 namespace KinemoPlatform.API.Maintenance.Application.Internal.CommandServices;

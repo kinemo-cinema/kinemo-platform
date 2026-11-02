@@ -1,6 +1,6 @@
 ﻿using KinemoPlatform.API.Maintenance.Domain.Model.Aggregates;
 using KinemoPlatform.API.Maintenance.Domain.Repositories;
-using KinemoPlatform.API.Maintenance.Domain.Services;
+using KinemoPlatform.API.Maintenance.Application.Services;
 
 namespace KinemoPlatform.API.Maintenance.Application.Internal.QueryServices;
 

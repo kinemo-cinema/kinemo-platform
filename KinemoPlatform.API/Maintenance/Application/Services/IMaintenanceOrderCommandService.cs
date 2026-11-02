@@ -1,7 +1,7 @@
 ﻿using KinemoPlatform.API.Maintenance.Domain.Model.Aggregates;
 using KinemoPlatform.API.Maintenance.Domain.Model.Commands;
 
-namespace KinemoPlatform.API.Maintenance.Domain.Services;
+namespace KinemoPlatform.API.Maintenance.Application.Services;
 
 public interface IMaintenanceOrderCommandService
 {

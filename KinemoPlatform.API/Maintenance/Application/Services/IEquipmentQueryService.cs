@@ -2,7 +2,7 @@
 using KinemoPlatform.API.Maintenance.Domain.Model.Entities;
 using KinemoPlatform.API.Maintenance.Domain.Model.Queries;
 
-namespace KinemoPlatform.API.Maintenance.Domain.Services;
+namespace KinemoPlatform.API.Maintenance.Application.Services;
 
 public interface IEquipmentQueryService
 {

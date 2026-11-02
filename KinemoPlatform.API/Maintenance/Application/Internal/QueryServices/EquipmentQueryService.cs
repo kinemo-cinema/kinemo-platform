@@ -2,7 +2,7 @@
 using KinemoPlatform.API.Maintenance.Domain.Model.Entities;
 using KinemoPlatform.API.Maintenance.Domain.Model.Queries;
 using KinemoPlatform.API.Maintenance.Domain.Repositories;
-using KinemoPlatform.API.Maintenance.Domain.Services;
+using KinemoPlatform.API.Maintenance.Application.Services;
 
 namespace KinemoPlatform.API.Maintenance.Application.Internal.QueryServices;
 
