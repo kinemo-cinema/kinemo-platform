@@ -42,3 +42,5 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - `EditShow` returned `400` for an unknown show instead of the documented `404`.
 - Shows whose end time is not after their start time are rejected instead of being saved.
 - Ticketing sync no longer records a successful provider call as failed when saving or event handling throws, no longer records a cancelled request as a provider failure, and truncates provider error messages to the 1000-character column.
+- Assigning a seat status that cannot be set manually returned `404`; it now returns `400`.
+- Initializing seats no longer accepts an unbounded number of seats (limited to 1-1000, like room capacity).
