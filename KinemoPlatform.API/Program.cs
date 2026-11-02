@@ -64,7 +64,7 @@ using KinemoPlatform.API.Execution.Infrastructure.Persistence.EFC.Repositories;
 using KinemoPlatform.API.Maintenance.Application.Internal.CommandServices;
 using KinemoPlatform.API.Maintenance.Application.Internal.QueryServices;
 using KinemoPlatform.API.Maintenance.Domain.Repositories;
-using KinemoPlatform.API.Maintenance.Domain.Services;
+using KinemoPlatform.API.Maintenance.Application.Services;
 using KinemoPlatform.API.Maintenance.Infrastructure.Persistence.EFC.Repositories;
 
 // BC08: Analytics

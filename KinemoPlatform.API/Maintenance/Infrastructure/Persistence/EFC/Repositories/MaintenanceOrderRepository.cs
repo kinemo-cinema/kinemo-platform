@@ -9,11 +9,11 @@ namespace KinemoPlatform.API.Maintenance.Infrastructure.Persistence.EFC.Reposito
 public class MaintenanceOrderRepository(AppDbContext context) 
     : BaseRepository<MaintenanceOrder>(context), IMaintenanceOrderRepository
 {
-    public async Task<IEnumerable<MaintenanceOrder>> FindByEquipmentIdAsync(int equipmentId)
+    public async Task<IEnumerable<MaintenanceOrder>> FindByEquipmentIdAsync(int equipmentId, CancellationToken cancellationToken = default)
     {
         return await Context.Set<MaintenanceOrder>()
             .Where(m => m.EquipmentId == equipmentId)
             .OrderByDescending(m => m.ScheduledDate)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }
