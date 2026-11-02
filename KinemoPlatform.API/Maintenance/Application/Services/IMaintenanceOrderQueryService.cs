@@ -4,5 +4,5 @@ namespace KinemoPlatform.API.Maintenance.Application.Services;
 
 public interface IMaintenanceOrderQueryService
 {
-    Task<IEnumerable<MaintenanceOrder>> HandleGetByEquipmentId(int equipmentId);
+    Task<IEnumerable<MaintenanceOrder>> HandleGetByEquipmentId(int equipmentId, CancellationToken cancellationToken = default);
 }

@@ -9,18 +9,18 @@ namespace KinemoPlatform.API.Maintenance.Infrastructure.Persistence.EFC.Reposito
 public class EquipmentRepository(AppDbContext context) 
     : BaseRepository<Equipment>(context), IEquipmentRepository
 {
-    public async Task<bool> ExistsByNameAndRoomAsync(string name, int roomId)
+    public async Task<bool> ExistsByNameAndRoomAsync(string name, int roomId, CancellationToken cancellationToken = default)
     {
-        return await Context.Set<Equipment>().AnyAsync(e => e.Name == name && e.RoomId == roomId);
+        return await Context.Set<Equipment>().AnyAsync(e => e.Name == name && e.RoomId == roomId, cancellationToken);
     }
 
-    public async Task<Equipment?> FindByIdWithDetailsAsync(int equipmentId)
+    public async Task<Equipment?> FindByIdWithDetailsAsync(int equipmentId, CancellationToken cancellationToken = default)
     {
         return await Context.Set<Equipment>()
             .Include(e => e.Incidents)
             .Include(e => e.Tests)
             .ThenInclude(t => t.ChannelTests)
-            .FirstOrDefaultAsync(e => e.Id == equipmentId);
+            .FirstOrDefaultAsync(e => e.Id == equipmentId, cancellationToken);
     }
 
     // Override to include incidents and tests when listing all equipment

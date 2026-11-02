@@ -6,7 +6,7 @@ namespace KinemoPlatform.API.Maintenance.Application.Services;
 
 public interface IEquipmentQueryService
 {
-    Task<Equipment?> Handle(GetEquipmentByIdQuery query);
-    Task<IEnumerable<Equipment>> Handle(GetAllEquipmentQuery query);
-    Task<IEnumerable<Incident>> Handle(GetIncidentsByEquipmentIdQuery query);
+    Task<Equipment?> Handle(GetEquipmentByIdQuery query, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Equipment>> Handle(GetAllEquipmentQuery query, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Incident>> Handle(GetIncidentsByEquipmentIdQuery query, CancellationToken cancellationToken = default);
 }

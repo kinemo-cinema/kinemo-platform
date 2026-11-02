@@ -6,8 +6,8 @@ namespace KinemoPlatform.API.Maintenance.Application.Internal.QueryServices;
 
 public class MaintenanceOrderQueryService(IMaintenanceOrderRepository maintenanceOrderRepository) : IMaintenanceOrderQueryService
 {
-    public async Task<IEnumerable<MaintenanceOrder>> HandleGetByEquipmentId(int equipmentId)
+    public async Task<IEnumerable<MaintenanceOrder>> HandleGetByEquipmentId(int equipmentId, CancellationToken cancellationToken = default)
     {
-        return await maintenanceOrderRepository.FindByEquipmentIdAsync(equipmentId);
+        return await maintenanceOrderRepository.FindByEquipmentIdAsync(equipmentId, cancellationToken);
     }
 }
