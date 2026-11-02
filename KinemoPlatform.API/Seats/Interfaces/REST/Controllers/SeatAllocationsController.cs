@@ -23,6 +23,7 @@ public class SeatAllocationsController(
     [EndpointDescription("Generate the seat map for a specific show.")]
     [ProducesResponseType(typeof(SeatAllocationResource), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> InitializeSeats(
         [FromBody] InitializeSeatsResource resource,
         CancellationToken cancellationToken)
@@ -104,6 +105,7 @@ public class SeatAllocationsController(
     [EndpointDescription("Log a broken seat so it cannot be used (US12).")]
     [ProducesResponseType(typeof(SeatAllocationResource), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> MarkSeatOutOfService(
         [FromRoute] int showId,
         [FromRoute] int seatNumber,
