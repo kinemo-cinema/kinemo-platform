@@ -89,6 +89,7 @@ public class AnalyticsController(
     [EndpointSummary("Generate Report")]
     [EndpointDescription("Generate an operational report.")]
     [ProducesResponseType(typeof(OperationalReportResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GenerateReport(
         [FromBody] GenerateReportResource resource,
         CancellationToken cancellationToken)

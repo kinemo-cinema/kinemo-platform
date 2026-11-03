@@ -19,6 +19,12 @@ public class OperationalReportCommandService(
         GenerateReportCommand command,
         CancellationToken cancellationToken = default)
     {
+        if (command.PeriodStart >= command.PeriodEnd)
+        {
+            return new Result<OperationalReport, EAnalyticsError>.Failure(
+                EAnalyticsError.InvalidPeriod);
+        }
+
         var report = new OperationalReport(command);
 
         await reportRepository.AddAsync(report, cancellationToken);

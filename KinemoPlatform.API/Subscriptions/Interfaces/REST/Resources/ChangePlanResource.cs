@@ -1,2 +1,7 @@
-﻿namespace KinemoPlatform.API.Subscriptions.Interfaces.REST.Resources;
-public record ChangePlanResource(int NewPlanId);
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace KinemoPlatform.API.Subscriptions.Interfaces.REST.Resources;
+
+public record ChangePlanResource(
+    [property: Range(1, int.MaxValue)] int NewPlanId
+);
