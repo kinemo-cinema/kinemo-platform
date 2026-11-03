@@ -8,5 +8,7 @@ public interface IDashboardCommandService
     /// <summary>
     ///     Handles the generation of a new operational dashboard.
     /// </summary>
-    Task<Dashboard?> Handle(GenerateDashboardCommand command);
+    Task<Dashboard?> Handle(
+        GenerateDashboardCommand command,
+        CancellationToken cancellationToken = default);
 }

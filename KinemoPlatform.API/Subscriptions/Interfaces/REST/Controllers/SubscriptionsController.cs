@@ -20,16 +20,23 @@ public class SubscriptionsController(
     [EndpointDescription("Contract a new service plan for a cinema (US39).")]
     [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateSubscription([FromBody] CreateSubscriptionResource resource)
+    public async Task<IActionResult> CreateSubscription(
+        [FromBody] CreateSubscriptionResource resource,
+        CancellationToken cancellationToken)
     {
         try
         {
             var command = CreateSubscriptionCommandFromResourceAssembler.ToCommandFromResource(resource);
-            var subscription = await commandService.Handle(command);
+            var subscription = await commandService.Handle(command, cancellationToken);
+
             if (subscription is null) return BadRequest();
-            
+
             var subscriptionResource = SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription);
-            return CreatedAtAction(nameof(GetSubscriptionById), new { subscriptionId = subscription.Id }, subscriptionResource);
+
+            return CreatedAtAction(
+                nameof(GetSubscriptionById),
+                new { subscriptionId = subscription.Id },
+                subscriptionResource);
         }
         catch (InvalidOperationException ex)
         {
@@ -41,10 +48,16 @@ public class SubscriptionsController(
     [EndpointSummary("Get Subscription by Id")]
     [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetSubscriptionById([FromRoute] int subscriptionId)
+    public async Task<IActionResult> GetSubscriptionById(
+        [FromRoute] int subscriptionId,
+        CancellationToken cancellationToken)
     {
-        var subscription = await queryService.Handle(new GetSubscriptionByIdQuery(subscriptionId));
+        var subscription = await queryService.Handle(
+            new GetSubscriptionByIdQuery(subscriptionId),
+            cancellationToken);
+
         if (subscription is null) return NotFound();
+
         return Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription));
     }
 
@@ -53,10 +66,16 @@ public class SubscriptionsController(
     [EndpointDescription("Check the current subscription status for a cinema (US41).")]
     [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetSubscriptionByCinemaId([FromRoute] int cinemaId)
+    public async Task<IActionResult> GetSubscriptionByCinemaId(
+        [FromRoute] int cinemaId,
+        CancellationToken cancellationToken)
     {
-        var subscription = await queryService.Handle(new GetSubscriptionByCinemaIdQuery(cinemaId));
+        var subscription = await queryService.Handle(
+            new GetSubscriptionByCinemaIdQuery(cinemaId),
+            cancellationToken);
+
         if (subscription is null) return NotFound();
+
         return Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription));
     }
 
@@ -64,13 +83,20 @@ public class SubscriptionsController(
     [EndpointSummary("Process Payment")]
     [EndpointDescription("Process a subscription payment (US40).")]
     [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
-    public async Task<IActionResult> ProcessPayment([FromRoute] int subscriptionId, [FromBody] ProcessPaymentResource resource)
+    public async Task<IActionResult> ProcessPayment(
+        [FromRoute] int subscriptionId,
+        [FromBody] ProcessPaymentResource resource,
+        CancellationToken cancellationToken)
     {
         try
         {
-            var command = ProcessPaymentCommandFromResourceAssembler.ToCommandFromResource(resource, subscriptionId);
-            var subscription = await commandService.Handle(command);
+            var command = ProcessPaymentCommandFromResourceAssembler.ToCommandFromResource(
+                resource, subscriptionId);
+
+            var subscription = await commandService.Handle(command, cancellationToken);
+
             if (subscription is null) return NotFound();
+
             return Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription));
         }
         catch (InvalidOperationException)
@@ -84,13 +110,20 @@ public class SubscriptionsController(
     [EndpointDescription("Upgrade or downgrade a subscription (US42).")]
     [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ChangePlan([FromRoute] int subscriptionId, [FromBody] ChangePlanResource resource)
+    public async Task<IActionResult> ChangePlan(
+        [FromRoute] int subscriptionId,
+        [FromBody] ChangePlanResource resource,
+        CancellationToken cancellationToken)
     {
         try
         {
-            var command = ChangePlanCommandFromResourceAssembler.ToCommandFromResource(resource, subscriptionId);
-            var subscription = await commandService.Handle(command);
+            var command = ChangePlanCommandFromResourceAssembler.ToCommandFromResource(
+                resource, subscriptionId);
+
+            var subscription = await commandService.Handle(command, cancellationToken);
+
             if (subscription is null) return NotFound();
+
             return Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription));
         }
         catch (InvalidOperationException ex)

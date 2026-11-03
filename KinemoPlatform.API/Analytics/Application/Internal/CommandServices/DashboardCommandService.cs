@@ -15,26 +15,41 @@ public class DashboardCommandService(
     IUnitOfWork unitOfWork,
     IMediator domainEventPublisher) : IDashboardCommandService
 {
-    public async Task<Dashboard?> Handle(GenerateDashboardCommand command)
+    public async Task<Dashboard?> Handle(
+        GenerateDashboardCommand command,
+        CancellationToken cancellationToken = default)
     {
         var dashboard = new Dashboard(command);
 
-        // SIMULATION: In a real system, you would query BC05, BC06, and BC07 
+        // SIMULATION: In a real system, you would query BC05, BC06, and BC07
         // to get the actual data. Here, we mock some analytics for demonstration.
-        
-        dashboard.AddMetric(new OperationalMetric(EMetricType.RoomUtilization, 85.5m, command.PeriodStart, command.PeriodEnd));
-        dashboard.AddMetric(new OperationalMetric(EMetricType.ShowCount, 120m, command.PeriodStart, command.PeriodEnd));
-        
+
+        dashboard.AddMetric(new OperationalMetric(
+            EMetricType.RoomUtilization,
+            85.5m,
+            command.PeriodStart,
+            command.PeriodEnd));
+
+        dashboard.AddMetric(new OperationalMetric(
+            EMetricType.ShowCount,
+            120m,
+            command.PeriodStart,
+            command.PeriodEnd));
+
         dashboard.AddRoomPerformance(new RoomPerformance(1, 45.5m, 60, 2));
         dashboard.AddRoomPerformance(new RoomPerformance(2, 38.0m, 60, 0));
-        
+
         dashboard.AddIncidentSummary(new IncidentSummary(5, 2, 1, 1, 1));
 
-        await dashboardRepository.AddAsync(dashboard);
-        await unitOfWork.CompleteAsync();
+        await dashboardRepository.AddAsync(dashboard, cancellationToken);
+        await unitOfWork.CompleteAsync(cancellationToken);
 
         await domainEventPublisher.PublishAsync(
-            new DashboardGeneratedEvent(dashboard.Id, dashboard.PeriodStart, dashboard.PeriodEnd));
+            new DashboardGeneratedEvent(
+                dashboard.Id,
+                dashboard.PeriodStart,
+                dashboard.PeriodEnd),
+            cancellationToken);
 
         return dashboard;
     }

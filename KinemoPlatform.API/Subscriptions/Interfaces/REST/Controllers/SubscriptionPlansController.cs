@@ -17,9 +17,11 @@ public class SubscriptionPlansController(ISubscriptionPlanQueryService queryServ
     [EndpointSummary("Get All Plans")]
     [EndpointDescription("Retrieve all available subscription plans for pricing tables.")]
     [ProducesResponseType(typeof(IEnumerable<SubscriptionPlanResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAllPlans()
+    public async Task<IActionResult> GetAllPlans(CancellationToken cancellationToken)
     {
-        var plans = await queryService.Handle(new GetAllPlansQuery());
-        return Ok(plans.Select(SubscriptionPlanResourceFromEntityAssembler.ToResourceFromEntity));
+        var plans = await queryService.Handle(new GetAllPlansQuery(), cancellationToken);
+
+        return Ok(plans.Select(
+            SubscriptionPlanResourceFromEntityAssembler.ToResourceFromEntity));
     }
 }

@@ -8,15 +8,21 @@ public interface ISubscriptionCommandService
     /// <summary>
     ///     Handles creating a new subscription (US39).
     /// </summary>
-    Task<Subscription?> Handle(CreateSubscriptionCommand command);
+    Task<Subscription?> Handle(
+        CreateSubscriptionCommand command,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Handles processing a payment for a subscription (US40).
     /// </summary>
-    Task<Subscription?> Handle(ProcessPaymentCommand command);
+    Task<Subscription?> Handle(
+        ProcessPaymentCommand command,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Handles changing the plan of an existing subscription (US42).
     /// </summary>
-    Task<Subscription?> Handle(ChangePlanCommand command);
+    Task<Subscription?> Handle(
+        ChangePlanCommand command,
+        CancellationToken cancellationToken = default);
 }

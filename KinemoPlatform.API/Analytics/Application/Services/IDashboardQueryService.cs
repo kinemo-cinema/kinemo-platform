@@ -5,6 +5,11 @@ namespace KinemoPlatform.API.Analytics.Application.Services;
 
 public interface IDashboardQueryService
 {
-    Task<Dashboard?> Handle(GetDashboardByIdQuery query);
-    Task<Dashboard?> Handle(GetLatestDashboardQuery query);
+    Task<Dashboard?> Handle(
+        GetDashboardByIdQuery query,
+        CancellationToken cancellationToken = default);
+
+    Task<Dashboard?> Handle(
+        GetLatestDashboardQuery query,
+        CancellationToken cancellationToken = default);
 }

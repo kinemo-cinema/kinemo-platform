@@ -5,5 +5,7 @@ namespace KinemoPlatform.API.Analytics.Application.Services;
 
 public interface IOperationalReportQueryService
 {
-    Task<OperationalReport?> Handle(GetReportByIdQuery query);
+    Task<OperationalReport?> Handle(
+        GetReportByIdQuery query,
+        CancellationToken cancellationToken = default);
 }

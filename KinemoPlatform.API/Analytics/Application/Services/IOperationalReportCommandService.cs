@@ -8,5 +8,7 @@ public interface IOperationalReportCommandService
     /// <summary>
     ///     Handles the generation of a new operational report.
     /// </summary>
-    Task<OperationalReport?> Handle(GenerateReportCommand command);
+    Task<OperationalReport?> Handle(
+        GenerateReportCommand command,
+        CancellationToken cancellationToken = default);
 }

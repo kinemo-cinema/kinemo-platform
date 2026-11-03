@@ -8,5 +8,7 @@ public interface ISubscriptionPlanQueryService
     /// <summary>
     ///     Handles retrieving all available plans (for the landing page and pricing tables).
     /// </summary>
-    Task<IEnumerable<SubscriptionPlan>> Handle(GetAllPlansQuery query);
+    Task<IEnumerable<SubscriptionPlan>> Handle(
+        GetAllPlansQuery query,
+        CancellationToken cancellationToken = default);
 }

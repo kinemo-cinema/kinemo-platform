@@ -5,6 +5,11 @@ namespace KinemoPlatform.API.Subscriptions.Application.Services;
 
 public interface ISubscriptionQueryService
 {
-    Task<Subscription?> Handle(GetSubscriptionByIdQuery query);
-    Task<Subscription?> Handle(GetSubscriptionByCinemaIdQuery query);
+    Task<Subscription?> Handle(
+        GetSubscriptionByIdQuery query,
+        CancellationToken cancellationToken = default);
+
+    Task<Subscription?> Handle(
+        GetSubscriptionByCinemaIdQuery query,
+        CancellationToken cancellationToken = default);
 }

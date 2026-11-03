@@ -13,15 +13,21 @@ public class OperationalReportCommandService(
     IUnitOfWork unitOfWork,
     IMediator domainEventPublisher) : IOperationalReportCommandService
 {
-    public async Task<OperationalReport?> Handle(GenerateReportCommand command)
+    public async Task<OperationalReport?> Handle(
+        GenerateReportCommand command,
+        CancellationToken cancellationToken = default)
     {
         var report = new OperationalReport(command);
-        
-        await reportRepository.AddAsync(report);
-        await unitOfWork.CompleteAsync();
+
+        await reportRepository.AddAsync(report, cancellationToken);
+        await unitOfWork.CompleteAsync(cancellationToken);
 
         await domainEventPublisher.PublishAsync(
-            new ReportGeneratedEvent(report.Id, report.ReportType, report.ExportFormat));
+            new ReportGeneratedEvent(
+                report.Id,
+                report.ReportType,
+                report.ExportFormat),
+            cancellationToken);
 
         return report;
     }

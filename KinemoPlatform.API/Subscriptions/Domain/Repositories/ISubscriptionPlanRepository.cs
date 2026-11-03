@@ -11,5 +11,7 @@ public interface ISubscriptionPlanRepository : IBaseRepository<SubscriptionPlan>
     /// <summary>
     ///     Checks if a plan with the given name already exists.
     /// </summary>
-    Task<bool> ExistsByNameAsync(string name);
+    Task<bool> ExistsByNameAsync(
+        string name,
+        CancellationToken cancellationToken = default);
 }

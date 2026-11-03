@@ -1,4 +1,5 @@
-﻿using Cortex.Mediator;
+﻿
+using Cortex.Mediator;
 using KinemoPlatform.API.Shared.Domain.Repositories;
 using KinemoPlatform.API.Subscriptions.Application.Services;
 using KinemoPlatform.API.Subscriptions.Domain.Model.Aggregates;
@@ -14,52 +15,77 @@ public class SubscriptionCommandService(
     IUnitOfWork unitOfWork,
     IMediator domainEventPublisher) : ISubscriptionCommandService
 {
-    public async Task<Subscription?> Handle(CreateSubscriptionCommand command)
+    public async Task<Subscription?> Handle(
+        CreateSubscriptionCommand command,
+        CancellationToken cancellationToken = default)
     {
-        var plan = await planRepository.FindByIdAsync(command.PlanId);
-        if (plan is null) throw new InvalidOperationException($"Plan {command.PlanId} not found.");
+        var plan = await planRepository.FindByIdAsync(command.PlanId, cancellationToken);
+        if (plan is null)
+            throw new InvalidOperationException($"Plan {command.PlanId} not found.");
 
         var subscription = new Subscription(command);
-        await subscriptionRepository.AddAsync(subscription);
-        await unitOfWork.CompleteAsync();
+
+        await subscriptionRepository.AddAsync(subscription, cancellationToken);
+        await unitOfWork.CompleteAsync(cancellationToken);
 
         await domainEventPublisher.PublishAsync(
-            new SubscriptionCreatedEvent(subscription.Id, subscription.CinemaId, subscription.PlanId));
+            new SubscriptionCreatedEvent(
+                subscription.Id,
+                subscription.CinemaId,
+                subscription.PlanId),
+            cancellationToken);
 
         return subscription;
     }
 
-    public async Task<Subscription?> Handle(ProcessPaymentCommand command)
+    public async Task<Subscription?> Handle(
+        ProcessPaymentCommand command,
+        CancellationToken cancellationToken = default)
     {
-        var subscription = await subscriptionRepository.FindByIdWithDetailsAsync(command.SubscriptionId);
-        if (subscription is null) throw new InvalidOperationException($"Subscription {command.SubscriptionId} not found.");
+        var subscription = await subscriptionRepository.FindByIdWithDetailsAsync(
+            command.SubscriptionId, cancellationToken);
 
-        // SIMULATION: In a real app, you would call Stripe/PayPal here using the PaymentToken.
-        // For this project, we simulate success if the token is not "fail".
+        if (subscription is null)
+            throw new InvalidOperationException(
+                $"Subscription {command.SubscriptionId} not found.");
+
         bool isSuccessful = command.PaymentToken.ToLower() != "fail";
 
         var transaction = subscription.ProcessPayment(command.Amount, isSuccessful);
-        
+
         subscriptionRepository.Update(subscription);
-        await unitOfWork.CompleteAsync();
+        await unitOfWork.CompleteAsync(cancellationToken);
 
         await domainEventPublisher.PublishAsync(
-            new PaymentProcessedEvent(subscription.Id, transaction.Amount, isSuccessful));
+            new PaymentProcessedEvent(
+                subscription.Id,
+                transaction.Amount,
+                isSuccessful),
+            cancellationToken);
 
         return subscription;
     }
 
-    public async Task<Subscription?> Handle(ChangePlanCommand command)
+    public async Task<Subscription?> Handle(
+        ChangePlanCommand command,
+        CancellationToken cancellationToken = default)
     {
-        var subscription = await subscriptionRepository.FindByIdWithDetailsAsync(command.SubscriptionId);
-        if (subscription is null) throw new InvalidOperationException($"Subscription {command.SubscriptionId} not found.");
+        var subscription = await subscriptionRepository.FindByIdWithDetailsAsync(
+            command.SubscriptionId, cancellationToken);
 
-        var newPlan = await planRepository.FindByIdAsync(command.NewPlanId);
-        if (newPlan is null) throw new InvalidOperationException($"Plan {command.NewPlanId} not found.");
+        if (subscription is null)
+            throw new InvalidOperationException(
+                $"Subscription {command.SubscriptionId} not found.");
+
+        var newPlan = await planRepository.FindByIdAsync(command.NewPlanId, cancellationToken);
+        if (newPlan is null)
+            throw new InvalidOperationException(
+                $"Plan {command.NewPlanId} not found.");
 
         subscription.ChangePlan(command.NewPlanId);
+
         subscriptionRepository.Update(subscription);
-        await unitOfWork.CompleteAsync();
+        await unitOfWork.CompleteAsync(cancellationToken);
 
         return subscription;
     }

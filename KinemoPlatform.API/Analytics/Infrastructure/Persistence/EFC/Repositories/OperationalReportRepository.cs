@@ -5,7 +5,7 @@ using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
 
 namespace KinemoPlatform.API.Analytics.Infrastructure.Persistence.EFC.Repositories;
 
-public class OperationalReportRepository(AppDbContext context) 
+public class OperationalReportRepository(AppDbContext context)
     : BaseRepository<OperationalReport>(context), IOperationalReportRepository
 {
     // Standard BaseRepository methods are sufficient
