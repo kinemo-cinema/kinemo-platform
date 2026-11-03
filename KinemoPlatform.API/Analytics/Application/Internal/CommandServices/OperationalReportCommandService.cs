@@ -1,9 +1,11 @@
 ﻿using Cortex.Mediator;
+using KinemoPlatform.API.Analytics.Application.Errors;
 using KinemoPlatform.API.Analytics.Application.Services;
 using KinemoPlatform.API.Analytics.Domain.Model.Aggregates;
 using KinemoPlatform.API.Analytics.Domain.Model.Commands;
 using KinemoPlatform.API.Analytics.Domain.Model.Events;
 using KinemoPlatform.API.Analytics.Domain.Repositories;
+using KinemoPlatform.API.Shared.Application.Patterns;
 using KinemoPlatform.API.Shared.Domain.Repositories;
 
 namespace KinemoPlatform.API.Analytics.Application.Internal.CommandServices;
@@ -13,7 +15,7 @@ public class OperationalReportCommandService(
     IUnitOfWork unitOfWork,
     IMediator domainEventPublisher) : IOperationalReportCommandService
 {
-    public async Task<OperationalReport?> Handle(
+    public async Task<Result<OperationalReport, EAnalyticsError>> Handle(
         GenerateReportCommand command,
         CancellationToken cancellationToken = default)
     {
@@ -29,6 +31,6 @@ public class OperationalReportCommandService(
                 report.ExportFormat),
             cancellationToken);
 
-        return report;
+        return new Result<OperationalReport, EAnalyticsError>.Success(report);
     }
 }

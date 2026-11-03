@@ -1,6 +1,7 @@
-﻿
-using Cortex.Mediator;
+﻿using Cortex.Mediator;
+using KinemoPlatform.API.Shared.Application.Patterns;
 using KinemoPlatform.API.Shared.Domain.Repositories;
+using KinemoPlatform.API.Subscriptions.Application.Errors;
 using KinemoPlatform.API.Subscriptions.Application.Services;
 using KinemoPlatform.API.Subscriptions.Domain.Model.Aggregates;
 using KinemoPlatform.API.Subscriptions.Domain.Model.Commands;
@@ -15,13 +16,16 @@ public class SubscriptionCommandService(
     IUnitOfWork unitOfWork,
     IMediator domainEventPublisher) : ISubscriptionCommandService
 {
-    public async Task<Subscription?> Handle(
+    public async Task<Result<Subscription, ESubscriptionError>> Handle(
         CreateSubscriptionCommand command,
         CancellationToken cancellationToken = default)
     {
-        var plan = await planRepository.FindByIdAsync(command.PlanId, cancellationToken);
+        var plan = await planRepository.FindByIdAsync(
+            command.PlanId, cancellationToken);
+
         if (plan is null)
-            throw new InvalidOperationException($"Plan {command.PlanId} not found.");
+            return new Result<Subscription, ESubscriptionError>.Failure(
+                ESubscriptionError.PlanNotFound);
 
         var subscription = new Subscription(command);
 
@@ -35,10 +39,10 @@ public class SubscriptionCommandService(
                 subscription.PlanId),
             cancellationToken);
 
-        return subscription;
+        return new Result<Subscription, ESubscriptionError>.Success(subscription);
     }
 
-    public async Task<Subscription?> Handle(
+    public async Task<Result<Subscription, ESubscriptionError>> Handle(
         ProcessPaymentCommand command,
         CancellationToken cancellationToken = default)
     {
@@ -46,12 +50,20 @@ public class SubscriptionCommandService(
             command.SubscriptionId, cancellationToken);
 
         if (subscription is null)
-            throw new InvalidOperationException(
-                $"Subscription {command.SubscriptionId} not found.");
+            return new Result<Subscription, ESubscriptionError>.Failure(
+                ESubscriptionError.SubscriptionNotFound);
 
-        bool isSuccessful = command.PaymentToken.ToLower() != "fail";
+        if (command.Amount <= 0 || string.IsNullOrWhiteSpace(command.PaymentToken))
+            return new Result<Subscription, ESubscriptionError>.Failure(
+                ESubscriptionError.InvalidPayment);
 
-        var transaction = subscription.ProcessPayment(command.Amount, isSuccessful);
+        bool isSuccessful = !string.Equals(
+            command.PaymentToken,
+            "fail",
+            StringComparison.OrdinalIgnoreCase);
+
+        var transaction = subscription.ProcessPayment(
+            command.Amount, isSuccessful);
 
         subscriptionRepository.Update(subscription);
         await unitOfWork.CompleteAsync(cancellationToken);
@@ -63,10 +75,10 @@ public class SubscriptionCommandService(
                 isSuccessful),
             cancellationToken);
 
-        return subscription;
+        return new Result<Subscription, ESubscriptionError>.Success(subscription);
     }
 
-    public async Task<Subscription?> Handle(
+    public async Task<Result<Subscription, ESubscriptionError>> Handle(
         ChangePlanCommand command,
         CancellationToken cancellationToken = default)
     {
@@ -74,19 +86,25 @@ public class SubscriptionCommandService(
             command.SubscriptionId, cancellationToken);
 
         if (subscription is null)
-            throw new InvalidOperationException(
-                $"Subscription {command.SubscriptionId} not found.");
+            return new Result<Subscription, ESubscriptionError>.Failure(
+                ESubscriptionError.SubscriptionNotFound);
 
-        var newPlan = await planRepository.FindByIdAsync(command.NewPlanId, cancellationToken);
+        var newPlan = await planRepository.FindByIdAsync(
+            command.NewPlanId, cancellationToken);
+
         if (newPlan is null)
-            throw new InvalidOperationException(
-                $"Plan {command.NewPlanId} not found.");
+            return new Result<Subscription, ESubscriptionError>.Failure(
+                ESubscriptionError.PlanNotFound);
+
+        if (subscription.PlanId == command.NewPlanId)
+            return new Result<Subscription, ESubscriptionError>.Failure(
+                ESubscriptionError.InvalidPlanChange);
 
         subscription.ChangePlan(command.NewPlanId);
 
         subscriptionRepository.Update(subscription);
         await unitOfWork.CompleteAsync(cancellationToken);
 
-        return subscription;
+        return new Result<Subscription, ESubscriptionError>.Success(subscription);
     }
 }

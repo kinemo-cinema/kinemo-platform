@@ -1,5 +1,5 @@
-﻿
-using System.Net.Mime;
+﻿using System.Net.Mime;
+using KinemoPlatform.API.Analytics.Application.Errors;
 using KinemoPlatform.API.Analytics.Application.Services;
 using KinemoPlatform.API.Analytics.Domain.Model.Queries;
 using KinemoPlatform.API.Analytics.Interfaces.REST.Resources;
@@ -18,32 +18,34 @@ public class AnalyticsController(
     IOperationalReportCommandService reportCommandService,
     IOperationalReportQueryService reportQueryService) : ControllerBase
 {
-    // ---------------------------------------------------------------------
-    // Dashboard Endpoints
-    // ---------------------------------------------------------------------
-
     [HttpPost("dashboards")]
     [EndpointSummary("Generate Dashboard")]
     [EndpointDescription("Generate a new operational dashboard for a specific period.")]
     [ProducesResponseType(typeof(DashboardResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GenerateDashboard(
         [FromBody] GenerateDashboardResource resource,
         CancellationToken cancellationToken)
     {
-        var command = GenerateDashboardCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var command =
+            GenerateDashboardCommandFromResourceAssembler.ToCommandFromResource(resource);
 
-        var dashboard = await dashboardCommandService.Handle(
+        var result = await dashboardCommandService.Handle(
             command,
             cancellationToken);
 
-        if (dashboard is null) return BadRequest();
+        return result.Fold<IActionResult>(
+            dashboard =>
+            {
+                var dashboardResource =
+                    DashboardResourceFromEntityAssembler.ToResourceFromEntity(dashboard);
 
-        var dashboardResource = DashboardResourceFromEntityAssembler.ToResourceFromEntity(dashboard);
-
-        return CreatedAtAction(
-            nameof(GetDashboardById),
-            new { dashboardId = dashboard.Id },
-            dashboardResource);
+                return CreatedAtAction(
+                    nameof(GetDashboardById),
+                    new { dashboardId = dashboard.Id },
+                    dashboardResource);
+            },
+            MapAnalyticsError);
     }
 
     [HttpGet("dashboards/{dashboardId:int}")]
@@ -58,9 +60,11 @@ public class AnalyticsController(
             new GetDashboardByIdQuery(dashboardId),
             cancellationToken);
 
-        if (dashboard is null) return NotFound();
+        if (dashboard is null)
+            return NotFound();
 
-        return Ok(DashboardResourceFromEntityAssembler.ToResourceFromEntity(dashboard));
+        return Ok(
+            DashboardResourceFromEntityAssembler.ToResourceFromEntity(dashboard));
     }
 
     [HttpGet("dashboards/latest")]
@@ -74,37 +78,41 @@ public class AnalyticsController(
             new GetLatestDashboardQuery(),
             cancellationToken);
 
-        if (dashboard is null) return NotFound();
+        if (dashboard is null)
+            return NotFound();
 
-        return Ok(DashboardResourceFromEntityAssembler.ToResourceFromEntity(dashboard));
+        return Ok(
+            DashboardResourceFromEntityAssembler.ToResourceFromEntity(dashboard));
     }
-
-    // ---------------------------------------------------------------------
-    // Report Endpoints
-    // ---------------------------------------------------------------------
 
     [HttpPost("reports")]
     [EndpointSummary("Generate Report")]
     [EndpointDescription("Generate an operational report.")]
     [ProducesResponseType(typeof(OperationalReportResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GenerateReport(
         [FromBody] GenerateReportResource resource,
         CancellationToken cancellationToken)
     {
-        var command = GenerateReportCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var command =
+            GenerateReportCommandFromResourceAssembler.ToCommandFromResource(resource);
 
-        var report = await reportCommandService.Handle(
+        var result = await reportCommandService.Handle(
             command,
             cancellationToken);
 
-        if (report is null) return BadRequest();
+        return result.Fold<IActionResult>(
+            report =>
+            {
+                var reportResource =
+                    OperationalReportResourceFromEntityAssembler.ToResourceFromEntity(report);
 
-        var reportResource = OperationalReportResourceFromEntityAssembler.ToResourceFromEntity(report);
-
-        return CreatedAtAction(
-            nameof(GetReportById),
-            new { reportId = report.Id },
-            reportResource);
+                return CreatedAtAction(
+                    nameof(GetReportById),
+                    new { reportId = report.Id },
+                    reportResource);
+            },
+            MapAnalyticsError);
     }
 
     [HttpGet("reports/{reportId:int}")]
@@ -119,8 +127,35 @@ public class AnalyticsController(
             new GetReportByIdQuery(reportId),
             cancellationToken);
 
-        if (report is null) return NotFound();
+        if (report is null)
+            return NotFound();
 
-        return Ok(OperationalReportResourceFromEntityAssembler.ToResourceFromEntity(report));
+        return Ok(
+            OperationalReportResourceFromEntityAssembler.ToResourceFromEntity(report));
+    }
+
+    private IActionResult MapAnalyticsError(EAnalyticsError error)
+    {
+        return error switch
+        {
+            EAnalyticsError.InvalidPeriod => Problem(
+                statusCode: StatusCodes.Status400BadRequest,
+                title: "Invalid period",
+                detail: "The start date must be earlier than the end date."),
+
+            EAnalyticsError.DashboardNotFound => Problem(
+                statusCode: StatusCodes.Status404NotFound,
+                title: "Dashboard not found",
+                detail: "The requested dashboard does not exist."),
+
+            EAnalyticsError.ReportNotFound => Problem(
+                statusCode: StatusCodes.Status404NotFound,
+                title: "Report not found",
+                detail: "The requested operational report does not exist."),
+
+            _ => Problem(
+                statusCode: StatusCodes.Status500InternalServerError,
+                title: "Unexpected analytics error")
+        };
     }
 }

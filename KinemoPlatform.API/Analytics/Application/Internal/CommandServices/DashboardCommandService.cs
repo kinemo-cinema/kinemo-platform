@@ -1,4 +1,5 @@
 ﻿using Cortex.Mediator;
+using KinemoPlatform.API.Analytics.Application.Errors;
 using KinemoPlatform.API.Analytics.Application.Services;
 using KinemoPlatform.API.Analytics.Domain.Model.Aggregates;
 using KinemoPlatform.API.Analytics.Domain.Model.Commands;
@@ -6,6 +7,7 @@ using KinemoPlatform.API.Analytics.Domain.Model.Entities;
 using KinemoPlatform.API.Analytics.Domain.Model.Events;
 using KinemoPlatform.API.Analytics.Domain.Model.ValueObjects;
 using KinemoPlatform.API.Analytics.Domain.Repositories;
+using KinemoPlatform.API.Shared.Application.Patterns;
 using KinemoPlatform.API.Shared.Domain.Repositories;
 
 namespace KinemoPlatform.API.Analytics.Application.Internal.CommandServices;
@@ -15,14 +17,15 @@ public class DashboardCommandService(
     IUnitOfWork unitOfWork,
     IMediator domainEventPublisher) : IDashboardCommandService
 {
-    public async Task<Dashboard?> Handle(
+    public async Task<Result<Dashboard, EAnalyticsError>> Handle(
         GenerateDashboardCommand command,
         CancellationToken cancellationToken = default)
     {
-        var dashboard = new Dashboard(command);
+        if (command.PeriodStart >= command.PeriodEnd)
+            return new Result<Dashboard, EAnalyticsError>.Failure(
+                EAnalyticsError.InvalidPeriod);
 
-        // SIMULATION: In a real system, you would query BC05, BC06, and BC07
-        // to get the actual data. Here, we mock some analytics for demonstration.
+        var dashboard = new Dashboard(command);
 
         dashboard.AddMetric(new OperationalMetric(
             EMetricType.RoomUtilization,
@@ -51,6 +54,6 @@ public class DashboardCommandService(
                 dashboard.PeriodEnd),
             cancellationToken);
 
-        return dashboard;
+        return new Result<Dashboard, EAnalyticsError>.Success(dashboard);
     }
 }
