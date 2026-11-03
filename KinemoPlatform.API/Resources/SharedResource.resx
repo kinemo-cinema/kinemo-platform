@@ -170,4 +170,46 @@
     <data name="Equipment.ReportIncident.Response400" xml:space="preserve"><value>The request body is invalid.</value></data>
     <data name="Equipment.RunTest.Response400" xml:space="preserve"><value>The request body is invalid.</value></data>
     <data name="MaintenanceOrders.CompleteMaintenance.Response400" xml:space="preserve"><value>The request body is invalid.</value></data>
+    <data name="Analytics.InvalidPeriod.Title" xml:space="preserve">
+        <value>Invalid period</value>
+    </data>
+    <data name="Analytics.InvalidPeriod.Detail" xml:space="preserve">
+        <value>The start date must be earlier than the end date.</value>
+    </data>
+    <data name="Analytics.DashboardNotFound.Title" xml:space="preserve">
+        <value>Dashboard not found</value>
+    </data>
+    <data name="Analytics.DashboardNotFound.Detail" xml:space="preserve">
+        <value>The requested dashboard does not exist.</value>
+    </data>
+    <data name="Analytics.ReportNotFound.Title" xml:space="preserve">
+        <value>Report not found</value>
+    </data>
+    <data name="Analytics.ReportNotFound.Detail" xml:space="preserve">
+        <value>The requested operational report does not exist.</value>
+    </data>
+    <data name="Subscriptions.PlanNotFound.Title" xml:space="preserve">
+        <value>Subscription plan not found</value>
+    </data>
+    <data name="Subscriptions.PlanNotFound.Detail" xml:space="preserve">
+        <value>The requested subscription plan does not exist.</value>
+    </data>
+    <data name="Subscriptions.SubscriptionNotFound.Title" xml:space="preserve">
+        <value>Subscription not found</value>
+    </data>
+    <data name="Subscriptions.SubscriptionNotFound.Detail" xml:space="preserve">
+        <value>The requested subscription does not exist.</value>
+    </data>
+    <data name="Subscriptions.InvalidPayment.Title" xml:space="preserve">
+        <value>Invalid payment</value>
+    </data>
+    <data name="Subscriptions.InvalidPayment.Detail" xml:space="preserve">
+        <value>The payment information is invalid.</value>
+    </data>
+    <data name="Subscriptions.InvalidPlanChange.Title" xml:space="preserve">
+        <value>Invalid plan change</value>
+    </data>
+    <data name="Subscriptions.InvalidPlanChange.Detail" xml:space="preserve">
+        <value>The requested plan change cannot be completed.</value>
+    </data>
 </root>

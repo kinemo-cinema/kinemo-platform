@@ -1,4 +1,6 @@
-﻿
+using KinemoPlatform.API.Resources;
+using Microsoft.Extensions.Localization;
+
 using System.Net.Mime;
 using KinemoPlatform.API.Subscriptions.Application.Errors;
 using KinemoPlatform.API.Subscriptions.Application.Services;
@@ -129,7 +131,7 @@ public class SubscriptionsController(
 
     private IActionResult MapSubscriptionError(ESubscriptionError error)
     {
-        var problem = SubscriptionErrorAssembler.ToProblemDetails(error);
+        var problem = SubscriptionErrorAssembler.ToProblemDetails(error, HttpContext.RequestServices.GetRequiredService<IStringLocalizer<SharedResource>>());
 
         return new ObjectResult(problem)
         {

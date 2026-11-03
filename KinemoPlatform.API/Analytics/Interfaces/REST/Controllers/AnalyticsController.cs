@@ -1,4 +1,6 @@
-﻿using System.Net.Mime;
+using KinemoPlatform.API.Resources;
+using Microsoft.Extensions.Localization;
+using System.Net.Mime;
 using KinemoPlatform.API.Analytics.Application.Errors;
 using KinemoPlatform.API.Analytics.Application.Services;
 using KinemoPlatform.API.Analytics.Domain.Model.Queries;
@@ -136,7 +138,7 @@ public class AnalyticsController(
 
     private IActionResult MapAnalyticsError(EAnalyticsError error)
     {
-        var problem = AnalyticsErrorAssembler.ToProblemDetails(error);
+        var problem = AnalyticsErrorAssembler.ToProblemDetails(error, HttpContext.RequestServices.GetRequiredService<IStringLocalizer<SharedResource>>());
 
         return new ObjectResult(problem)
         {
