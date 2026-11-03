@@ -70,8 +70,8 @@ using KinemoPlatform.API.Maintenance.Infrastructure.Persistence.EFC.Repositories
 // BC08: Analytics
 using KinemoPlatform.API.Analytics.Application.Internal.CommandServices;
 using KinemoPlatform.API.Analytics.Application.Internal.QueryServices;
+using KinemoPlatform.API.Analytics.Application.Services;
 using KinemoPlatform.API.Analytics.Domain.Repositories;
-using KinemoPlatform.API.Analytics.Domain.Services;
 using KinemoPlatform.API.Analytics.Infrastructure.Persistence.EFC.Repositories;
 using KinemoPlatform.API.Movies.Application.Services;
 using KinemoPlatform.API.Rooms.Application.Services;
@@ -80,8 +80,8 @@ using KinemoPlatform.API.Scheduling.Application.Services;
 // BC09: Subscriptions
 using KinemoPlatform.API.Subscriptions.Application.Internal.CommandServices;
 using KinemoPlatform.API.Subscriptions.Application.Internal.QueryServices;
+using KinemoPlatform.API.Subscriptions.Application.Services;
 using KinemoPlatform.API.Subscriptions.Domain.Repositories;
-using KinemoPlatform.API.Subscriptions.Domain.Services;
 using KinemoPlatform.API.Subscriptions.Infrastructure.Persistence.EFC.Repositories;
 using KinemoPlatform.API.Ticketing.Application.Services;
 
