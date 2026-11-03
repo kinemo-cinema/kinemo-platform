@@ -1,10 +1,10 @@
 ﻿using Cortex.Mediator;
 using KinemoPlatform.API.Shared.Domain.Repositories;
+using KinemoPlatform.API.Subscriptions.Application.Services;
 using KinemoPlatform.API.Subscriptions.Domain.Model.Aggregates;
 using KinemoPlatform.API.Subscriptions.Domain.Model.Commands;
 using KinemoPlatform.API.Subscriptions.Domain.Model.Events;
 using KinemoPlatform.API.Subscriptions.Domain.Repositories;
-using KinemoPlatform.API.Subscriptions.Domain.Services;
 
 namespace KinemoPlatform.API.Subscriptions.Application.Internal.CommandServices;
 

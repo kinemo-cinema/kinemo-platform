@@ -1,6 +1,6 @@
 ﻿using System.Net.Mime;
+using KinemoPlatform.API.Subscriptions.Application.Services;
 using KinemoPlatform.API.Subscriptions.Domain.Model.Queries;
-using KinemoPlatform.API.Subscriptions.Domain.Services;
 using KinemoPlatform.API.Subscriptions.Interfaces.REST.Resources;
 using KinemoPlatform.API.Subscriptions.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;

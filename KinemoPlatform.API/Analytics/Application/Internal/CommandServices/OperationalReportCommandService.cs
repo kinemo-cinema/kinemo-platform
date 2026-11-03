@@ -1,9 +1,9 @@
 ﻿using Cortex.Mediator;
+using KinemoPlatform.API.Analytics.Application.Services;
 using KinemoPlatform.API.Analytics.Domain.Model.Aggregates;
 using KinemoPlatform.API.Analytics.Domain.Model.Commands;
 using KinemoPlatform.API.Analytics.Domain.Model.Events;
 using KinemoPlatform.API.Analytics.Domain.Repositories;
-using KinemoPlatform.API.Analytics.Domain.Services;
 using KinemoPlatform.API.Shared.Domain.Repositories;
 
 namespace KinemoPlatform.API.Analytics.Application.Internal.CommandServices;

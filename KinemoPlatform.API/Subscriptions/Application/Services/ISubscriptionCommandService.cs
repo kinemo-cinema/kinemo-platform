@@ -1,7 +1,7 @@
 ﻿using KinemoPlatform.API.Subscriptions.Domain.Model.Aggregates;
 using KinemoPlatform.API.Subscriptions.Domain.Model.Commands;
 
-namespace KinemoPlatform.API.Subscriptions.Domain.Services;
+namespace KinemoPlatform.API.Subscriptions.Application.Services;
 
 public interface ISubscriptionCommandService
 {

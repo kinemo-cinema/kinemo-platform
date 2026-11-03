@@ -1,6 +1,6 @@
 ﻿using System.Net.Mime;
+using KinemoPlatform.API.Analytics.Application.Services;
 using KinemoPlatform.API.Analytics.Domain.Model.Queries;
-using KinemoPlatform.API.Analytics.Domain.Services;
 using KinemoPlatform.API.Analytics.Interfaces.REST.Resources;
 using KinemoPlatform.API.Analytics.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
