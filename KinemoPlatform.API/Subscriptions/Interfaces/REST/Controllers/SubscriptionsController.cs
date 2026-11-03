@@ -1,8 +1,7 @@
-﻿using System.Net.Mime;
-using KinemoPlatform.API.Shared.Application.Patterns;
+﻿
+using System.Net.Mime;
 using KinemoPlatform.API.Subscriptions.Application.Errors;
 using KinemoPlatform.API.Subscriptions.Application.Services;
-using KinemoPlatform.API.Subscriptions.Domain.Model.Aggregates;
 using KinemoPlatform.API.Subscriptions.Domain.Model.Queries;
 using KinemoPlatform.API.Subscriptions.Interfaces.REST.Resources;
 using KinemoPlatform.API.Subscriptions.Interfaces.REST.Transform;
@@ -28,6 +27,7 @@ public class SubscriptionsController(
         CancellationToken cancellationToken)
     {
         var command = CreateSubscriptionCommandFromResourceAssembler.ToCommandFromResource(resource);
+
         var result = await commandService.Handle(command, cancellationToken);
 
         return result.Fold<IActionResult>(
@@ -56,9 +56,11 @@ public class SubscriptionsController(
             new GetSubscriptionByIdQuery(subscriptionId),
             cancellationToken);
 
-        if (subscription is null) return NotFound();
+        if (subscription is null)
+            return NotFound();
 
-        return Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription));
+        return Ok(
+            SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription));
     }
 
     [HttpGet("cinema/{cinemaId:int}")]
@@ -74,15 +76,18 @@ public class SubscriptionsController(
             new GetSubscriptionByCinemaIdQuery(cinemaId),
             cancellationToken);
 
-        if (subscription is null) return NotFound();
+        if (subscription is null)
+            return NotFound();
 
-        return Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription));
+        return Ok(
+            SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription));
     }
 
     [HttpPost("{subscriptionId:int}/payments")]
     [EndpointSummary("Process Payment")]
     [EndpointDescription("Process a subscription payment (US40).")]
     [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ProcessPayment(
         [FromRoute] int subscriptionId,
@@ -105,7 +110,6 @@ public class SubscriptionsController(
     [EndpointDescription("Upgrade or downgrade a subscription (US42).")]
     [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> ChangePlan(
         [FromRoute] int subscriptionId,
@@ -125,31 +129,12 @@ public class SubscriptionsController(
 
     private IActionResult MapSubscriptionError(ESubscriptionError error)
     {
-        return error switch
+        var problem = SubscriptionErrorAssembler.ToProblemDetails(error);
+
+        return new ObjectResult(problem)
         {
-            ESubscriptionError.PlanNotFound => Problem(
-                statusCode: StatusCodes.Status404NotFound,
-                title: "Subscription plan not found",
-                detail: "The requested subscription plan does not exist."),
-
-            ESubscriptionError.SubscriptionNotFound => Problem(
-                statusCode: StatusCodes.Status404NotFound,
-                title: "Subscription not found",
-                detail: "The requested subscription does not exist."),
-
-            ESubscriptionError.InvalidPayment => Problem(
-                statusCode: StatusCodes.Status400BadRequest,
-                title: "Invalid payment",
-                detail: "The payment information is invalid."),
-
-            ESubscriptionError.InvalidPlanChange => Problem(
-                statusCode: StatusCodes.Status409Conflict,
-                title: "Invalid plan change",
-                detail: "The requested plan change cannot be completed."),
-
-            _ => Problem(
-                statusCode: StatusCodes.Status500InternalServerError,
-                title: "Unexpected subscription error")
+            StatusCode = problem.Status,
+            ContentTypes = { "application/problem+json" }
         };
     }
 }

@@ -89,7 +89,6 @@ public class AnalyticsController(
     [EndpointSummary("Generate Report")]
     [EndpointDescription("Generate an operational report.")]
     [ProducesResponseType(typeof(OperationalReportResource), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GenerateReport(
         [FromBody] GenerateReportResource resource,
         CancellationToken cancellationToken)
@@ -136,26 +135,12 @@ public class AnalyticsController(
 
     private IActionResult MapAnalyticsError(EAnalyticsError error)
     {
-        return error switch
+        var problem = AnalyticsErrorAssembler.ToProblemDetails(error);
+
+        return new ObjectResult(problem)
         {
-            EAnalyticsError.InvalidPeriod => Problem(
-                statusCode: StatusCodes.Status400BadRequest,
-                title: "Invalid period",
-                detail: "The start date must be earlier than the end date."),
-
-            EAnalyticsError.DashboardNotFound => Problem(
-                statusCode: StatusCodes.Status404NotFound,
-                title: "Dashboard not found",
-                detail: "The requested dashboard does not exist."),
-
-            EAnalyticsError.ReportNotFound => Problem(
-                statusCode: StatusCodes.Status404NotFound,
-                title: "Report not found",
-                detail: "The requested operational report does not exist."),
-
-            _ => Problem(
-                statusCode: StatusCodes.Status500InternalServerError,
-                title: "Unexpected analytics error")
+            StatusCode = problem.Status,
+            ContentTypes = { "application/problem+json" }
         };
     }
 }
