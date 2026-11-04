@@ -64,8 +64,12 @@ public partial class ShowExecution
         FinishedAt = DateTimeOffset.UtcNow;
     }
 
+    
+    
     public void TriggerEmergencyStop(string reason)
     {
+        if (!CanTriggerEmergencyStop())
+            throw new InvalidOperationException("Only an in-progress or paused execution can be emergency stopped.");
         Status = EExecutionStatus.EmergencyStopped;
         EmergencyEvents.Add(new EmergencyEvent(reason));
     }
@@ -74,4 +78,9 @@ public partial class ShowExecution
     {
         HardwareLogs.Add(new HardwareExecutionLog(message, severity));
     }
+    
+    public bool CanPause() => Status == EExecutionStatus.InProgress;
+    public bool CanResume() => Status == EExecutionStatus.Paused;
+    public bool CanFinish() => Status is EExecutionStatus.InProgress or EExecutionStatus.Paused;
+    public bool CanTriggerEmergencyStop() => Status is EExecutionStatus.InProgress or EExecutionStatus.Paused;
 }
