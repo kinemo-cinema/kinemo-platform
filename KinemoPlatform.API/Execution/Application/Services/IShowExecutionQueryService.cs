@@ -11,10 +11,10 @@ public interface IShowExecutionQueryService
     /// <summary>
     ///     Handles retrieving an execution by its unique ID.
     /// </summary>
-    Task<ShowExecution?> Handle(GetExecutionByIdQuery query);
+    Task<ShowExecution?> Handle(GetExecutionByIdQuery query, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Handles retrieving the current (or most recent) execution for a specific show.
     /// </summary>
-    Task<ShowExecution?> Handle(GetExecutionByShowIdQuery query);
+    Task<ShowExecution?> Handle(GetExecutionByShowIdQuery query, CancellationToken cancellationToken = default);
 }
