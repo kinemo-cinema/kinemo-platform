@@ -1,7 +1,7 @@
-﻿using KinemoPlatform.API.Execution.Domain.Model.Aggregates;
+﻿using KinemoPlatform.API.Execution.Application.Services;
+using KinemoPlatform.API.Execution.Domain.Model.Aggregates;
 using KinemoPlatform.API.Execution.Domain.Model.Queries;
 using KinemoPlatform.API.Execution.Domain.Repositories;
-using KinemoPlatform.API.Execution.Domain.Services;
 
 namespace KinemoPlatform.API.Execution.Application.Internal.QueryServices;
 

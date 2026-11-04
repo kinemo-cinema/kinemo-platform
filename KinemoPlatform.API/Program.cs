@@ -57,7 +57,6 @@ using KinemoPlatform.API.Seats.Infrastructure.Persistence.EFC.Repositories;
 using KinemoPlatform.API.Execution.Application.Internal.CommandServices;
 using KinemoPlatform.API.Execution.Application.Internal.QueryServices;
 using KinemoPlatform.API.Execution.Domain.Repositories;
-using KinemoPlatform.API.Execution.Domain.Services;
 using KinemoPlatform.API.Execution.Infrastructure.Persistence.EFC.Repositories;
 
 // BC07: Maintenance
@@ -73,6 +72,7 @@ using KinemoPlatform.API.Analytics.Application.Internal.QueryServices;
 using KinemoPlatform.API.Analytics.Application.Services;
 using KinemoPlatform.API.Analytics.Domain.Repositories;
 using KinemoPlatform.API.Analytics.Infrastructure.Persistence.EFC.Repositories;
+using KinemoPlatform.API.Execution.Application.Services;
 using KinemoPlatform.API.Movies.Application.Services;
 using KinemoPlatform.API.Rooms.Application.Services;
 using KinemoPlatform.API.Scheduling.Application.Services;

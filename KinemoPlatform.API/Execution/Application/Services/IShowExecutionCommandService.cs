@@ -1,7 +1,7 @@
 ﻿using KinemoPlatform.API.Execution.Domain.Model.Aggregates;
 using KinemoPlatform.API.Execution.Domain.Model.Commands;
 
-namespace KinemoPlatform.API.Execution.Domain.Services;
+namespace KinemoPlatform.API.Execution.Application.Services;
 
 /// <summary>
 ///     Represents the show execution command service in the Kinemo Platform.

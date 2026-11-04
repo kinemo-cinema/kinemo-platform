@@ -1,7 +1,7 @@
 ﻿using System.Net.Mime;
+using KinemoPlatform.API.Execution.Application.Services;
 using KinemoPlatform.API.Execution.Domain.Model.Commands;
 using KinemoPlatform.API.Execution.Domain.Model.Queries;
-using KinemoPlatform.API.Execution.Domain.Services;
 using KinemoPlatform.API.Execution.Interfaces.REST.Resources;
 using KinemoPlatform.API.Execution.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;

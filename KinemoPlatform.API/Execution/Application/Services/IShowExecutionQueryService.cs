@@ -1,7 +1,7 @@
 ﻿using KinemoPlatform.API.Execution.Domain.Model.Aggregates;
 using KinemoPlatform.API.Execution.Domain.Model.Queries;
 
-namespace KinemoPlatform.API.Execution.Domain.Services;
+namespace KinemoPlatform.API.Execution.Application.Services;
 
 /// <summary>
 ///     Represents the show execution query service in the Kinemo Platform.
