@@ -245,4 +245,11 @@
     <data name="SeatAllocations.MarkSeatOutOfService.Response200" xml:space="preserve"><value>Se marcó el asiento fuera de servicio.</value></data>
     <data name="SeatAllocations.MarkSeatOutOfService.Response400" xml:space="preserve"><value>El cuerpo de la solicitud no es válido.</value></data>
     <data name="SeatAllocations.MarkSeatOutOfService.Response404" xml:space="preserve"><value>No se encontró el asiento o la asignación.</value></data>
+    <data name="ExecutionNotFound" xml:space="preserve"><value>No se encontró la ejecución.</value></data>
+    <data name="ActiveExecutionAlreadyExists" xml:space="preserve"><value>Ya existe una ejecución activa para esta función.</value></data>
+    <data name="InvalidExecutionState" xml:space="preserve"><value>La ejecución no está en un estado que permita esta operación.</value></data>
+    <data name="InvalidExecutionShowId" xml:space="preserve"><value>El id de la función debe ser un número positivo.</value></data>
+    <data name="InvalidSensoryContentId" xml:space="preserve"><value>El id del contenido sensorial debe ser un número positivo.</value></data>
+    <data name="RequiredEmergencyStopReason" xml:space="preserve"><value>El motivo de la parada de emergencia es obligatorio.</value></data>
+    <data name="InvalidEmergencyStopReasonLength" xml:space="preserve"><value>El motivo no debe superar los {1} caracteres.</value></data>
 </root>

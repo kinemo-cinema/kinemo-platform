@@ -40,6 +40,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Execution\Domain\Services\" />
       <Folder Include="Rooms\Domain\Services\" />
       <Folder Include="Scheduling\Domain\Services\" />
       <Folder Include="Ticketing\Domain\Services\" />

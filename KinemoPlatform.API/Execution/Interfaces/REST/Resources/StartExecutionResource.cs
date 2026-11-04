@@ -1,3 +1,7 @@
-﻿namespace KinemoPlatform.API.Execution.Interfaces.REST.Resources;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record StartExecutionResource(int ShowId, int SensoryContentId);
+namespace KinemoPlatform.API.Execution.Interfaces.REST.Resources;
+
+public record StartExecutionResource(
+    [Range(1, int.MaxValue, ErrorMessage = "InvalidExecutionShowId")] int ShowId,
+    [Range(1, int.MaxValue, ErrorMessage = "InvalidSensoryContentId")] int SensoryContentId);
