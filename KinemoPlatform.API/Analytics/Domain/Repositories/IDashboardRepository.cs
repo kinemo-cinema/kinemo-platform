@@ -11,10 +11,13 @@ public interface IDashboardRepository : IBaseRepository<Dashboard>
     /// <summary>
     ///     Retrieves a dashboard by ID, eagerly loading metrics, room performances, and incident summaries.
     /// </summary>
-    Task<Dashboard?> FindByIdWithDetailsAsync(int dashboardId);
+    Task<Dashboard?> FindByIdWithDetailsAsync(
+        int dashboardId,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Retrieves the most recently generated dashboard.
     /// </summary>
-    Task<Dashboard?> FindLatestAsync();
+    Task<Dashboard?> FindLatestAsync(
+        CancellationToken cancellationToken = default);
 }

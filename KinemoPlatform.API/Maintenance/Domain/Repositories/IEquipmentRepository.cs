@@ -11,10 +11,10 @@ public interface IEquipmentRepository : IBaseRepository<Equipment>
     /// <summary>
     ///     Checks if an equipment with the given name already exists in a specific room.
     /// </summary>
-    Task<bool> ExistsByNameAndRoomAsync(string name, int roomId);
+    Task<bool> ExistsByNameAndRoomAsync(string name, int roomId, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Retrieves equipment by ID, eagerly loading incidents and tests.
     /// </summary>
-    Task<Equipment?> FindByIdWithDetailsAsync(int equipmentId);
+    Task<Equipment?> FindByIdWithDetailsAsync(int equipmentId, CancellationToken cancellationToken = default);
 }

@@ -1,14 +1,17 @@
-﻿using KinemoPlatform.API.Analytics.Domain.Model.Aggregates;
+﻿using KinemoPlatform.API.Analytics.Application.Services;
+using KinemoPlatform.API.Analytics.Domain.Model.Aggregates;
 using KinemoPlatform.API.Analytics.Domain.Model.Queries;
 using KinemoPlatform.API.Analytics.Domain.Repositories;
-using KinemoPlatform.API.Analytics.Domain.Services;
 
 namespace KinemoPlatform.API.Analytics.Application.Internal.QueryServices;
 
-public class OperationalReportQueryService(IOperationalReportRepository reportRepository) : IOperationalReportQueryService
+public class OperationalReportQueryService(IOperationalReportRepository reportRepository)
+    : IOperationalReportQueryService
 {
-    public async Task<OperationalReport?> Handle(GetReportByIdQuery query)
+    public async Task<OperationalReport?> Handle(
+        GetReportByIdQuery query,
+        CancellationToken cancellationToken = default)
     {
-        return await reportRepository.FindByIdAsync(query.ReportId);
+        return await reportRepository.FindByIdAsync(query.ReportId, cancellationToken);
     }
 }

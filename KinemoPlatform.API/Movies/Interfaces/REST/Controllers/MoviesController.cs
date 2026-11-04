@@ -1,14 +1,15 @@
 ﻿using System.Net.Mime;
 using KinemoPlatform.API.Movies.Domain.Model.Commands;
-using KinemoPlatform.API.Movies.Domain.Model.Queries;              // ← ADDED
+using KinemoPlatform.API.Movies.Domain.Model.Queries;
 using KinemoPlatform.API.Movies.Domain.Model.ValueObjects;
-using KinemoPlatform.API.Movies.Domain.Services;
+using KinemoPlatform.API.Movies.Application.Services;
 using KinemoPlatform.API.Movies.Infrastructure.External.FileStorage;
 using KinemoPlatform.API.Movies.Interfaces.REST.Resources;
 using KinemoPlatform.API.Movies.Interfaces.REST.Transform;
-using Microsoft.AspNetCore.Http;                                    // ← ADDED
+using KinemoPlatform.API.Resources;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.Extensions.Localization;
 
 namespace KinemoPlatform.API.Movies.Interfaces.REST.Controllers;
 
@@ -28,28 +29,30 @@ namespace KinemoPlatform.API.Movies.Interfaces.REST.Controllers;
 /// <param name="sensoryFileStorage">
 ///     The <see cref="ISensoryFileStorage" /> to persist sensory file uploads.
 /// </param>
+/// <param name="localizer">
+///     The <see cref="IStringLocalizer{SharedResource}" /> used for localized error messages.
+/// </param>
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-[SwaggerTag("Available Movie Endpoints.")]
+[Tags("Movie")]
 public class MoviesController(
     IMovieCommandService movieCommandService,
     IMovieQueryService movieQueryService,
-    ISensoryFileStorage sensoryFileStorage) : ControllerBase
+    ISensoryFileStorage sensoryFileStorage,
+    IStringLocalizer<SharedResource> localizer) : ControllerBase
 {
     // ---------------------------------------------------------------------
     // GET /api/v1/movies/{movieId}
     // ---------------------------------------------------------------------
     [HttpGet("{movieId:int}")]
-    [SwaggerOperation(
-        Summary = "Get Movie by Id",
-        Description = "Get a movie by its unique identifier.",
-        OperationId = "GetMovieById")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The movie was found.", typeof(MovieResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The movie was not found.")]
-    public async Task<IActionResult> GetMovieById([FromRoute] int movieId)
+    [EndpointSummary("Get Movie by Id")]
+    [EndpointDescription("Get a movie by its unique identifier.")]
+    [ProducesResponseType(typeof(MovieResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetMovieById([FromRoute] int movieId, CancellationToken cancellationToken)
     {
-        var movie = await movieQueryService.Handle(new GetMovieByIdQuery(movieId));
+        var movie = await movieQueryService.Handle(new GetMovieByIdQuery(movieId), cancellationToken);
         if (movie is null) return NotFound();
         var resource = MovieResourceFromEntityAssembler.ToResourceFromEntity(movie);
         return Ok(resource);
@@ -59,14 +62,12 @@ public class MoviesController(
     // GET /api/v1/movies
     // ---------------------------------------------------------------------
     [HttpGet]
-    [SwaggerOperation(
-        Summary = "Get All Movies",
-        Description = "Get all movies registered in the catalog.",
-        OperationId = "GetAllMovies")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The movies were found.", typeof(IEnumerable<MovieResource>))]
-    public async Task<IActionResult> GetAllMovies()
+    [EndpointSummary("Get All Movies")]
+    [EndpointDescription("Get all movies registered in the catalog.")]
+    [ProducesResponseType(typeof(IEnumerable<MovieResource>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllMovies(CancellationToken cancellationToken)
     {
-        var movies = await movieQueryService.Handle(new GetAllMoviesQuery());
+        var movies = await movieQueryService.Handle(new GetAllMoviesQuery(), cancellationToken);
         var resources = movies.Select(MovieResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(resources);
     }
@@ -75,16 +76,15 @@ public class MoviesController(
     // GET /api/v1/movies/search?title=...&genre=...
     // ---------------------------------------------------------------------
     [HttpGet("search")]
-    [SwaggerOperation(
-        Summary = "Search Movies",
-        Description = "Search movies by optional partial title and/or genre.",
-        OperationId = "SearchMovies")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The matching movies were found.", typeof(IEnumerable<MovieResource>))]
+    [EndpointSummary("Search Movies")]
+    [EndpointDescription("Search movies by optional partial title and/or genre.")]
+    [ProducesResponseType(typeof(IEnumerable<MovieResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> SearchMovies(
         [FromQuery] string? title,
-        [FromQuery] EMovieGenre? genre)
+        [FromQuery] EMovieGenre? genre,
+        CancellationToken cancellationToken)
     {
-        var movies = await movieQueryService.Handle(new SearchMoviesQuery(title, genre));
+        var movies = await movieQueryService.Handle(new SearchMoviesQuery(title, genre), cancellationToken);
         var resources = movies.Select(MovieResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(resources);
     }
@@ -93,166 +93,119 @@ public class MoviesController(
     // POST /api/v1/movies
     // ---------------------------------------------------------------------
     [HttpPost]
-    [SwaggerOperation(
-        Summary = "Create Movie",
-        Description = "Register a new 4D movie in the platform.",
-        OperationId = "CreateMovie")]
-    [SwaggerResponse(StatusCodes.Status201Created, "The movie was created.", typeof(MovieResource))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "The request body is invalid.")]
-    [SwaggerResponse(StatusCodes.Status409Conflict, "A movie with the same title already exists.")]
-    public async Task<IActionResult> CreateMovie([FromBody] CreateMovieResource resource)
+    [EndpointSummary("Create Movie")]
+    [EndpointDescription("Register a new 4D movie in the platform.")]
+    [ProducesResponseType(typeof(MovieResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> CreateMovie([FromBody] CreateMovieResource resource, CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = CreateMovieCommandFromResourceAssembler.ToCommandFromResource(resource);
-            var movie = await movieCommandService.Handle(command);
-            if (movie is null) return BadRequest();
-            var movieResource = MovieResourceFromEntityAssembler.ToResourceFromEntity(movie);
-            return CreatedAtAction(nameof(GetMovieById), new { movieId = movie.Id }, movieResource);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(new { message = ex.Message });
-        }
+        var command = CreateMovieCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var result = await movieCommandService.Handle(command, cancellationToken);
+        return ActionResultFromMovieResultAssembler.ToActionResult(result, this, localizer,
+            movie => CreatedAtAction(nameof(GetMovieById), new { movieId = movie.Id },
+                MovieResourceFromEntityAssembler.ToResourceFromEntity(movie)));
     }
 
     // ---------------------------------------------------------------------
     // PATCH /api/v1/movies/{movieId}
     // ---------------------------------------------------------------------
     [HttpPatch("{movieId:int}")]
-    [SwaggerOperation(
-        Summary = "Update Movie",
-        Description = "Update the basic information of an existing movie.",
-        OperationId = "UpdateMovie")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The movie was updated.", typeof(MovieResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The movie was not found.")]
+    [EndpointSummary("Update Movie")]
+    [EndpointDescription("Update the basic information of an existing movie.")]
+    [ProducesResponseType(typeof(MovieResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> UpdateMovie(
         [FromRoute] int movieId,
-        [FromBody] UpdateMovieResource resource)
+        [FromBody] UpdateMovieResource resource,
+        CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = UpdateMovieCommandFromResourceAssembler.ToCommandFromResource(resource, movieId);
-            var movie = await movieCommandService.Handle(command);
-            if (movie is null) return NotFound();
-            var movieResource = MovieResourceFromEntityAssembler.ToResourceFromEntity(movie);
-            return Ok(movieResource);
-        }
-        catch (InvalidOperationException)
-        {
-            return NotFound();
-        }
+        var command = UpdateMovieCommandFromResourceAssembler.ToCommandFromResource(resource, movieId);
+        var result = await movieCommandService.Handle(command, cancellationToken);
+        return ActionResultFromMovieResultAssembler.ToActionResult(result, this, localizer,
+            movie => Ok(MovieResourceFromEntityAssembler.ToResourceFromEntity(movie)));
     }
 
     // ---------------------------------------------------------------------
     // POST /api/v1/movies/{movieId}/deactivation
     // ---------------------------------------------------------------------
     [HttpPost("{movieId:int}/deactivation")]
-    [SwaggerOperation(
-        Summary = "Deactivate Movie",
-        Description = "Mark a movie as inactive so it cannot be scheduled in new shows (US04).",
-        OperationId = "DeactivateMovie")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The movie was deactivated.", typeof(MovieResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The movie was not found.")]
-    public async Task<IActionResult> DeactivateMovie([FromRoute] int movieId)
+    [EndpointSummary("Deactivate Movie")]
+    [EndpointDescription("Mark a movie as inactive so it cannot be scheduled in new shows (US04).")]
+    [ProducesResponseType(typeof(MovieResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeactivateMovie([FromRoute] int movieId, CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = new DeactivateMovieCommand(movieId);
-            var movie = await movieCommandService.Handle(command);
-            if (movie is null) return NotFound();
-            var movieResource = MovieResourceFromEntityAssembler.ToResourceFromEntity(movie);
-            return Ok(movieResource);
-        }
-        catch (InvalidOperationException)
-        {
-            return NotFound();
-        }
+        var result = await movieCommandService.Handle(new DeactivateMovieCommand(movieId), cancellationToken);
+        return ActionResultFromMovieResultAssembler.ToActionResult(result, this, localizer,
+            movie => Ok(MovieResourceFromEntityAssembler.ToResourceFromEntity(movie)));
     }
 
     // ---------------------------------------------------------------------
     // GET /api/v1/movies/{movieId}/sensory-content
     // ---------------------------------------------------------------------
     [HttpGet("{movieId:int}/sensory-content")]
-    [SwaggerOperation(
-        Summary = "Get Sensory Content",
-        Description = "Get the sensory content configuration associated with a movie.",
-        OperationId = "GetSensoryContentByMovieId")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The sensory content was found.", typeof(SensoryContentResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The movie or sensory content was not found.")]
-    public async Task<IActionResult> GetSensoryContent([FromRoute] int movieId)
+    [EndpointSummary("Get Sensory Content")]
+    [EndpointDescription("Get the sensory content configuration associated with a movie.")]
+    [ProducesResponseType(typeof(SensoryContentResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetSensoryContent([FromRoute] int movieId, CancellationToken cancellationToken)
     {
-        var sensoryContent = await movieQueryService.Handle(new GetSensoryContentByMovieIdQuery(movieId));
+        var sensoryContent = await movieQueryService.Handle(new GetSensoryContentByMovieIdQuery(movieId), cancellationToken);
         if (sensoryContent is null) return NotFound();
         var resource = SensoryContentResourceFromEntityAssembler.ToResourceFromEntity(sensoryContent);
         return Ok(resource);
     }
 
     // ---------------------------------------------------------------------
-// POST /api/v1/movies/{movieId}/sensory-file
-// ---------------------------------------------------------------------
+    // POST /api/v1/movies/{movieId}/sensory-file
+    // ---------------------------------------------------------------------
     [HttpPost("{movieId:int}/sensory-file")]
     [Consumes("multipart/form-data")]
-    [SwaggerOperation(
-        Summary = "Associate Sensory File",
-        Description = "Upload a sensory file and associate it with a movie's sensory content (US02).",
-        OperationId = "AssociateSensoryFile")]
-    [SwaggerResponse(StatusCodes.Status201Created, "The sensory file was associated.", typeof(MovieResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The movie was not found.")]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "The uploaded file is invalid.")]
+    [EndpointSummary("Associate Sensory File")]
+    [EndpointDescription("Upload a sensory file and associate it with a movie's sensory content (US02).")]
+    [ProducesResponseType(typeof(MovieResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> AssociateSensoryFile(
         [FromRoute] int movieId,
         IFormFile? file,                                    // <-- REMOVED [FromForm] HERE
         [FromForm] EEffectType effectType,
-        [FromForm] int durationSeconds)
+        [FromForm] int durationSeconds,
+        CancellationToken cancellationToken)
     {
         if (file is null || file.Length == 0)
-            return BadRequest(new { message = "A non-empty sensory file is required." });
+            return Problem(title: localizer["SensoryFileRequired"].Value, statusCode: StatusCodes.Status400BadRequest);
 
-        try
-        {
-            await using var stream = file.OpenReadStream();
-            var filePath = await sensoryFileStorage.UploadAsync(stream, file.FileName, movieId);
+        await using var stream = file.OpenReadStream();
+        var filePath = await sensoryFileStorage.UploadAsync(stream, file.FileName, movieId, cancellationToken);
 
-            var command = new AssociateSensoryFileCommand(movieId, effectType, filePath, durationSeconds);
-            var movie = await movieCommandService.Handle(command);
-            if (movie is null) return NotFound();
-
-            var resource = MovieResourceFromEntityAssembler.ToResourceFromEntity(movie);
-            return CreatedAtAction(nameof(GetMovieById), new { movieId = movie.Id }, resource);
-        }
-        catch (InvalidOperationException)
-        {
-            return NotFound();
-        }
+        var command = new AssociateSensoryFileCommand(movieId, effectType, filePath, durationSeconds);
+        var result = await movieCommandService.Handle(command, cancellationToken);
+        return ActionResultFromMovieResultAssembler.ToActionResult(result, this, localizer,
+            movie => CreatedAtAction(nameof(GetMovieById), new { movieId = movie.Id },
+                MovieResourceFromEntityAssembler.ToResourceFromEntity(movie)));
     }
 
     // ---------------------------------------------------------------------
     // POST /api/v1/movies/{movieId}/effects-profile
     // ---------------------------------------------------------------------
     [HttpPost("{movieId:int}/effects-profile")]
-    [SwaggerOperation(
-        Summary = "Configure Effects Profile",
-        Description = "Change the sensory intensity level applied to a movie's effects (US06).",
-        OperationId = "ConfigureEffectsProfile")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The effects profile was updated.", typeof(MovieResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The movie was not found.")]
+    [EndpointSummary("Configure Effects Profile")]
+    [EndpointDescription("Change the sensory intensity level applied to a movie's effects (US06).")]
+    [ProducesResponseType(typeof(MovieResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ConfigureEffectsProfile(
         [FromRoute] int movieId,
-        [FromBody] ConfigureEffectsProfileResource resource)
+        [FromBody] ConfigureEffectsProfileResource resource,
+        CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = ConfigureEffectsProfileCommandFromResourceAssembler
-                .ToCommandFromResource(resource, movieId);
-            var movie = await movieCommandService.Handle(command);
-            if (movie is null) return NotFound();
-            var movieResource = MovieResourceFromEntityAssembler.ToResourceFromEntity(movie);
-            return Ok(movieResource);
-        }
-        catch (InvalidOperationException)
-        {
-            return NotFound();
-        }
+        var command = ConfigureEffectsProfileCommandFromResourceAssembler.ToCommandFromResource(resource, movieId);
+        var result = await movieCommandService.Handle(command, cancellationToken);
+        return ActionResultFromMovieResultAssembler.ToActionResult(result, this, localizer,
+            movie => Ok(MovieResourceFromEntityAssembler.ToResourceFromEntity(movie)));
     }
 }

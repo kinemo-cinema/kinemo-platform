@@ -11,5 +11,5 @@ public interface IMaintenanceOrderRepository : IBaseRepository<MaintenanceOrder>
     /// <summary>
     ///     Retrieves all maintenance orders for a specific piece of equipment.
     /// </summary>
-    Task<IEnumerable<MaintenanceOrder>> FindByEquipmentIdAsync(int equipmentId);
+    Task<IEnumerable<MaintenanceOrder>> FindByEquipmentIdAsync(int equipmentId, CancellationToken cancellationToken = default);
 }

@@ -1,135 +1,117 @@
 ﻿using System.Net.Mime;
+using KinemoPlatform.API.Execution.Application.Services;
 using KinemoPlatform.API.Execution.Domain.Model.Commands;
 using KinemoPlatform.API.Execution.Domain.Model.Queries;
-using KinemoPlatform.API.Execution.Domain.Services;
 using KinemoPlatform.API.Execution.Interfaces.REST.Resources;
 using KinemoPlatform.API.Execution.Interfaces.REST.Transform;
+using KinemoPlatform.API.Resources;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.Extensions.Localization;
 
 namespace KinemoPlatform.API.Execution.Interfaces.REST.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-[SwaggerTag("Available Execution Endpoints.")]
+[Tags("Execution")]
 public class ExecutionsController(
     IShowExecutionCommandService commandService,
-    IShowExecutionQueryService queryService) : ControllerBase
+    IShowExecutionQueryService queryService,
+    IStringLocalizer<SharedResource> localizer) : ControllerBase
 {
     [HttpPost]
-    [SwaggerOperation(Summary = "Start Execution", Description = "Start a new 4D show execution (US13).", OperationId = "StartExecution")]
-    [SwaggerResponse(StatusCodes.Status201Created, "The execution was started.", typeof(ShowExecutionResource))]
-    [SwaggerResponse(StatusCodes.Status409Conflict, "An active execution already exists for this show.")]
-    public async Task<IActionResult> StartExecution([FromBody] StartExecutionResource resource)
+    [EndpointSummary("Start Execution")]
+    [EndpointDescription("Start a new 4D show execution (US13).")]
+    [ProducesResponseType(typeof(ShowExecutionResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> StartExecution([FromBody] StartExecutionResource resource,
+        CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = StartExecutionCommandFromResourceAssembler.ToCommandFromResource(resource);
-            var execution = await commandService.Handle(command);
-            if (execution is null) return BadRequest();
-            
-            var executionResource = ShowExecutionResourceFromEntityAssembler.ToResourceFromEntity(execution);
-            return CreatedAtAction(nameof(GetExecutionById), new { executionId = execution.Id }, executionResource);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(new { message = ex.Message });
-        }
+        var command = StartExecutionCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var result = await commandService.Handle(command, cancellationToken);
+        return ActionResultFromExecutionResultAssembler.ToActionResult(result, this, localizer,
+            e => CreatedAtAction(nameof(GetExecutionById), new { executionId = e.Id },
+                ShowExecutionResourceFromEntityAssembler.ToResourceFromEntity(e)));
     }
 
     [HttpGet("{executionId:int}")]
-    [SwaggerOperation(Summary = "Get Execution by Id", OperationId = "GetExecutionById")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The execution was found.", typeof(ShowExecutionResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The execution was not found.")]
-    public async Task<IActionResult> GetExecutionById([FromRoute] int executionId)
+    [EndpointSummary("Get Execution by Id")]
+    [ProducesResponseType(typeof(ShowExecutionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetExecutionById([FromRoute] int executionId,
+        CancellationToken cancellationToken)
     {
-        var execution = await queryService.Handle(new GetExecutionByIdQuery(executionId));
+        var execution = await queryService.Handle(new GetExecutionByIdQuery(executionId), cancellationToken);
         if (execution is null) return NotFound();
         return Ok(ShowExecutionResourceFromEntityAssembler.ToResourceFromEntity(execution));
     }
 
     [HttpGet("show/{showId:int}")]
-    [SwaggerOperation(Summary = "Get Active Execution by Show ID", OperationId = "GetExecutionByShowId")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The execution was found.", typeof(ShowExecutionResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "No active execution found.")]
-    public async Task<IActionResult> GetExecutionByShowId([FromRoute] int showId)
+    [EndpointSummary("Get Active Execution by Show ID")]
+    [ProducesResponseType(typeof(ShowExecutionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetExecutionByShowId([FromRoute] int showId,
+        CancellationToken cancellationToken)
     {
-        var execution = await queryService.Handle(new GetExecutionByShowIdQuery(showId));
+        var execution = await queryService.Handle(new GetExecutionByShowIdQuery(showId), cancellationToken);
         if (execution is null) return NotFound();
         return Ok(ShowExecutionResourceFromEntityAssembler.ToResourceFromEntity(execution));
     }
 
     [HttpPost("{executionId:int}/pause")]
-    [SwaggerOperation(Summary = "Pause Execution", Description = "Pause an active execution (US16).", OperationId = "PauseExecution")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The execution was paused.", typeof(ShowExecutionResource))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "Execution is not in progress.")]
-    public async Task<IActionResult> PauseExecution([FromRoute] int executionId)
+    [EndpointSummary("Pause Execution")]
+    [EndpointDescription("Pause an active execution (US16).")]
+    [ProducesResponseType(typeof(ShowExecutionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> PauseExecution([FromRoute] int executionId,
+        CancellationToken cancellationToken)
     {
-        try
-        {
-            var execution = await commandService.Handle(new PauseExecutionCommand(executionId));
-            if (execution is null) return NotFound();
-            return Ok(ShowExecutionResourceFromEntityAssembler.ToResourceFromEntity(execution));
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await commandService.Handle(new PauseExecutionCommand(executionId), cancellationToken);
+        return ActionResultFromExecutionResultAssembler.ToActionResult(result, this, localizer,
+            e => Ok(ShowExecutionResourceFromEntityAssembler.ToResourceFromEntity(e)));
     }
 
     [HttpPost("{executionId:int}/resume")]
-    [SwaggerOperation(Summary = "Resume Execution", Description = "Resume a paused execution (US16).", OperationId = "ResumeExecution")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The execution was resumed.", typeof(ShowExecutionResource))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "Execution is not paused.")]
-    public async Task<IActionResult> ResumeExecution([FromRoute] int executionId)
+    [EndpointSummary("Resume Execution")]
+    [EndpointDescription("Resume a paused execution (US16).")]
+    [ProducesResponseType(typeof(ShowExecutionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> ResumeExecution([FromRoute] int executionId,
+        CancellationToken cancellationToken)
     {
-        try
-        {
-            var execution = await commandService.Handle(new ResumeExecutionCommand(executionId));
-            if (execution is null) return NotFound();
-            return Ok(ShowExecutionResourceFromEntityAssembler.ToResourceFromEntity(execution));
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await commandService.Handle(new ResumeExecutionCommand(executionId), cancellationToken);
+        return ActionResultFromExecutionResultAssembler.ToActionResult(result, this, localizer,
+            e => Ok(ShowExecutionResourceFromEntityAssembler.ToResourceFromEntity(e)));
     }
 
     [HttpPost("{executionId:int}/finish")]
-    [SwaggerOperation(Summary = "Finish Execution", Description = "Finish an execution normally (US15).", OperationId = "FinishExecution")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The execution was finished.", typeof(ShowExecutionResource))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "Execution is already finished or stopped.")]
-    public async Task<IActionResult> FinishExecution([FromRoute] int executionId)
+    [EndpointSummary("Finish Execution")]
+    [EndpointDescription("Finish an execution normally (US15).")]
+    [ProducesResponseType(typeof(ShowExecutionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> FinishExecution([FromRoute] int executionId,
+        CancellationToken cancellationToken)
     {
-        try
-        {
-            var execution = await commandService.Handle(new FinishExecutionCommand(executionId));
-            if (execution is null) return NotFound();
-            return Ok(ShowExecutionResourceFromEntityAssembler.ToResourceFromEntity(execution));
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await commandService.Handle(new FinishExecutionCommand(executionId), cancellationToken);
+        return ActionResultFromExecutionResultAssembler.ToActionResult(result, this, localizer,
+            e => Ok(ShowExecutionResourceFromEntityAssembler.ToResourceFromEntity(e)));
     }
 
     [HttpPost("{executionId:int}/emergency-stop")]
-    [SwaggerOperation(Summary = "Emergency Stop", Description = "Trigger an emergency stop (US14).", OperationId = "TriggerEmergencyStop")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The execution was emergency stopped.", typeof(ShowExecutionResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The execution was not found.")]
-    public async Task<IActionResult> TriggerEmergencyStop([FromRoute] int executionId, [FromBody] TriggerEmergencyStopResource resource)
+    [EndpointSummary("Emergency Stop")]
+    [EndpointDescription("Trigger an emergency stop (US14).")]
+    [ProducesResponseType(typeof(ShowExecutionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> TriggerEmergencyStop([FromRoute] int executionId,
+        [FromBody] TriggerEmergencyStopResource resource, CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = TriggerEmergencyStopCommandFromResourceAssembler.ToCommandFromResource(resource, executionId);
-            var execution = await commandService.Handle(command);
-            if (execution is null) return NotFound();
-            return Ok(ShowExecutionResourceFromEntityAssembler.ToResourceFromEntity(execution));
-        }
-        catch (InvalidOperationException)
-        {
-            return NotFound();
-        }
+        var command = TriggerEmergencyStopCommandFromResourceAssembler.ToCommandFromResource(resource, executionId);
+        var result = await commandService.Handle(command, cancellationToken);
+        return ActionResultFromExecutionResultAssembler.ToActionResult(result, this, localizer,
+            e => Ok(ShowExecutionResourceFromEntityAssembler.ToResourceFromEntity(e)));
     }
 }

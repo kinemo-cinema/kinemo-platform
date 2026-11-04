@@ -6,11 +6,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KinemoPlatform.API.Subscriptions.Infrastructure.Persistence.EFC.Repositories;
 
-public class SubscriptionPlanRepository(AppDbContext context) 
+public class SubscriptionPlanRepository(AppDbContext context)
     : BaseRepository<SubscriptionPlan>(context), ISubscriptionPlanRepository
 {
-    public async Task<bool> ExistsByNameAsync(string name)
+    public async Task<bool> ExistsByNameAsync(
+        string name,
+        CancellationToken cancellationToken = default)
     {
-        return await Context.Set<SubscriptionPlan>().AnyAsync(p => p.Name == name);
+        return await Context.Set<SubscriptionPlan>()
+            .AnyAsync(p => p.Name == name, cancellationToken);
     }
 }

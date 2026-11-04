@@ -1,19 +1,26 @@
-﻿using KinemoPlatform.API.Analytics.Domain.Model.Aggregates;
+﻿using KinemoPlatform.API.Analytics.Application.Services;
+using KinemoPlatform.API.Analytics.Domain.Model.Aggregates;
 using KinemoPlatform.API.Analytics.Domain.Model.Queries;
 using KinemoPlatform.API.Analytics.Domain.Repositories;
-using KinemoPlatform.API.Analytics.Domain.Services;
 
 namespace KinemoPlatform.API.Analytics.Application.Internal.QueryServices;
 
-public class DashboardQueryService(IDashboardRepository dashboardRepository) : IDashboardQueryService
+public class DashboardQueryService(IDashboardRepository dashboardRepository)
+    : IDashboardQueryService
 {
-    public async Task<Dashboard?> Handle(GetDashboardByIdQuery query)
+    public async Task<Dashboard?> Handle(
+        GetDashboardByIdQuery query,
+        CancellationToken cancellationToken = default)
     {
-        return await dashboardRepository.FindByIdWithDetailsAsync(query.DashboardId);
+        return await dashboardRepository.FindByIdWithDetailsAsync(
+            query.DashboardId,
+            cancellationToken);
     }
 
-    public async Task<Dashboard?> Handle(GetLatestDashboardQuery query)
+    public async Task<Dashboard?> Handle(
+        GetLatestDashboardQuery query,
+        CancellationToken cancellationToken = default)
     {
-        return await dashboardRepository.FindLatestAsync();
+        return await dashboardRepository.FindLatestAsync(cancellationToken);
     }
 }

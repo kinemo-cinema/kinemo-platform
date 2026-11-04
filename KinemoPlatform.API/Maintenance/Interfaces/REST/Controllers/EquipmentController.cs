@@ -1,95 +1,86 @@
 ﻿using System.Net.Mime;
+using KinemoPlatform.API.Maintenance.Application.Services;
 using KinemoPlatform.API.Maintenance.Domain.Model.Queries;
-using KinemoPlatform.API.Maintenance.Domain.Services;
 using KinemoPlatform.API.Maintenance.Interfaces.REST.Resources;
 using KinemoPlatform.API.Maintenance.Interfaces.REST.Transform;
+using KinemoPlatform.API.Resources;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.Extensions.Localization;
 
 namespace KinemoPlatform.API.Maintenance.Interfaces.REST.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-[SwaggerTag("Available Equipment Endpoints.")]
+[Tags("Equipment")]
 public class EquipmentController(
     IEquipmentCommandService commandService,
-    IEquipmentQueryService queryService) : ControllerBase
+    IEquipmentQueryService queryService,
+    IStringLocalizer<SharedResource> localizer) : ControllerBase
 {
     [HttpPost]
-    [SwaggerOperation(Summary = "Register Equipment", Description = "Register a new hardware component in a room (US19).", OperationId = "RegisterEquipment")]
-    [SwaggerResponse(StatusCodes.Status201Created, "The equipment was registered.", typeof(EquipmentResource))]
-    [SwaggerResponse(StatusCodes.Status409Conflict, "Equipment with the same name already exists in this room.")]
-    public async Task<IActionResult> RegisterEquipment([FromBody] RegisterEquipmentResource resource)
+    [EndpointSummary("Register Equipment")]
+    [EndpointDescription("Register a new hardware component in a room (US19).")]
+    [ProducesResponseType(typeof(EquipmentResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> RegisterEquipment([FromBody] RegisterEquipmentResource resource,
+        CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = RegisterEquipmentCommandFromResourceAssembler.ToCommandFromResource(resource);
-            var equipment = await commandService.Handle(command);
-            if (equipment is null) return BadRequest();
-            
-            var equipmentResource = EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipment);
-            return CreatedAtAction(nameof(GetEquipmentById), new { equipmentId = equipment.Id }, equipmentResource);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(new { message = ex.Message });
-        }
+        var command = RegisterEquipmentCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var result = await commandService.Handle(command, cancellationToken);
+        return ActionResultFromEquipmentResultAssembler.ToActionResult(result, this, localizer,
+            equipment => CreatedAtAction(nameof(GetEquipmentById), new { equipmentId = equipment.Id },
+                EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipment)));
     }
 
     [HttpGet]
-    [SwaggerOperation(Summary = "Get All Equipment", OperationId = "GetAllEquipment")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The equipment was found.", typeof(IEnumerable<EquipmentResource>))]
-    public async Task<IActionResult> GetAllEquipment()
+    [EndpointSummary("Get All Equipment")]
+    [ProducesResponseType(typeof(IEnumerable<EquipmentResource>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllEquipment(CancellationToken cancellationToken)
     {
-        var equipmentList = await queryService.Handle(new GetAllEquipmentQuery());
+        var equipmentList = await queryService.Handle(new GetAllEquipmentQuery(), cancellationToken);
         return Ok(equipmentList.Select(EquipmentResourceFromEntityAssembler.ToResourceFromEntity));
     }
 
     [HttpGet("{equipmentId:int}")]
-    [SwaggerOperation(Summary = "Get Equipment by Id", OperationId = "GetEquipmentById")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The equipment was found.", typeof(EquipmentResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The equipment was not found.")]
-    public async Task<IActionResult> GetEquipmentById([FromRoute] int equipmentId)
+    [EndpointSummary("Get Equipment by Id")]
+    [ProducesResponseType(typeof(EquipmentResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetEquipmentById([FromRoute] int equipmentId, CancellationToken cancellationToken)
     {
-        var equipment = await queryService.Handle(new GetEquipmentByIdQuery(equipmentId));
+        var equipment = await queryService.Handle(new GetEquipmentByIdQuery(equipmentId), cancellationToken);
         if (equipment is null) return NotFound();
         return Ok(EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipment));
     }
 
     [HttpPost("{equipmentId:int}/incidents")]
-    [SwaggerOperation(Summary = "Report Incident", Description = "Report a broken component (US20).", OperationId = "ReportIncident")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The incident was registered.", typeof(EquipmentResource))]
-    public async Task<IActionResult> ReportIncident([FromRoute] int equipmentId, [FromBody] RegisterIncidentResource resource)
+    [EndpointSummary("Report Incident")]
+    [EndpointDescription("Report a broken component (US20).")]
+    [ProducesResponseType(typeof(EquipmentResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ReportIncident([FromRoute] int equipmentId,
+        [FromBody] RegisterIncidentResource resource, CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = RegisterIncidentCommandFromResourceAssembler.ToCommandFromResource(resource, equipmentId);
-            var equipment = await commandService.Handle(command);
-            if (equipment is null) return NotFound();
-            return Ok(EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipment));
-        }
-        catch (InvalidOperationException)
-        {
-            return NotFound();
-        }
+        var command = RegisterIncidentCommandFromResourceAssembler.ToCommandFromResource(resource, equipmentId);
+        var result = await commandService.Handle(command, cancellationToken);
+        return ActionResultFromEquipmentResultAssembler.ToActionResult(result, this, localizer,
+            equipment => Ok(EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipment)));
     }
 
     [HttpPost("{equipmentId:int}/tests")]
-    [SwaggerOperation(Summary = "Run Test", Description = "Run a diagnostic test on a specific channel (US17).", OperationId = "RunEquipmentTest")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The test was executed.", typeof(EquipmentResource))]
-    public async Task<IActionResult> RunTest([FromRoute] int equipmentId, [FromBody] RunEquipmentTestResource resource)
+    [EndpointSummary("Run Test")]
+    [EndpointDescription("Run a diagnostic test on a specific channel (US17).")]
+    [ProducesResponseType(typeof(EquipmentResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RunTest([FromRoute] int equipmentId,
+        [FromBody] RunEquipmentTestResource resource, CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = RunEquipmentTestCommandFromResourceAssembler.ToCommandFromResource(resource, equipmentId);
-            var equipment = await commandService.Handle(command);
-            if (equipment is null) return NotFound();
-            return Ok(EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipment));
-        }
-        catch (InvalidOperationException)
-        {
-            return NotFound();
-        }
+        var command = RunEquipmentTestCommandFromResourceAssembler.ToCommandFromResource(resource, equipmentId);
+        var result = await commandService.Handle(command, cancellationToken);
+        return ActionResultFromEquipmentResultAssembler.ToActionResult(result, this, localizer,
+            equipment => Ok(EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipment)));
     }
 }

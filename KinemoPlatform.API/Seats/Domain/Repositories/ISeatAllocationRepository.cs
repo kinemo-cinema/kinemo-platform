@@ -12,13 +12,15 @@ public interface ISeatAllocationRepository : IBaseRepository<SeatAllocation>
     ///     Checks if a seat allocation already exists for a specific show.
     /// </summary>
     /// <param name="showId">The ID of the show.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>True if an allocation exists, false otherwise.</returns>
-    Task<bool> ExistsByShowIdAsync(int showId);
+    Task<bool> ExistsByShowIdAsync(int showId, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Retrieves the seat allocation for a show, eagerly loading all seats and interventions.
     /// </summary>
     /// <param name="showId">The ID of the show.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The seat allocation with its related entities, or null if not found.</returns>
-    Task<SeatAllocation?> FindByShowIdWithDetailsAsync(int showId);
+    Task<SeatAllocation?> FindByShowIdWithDetailsAsync(int showId, CancellationToken cancellationToken = default);
 }

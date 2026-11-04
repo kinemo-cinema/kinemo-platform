@@ -1,85 +1,149 @@
-﻿using System.Net.Mime;
+using KinemoPlatform.API.Resources;
+using Microsoft.Extensions.Localization;
+using System.Net.Mime;
+using KinemoPlatform.API.Analytics.Application.Errors;
+using KinemoPlatform.API.Analytics.Application.Services;
 using KinemoPlatform.API.Analytics.Domain.Model.Queries;
-using KinemoPlatform.API.Analytics.Domain.Services;
 using KinemoPlatform.API.Analytics.Interfaces.REST.Resources;
 using KinemoPlatform.API.Analytics.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace KinemoPlatform.API.Analytics.Interfaces.REST.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-[SwaggerTag("Available Analytics Endpoints.")]
+[Tags("Analytics")]
 public class AnalyticsController(
     IDashboardCommandService dashboardCommandService,
     IDashboardQueryService dashboardQueryService,
     IOperationalReportCommandService reportCommandService,
     IOperationalReportQueryService reportQueryService) : ControllerBase
 {
-    // ---------------------------------------------------------------------
-    // Dashboard Endpoints
-    // ---------------------------------------------------------------------
     [HttpPost("dashboards")]
-    [SwaggerOperation(Summary = "Generate Dashboard", Description = "Generate a new operational dashboard for a specific period.", OperationId = "GenerateDashboard")]
-    [SwaggerResponse(StatusCodes.Status201Created, "The dashboard was generated.", typeof(DashboardResource))]
-    public async Task<IActionResult> GenerateDashboard([FromBody] GenerateDashboardResource resource)
+    [EndpointSummary("Generate Dashboard")]
+    [EndpointDescription("Generate a new operational dashboard for a specific period.")]
+    [ProducesResponseType(typeof(DashboardResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GenerateDashboard(
+        [FromBody] GenerateDashboardResource resource,
+        CancellationToken cancellationToken)
     {
-        var command = GenerateDashboardCommandFromResourceAssembler.ToCommandFromResource(resource);
-        var dashboard = await dashboardCommandService.Handle(command);
-        if (dashboard is null) return BadRequest();
-        
-        var dashboardResource = DashboardResourceFromEntityAssembler.ToResourceFromEntity(dashboard);
-        return CreatedAtAction(nameof(GetDashboardById), new { dashboardId = dashboard.Id }, dashboardResource);
+        var command =
+            GenerateDashboardCommandFromResourceAssembler.ToCommandFromResource(resource);
+
+        var result = await dashboardCommandService.Handle(
+            command,
+            cancellationToken);
+
+        return result.Fold<IActionResult>(
+            dashboard =>
+            {
+                var dashboardResource =
+                    DashboardResourceFromEntityAssembler.ToResourceFromEntity(dashboard);
+
+                return CreatedAtAction(
+                    nameof(GetDashboardById),
+                    new { dashboardId = dashboard.Id },
+                    dashboardResource);
+            },
+            MapAnalyticsError);
     }
 
     [HttpGet("dashboards/{dashboardId:int}")]
-    [SwaggerOperation(Summary = "Get Dashboard by Id", OperationId = "GetDashboardById")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The dashboard was found.", typeof(DashboardResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The dashboard was not found.")]
-    public async Task<IActionResult> GetDashboardById([FromRoute] int dashboardId)
+    [EndpointSummary("Get Dashboard by Id")]
+    [ProducesResponseType(typeof(DashboardResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetDashboardById(
+        [FromRoute] int dashboardId,
+        CancellationToken cancellationToken)
     {
-        var dashboard = await dashboardQueryService.Handle(new GetDashboardByIdQuery(dashboardId));
-        if (dashboard is null) return NotFound();
-        return Ok(DashboardResourceFromEntityAssembler.ToResourceFromEntity(dashboard));
+        var dashboard = await dashboardQueryService.Handle(
+            new GetDashboardByIdQuery(dashboardId),
+            cancellationToken);
+
+        if (dashboard is null)
+            return NotFound();
+
+        return Ok(
+            DashboardResourceFromEntityAssembler.ToResourceFromEntity(dashboard));
     }
 
     [HttpGet("dashboards/latest")]
-    [SwaggerOperation(Summary = "Get Latest Dashboard", OperationId = "GetLatestDashboard")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The latest dashboard was found.", typeof(DashboardResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "No dashboards exist.")]
-    public async Task<IActionResult> GetLatestDashboard()
+    [EndpointSummary("Get Latest Dashboard")]
+    [ProducesResponseType(typeof(DashboardResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetLatestDashboard(
+        CancellationToken cancellationToken)
     {
-        var dashboard = await dashboardQueryService.Handle(new GetLatestDashboardQuery());
-        if (dashboard is null) return NotFound();
-        return Ok(DashboardResourceFromEntityAssembler.ToResourceFromEntity(dashboard));
+        var dashboard = await dashboardQueryService.Handle(
+            new GetLatestDashboardQuery(),
+            cancellationToken);
+
+        if (dashboard is null)
+            return NotFound();
+
+        return Ok(
+            DashboardResourceFromEntityAssembler.ToResourceFromEntity(dashboard));
     }
 
-    // ---------------------------------------------------------------------
-    // Report Endpoints
-    // ---------------------------------------------------------------------
     [HttpPost("reports")]
-    [SwaggerOperation(Summary = "Generate Report", Description = "Generate an operational report.", OperationId = "GenerateReport")]
-    [SwaggerResponse(StatusCodes.Status201Created, "The report was generated.", typeof(OperationalReportResource))]
-    public async Task<IActionResult> GenerateReport([FromBody] GenerateReportResource resource)
+    [EndpointSummary("Generate Report")]
+    [EndpointDescription("Generate an operational report.")]
+    [ProducesResponseType(typeof(OperationalReportResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GenerateReport(
+        [FromBody] GenerateReportResource resource,
+        CancellationToken cancellationToken)
     {
-        var command = GenerateReportCommandFromResourceAssembler.ToCommandFromResource(resource);
-        var report = await reportCommandService.Handle(command);
-        if (report is null) return BadRequest();
-        
-        var reportResource = OperationalReportResourceFromEntityAssembler.ToResourceFromEntity(report);
-        return CreatedAtAction(nameof(GetReportById), new { reportId = report.Id }, reportResource);
+        var command =
+            GenerateReportCommandFromResourceAssembler.ToCommandFromResource(resource);
+
+        var result = await reportCommandService.Handle(
+            command,
+            cancellationToken);
+
+        return result.Fold<IActionResult>(
+            report =>
+            {
+                var reportResource =
+                    OperationalReportResourceFromEntityAssembler.ToResourceFromEntity(report);
+
+                return CreatedAtAction(
+                    nameof(GetReportById),
+                    new { reportId = report.Id },
+                    reportResource);
+            },
+            MapAnalyticsError);
     }
 
     [HttpGet("reports/{reportId:int}")]
-    [SwaggerOperation(Summary = "Get Report by Id", OperationId = "GetReportById")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The report was found.", typeof(OperationalReportResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The report was not found.")]
-    public async Task<IActionResult> GetReportById([FromRoute] int reportId)
+    [EndpointSummary("Get Report by Id")]
+    [ProducesResponseType(typeof(OperationalReportResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetReportById(
+        [FromRoute] int reportId,
+        CancellationToken cancellationToken)
     {
-        var report = await reportQueryService.Handle(new GetReportByIdQuery(reportId));
-        if (report is null) return NotFound();
-        return Ok(OperationalReportResourceFromEntityAssembler.ToResourceFromEntity(report));
+        var report = await reportQueryService.Handle(
+            new GetReportByIdQuery(reportId),
+            cancellationToken);
+
+        if (report is null)
+            return NotFound();
+
+        return Ok(
+            OperationalReportResourceFromEntityAssembler.ToResourceFromEntity(report));
+    }
+
+    private IActionResult MapAnalyticsError(EAnalyticsError error)
+    {
+        var problem = AnalyticsErrorAssembler.ToProblemDetails(error, HttpContext.RequestServices.GetRequiredService<IStringLocalizer<SharedResource>>());
+
+        return new ObjectResult(problem)
+        {
+            StatusCode = problem.Status,
+            ContentTypes = { "application/problem+json" }
+        };
     }
 }

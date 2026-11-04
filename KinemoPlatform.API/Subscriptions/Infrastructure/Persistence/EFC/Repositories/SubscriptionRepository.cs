@@ -6,24 +6,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KinemoPlatform.API.Subscriptions.Infrastructure.Persistence.EFC.Repositories;
 
-public class SubscriptionRepository(AppDbContext context) 
+public class SubscriptionRepository(AppDbContext context)
     : BaseRepository<Subscription>(context), ISubscriptionRepository
 {
-    public async Task<Subscription?> FindByIdWithDetailsAsync(int subscriptionId)
+    public async Task<Subscription?> FindByIdWithDetailsAsync(
+        int subscriptionId,
+        CancellationToken cancellationToken = default)
     {
         return await Context.Set<Subscription>()
             .Include(s => s.Transactions)
             .Include(s => s.Upgrades)
-            .FirstOrDefaultAsync(s => s.Id == subscriptionId);
+            .FirstOrDefaultAsync(
+                s => s.Id == subscriptionId,
+                cancellationToken);
     }
 
-    public async Task<Subscription?> FindByCinemaIdAsync(int cinemaId)
+    public async Task<Subscription?> FindByCinemaIdAsync(
+        int cinemaId,
+        CancellationToken cancellationToken = default)
     {
         return await Context.Set<Subscription>()
             .Include(s => s.Transactions)
             .Include(s => s.Upgrades)
             .Where(s => s.CinemaId == cinemaId)
-            .OrderByDescending(s => s.EndDate) // Get the most recent/latest one
-            .FirstOrDefaultAsync();
+            .OrderByDescending(s => s.EndDate)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }
