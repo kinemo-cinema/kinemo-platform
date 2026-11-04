@@ -49,7 +49,6 @@ using KinemoPlatform.API.Ticketing.Infrastructure.Persistence.EFC.Repositories;
 using KinemoPlatform.API.Seats.Application.Internal.CommandServices;
 using KinemoPlatform.API.Seats.Application.Internal.QueryServices;
 using KinemoPlatform.API.Seats.Domain.Repositories;
-using KinemoPlatform.API.Seats.Domain.Services;
 using KinemoPlatform.API.Seats.Infrastructure.Persistence.EFC.Repositories;
 
 
@@ -76,6 +75,7 @@ using KinemoPlatform.API.Analytics.Infrastructure.Persistence.EFC.Repositories;
 using KinemoPlatform.API.Movies.Application.Services;
 using KinemoPlatform.API.Rooms.Application.Services;
 using KinemoPlatform.API.Scheduling.Application.Services;
+using KinemoPlatform.API.Seats.Application.Services;
 
 // BC09: Subscriptions
 using KinemoPlatform.API.Subscriptions.Application.Internal.CommandServices;
