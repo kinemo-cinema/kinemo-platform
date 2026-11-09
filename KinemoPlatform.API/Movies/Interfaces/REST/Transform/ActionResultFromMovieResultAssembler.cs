@@ -41,6 +41,9 @@ public static class ActionResultFromMovieResultAssembler
                 EMovieError.DuplicateTitle => controller.Problem(
                     title: localizer["MovieTitleDuplicated"].Value,
                     statusCode: StatusCodes.Status409Conflict),
+                EMovieError.DuplicateEffectType => controller.Problem(
+                    title: localizer["SensoryTrackDuplicated"].Value,
+                    statusCode: StatusCodes.Status409Conflict),
                 _ => controller.Problem(
                     title: localizer["UnexpectedServerError"].Value,
                     statusCode: StatusCodes.Status500InternalServerError)

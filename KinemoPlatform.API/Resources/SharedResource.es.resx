@@ -255,4 +255,6 @@
     <data name="RoomNotAvailableForPreparation" xml:space="preserve"><value>No se puede preparar una sala bloqueada o fuera de servicio. Libérela primero.</value></data>
     <data name="RoomBlockPeriodInvalid" xml:space="preserve"><value>El fin del bloqueo debe ser posterior a su inicio.</value></data>
     <data name="Rooms.PrepareRoom.Response409" xml:space="preserve"><value>La sala está bloqueada o fuera de servicio y no se puede preparar.</value></data>
+    <data name="SensoryTrackDuplicated" xml:space="preserve"><value>La película ya tiene un archivo sensorial para este tipo de efecto.</value></data>
+    <data name="Movies.AssociateSensoryFile.Response409" xml:space="preserve"><value>La película ya tiene un archivo sensorial para este tipo de efecto.</value></data>
 </root>
