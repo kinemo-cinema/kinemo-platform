@@ -56,9 +56,10 @@ public class RoomsController(
 
     [HttpPost("{roomId:int}/preparation")]
     [EndpointSummary("Prepare Room")]
-    [EndpointDescription("Perform a readiness inspection on the room.")]
+    [EndpointDescription("Perform a readiness inspection on the room. A blocked room must be released first.")]
     [ProducesResponseType(typeof(RoomResource), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> PrepareRoom([FromRoute] int roomId, [FromBody] PrepareRoomResource resource,
         CancellationToken cancellationToken)

@@ -36,24 +36,45 @@ public partial class Room
     public ICollection<RoomBlock> Blocks { get; }
 
     /// <summary>
+    ///     Whether the room can be prepared: it must not be in maintenance or out of service and it must
+    ///     not have an active block. A blocked room has to be released first.
+    /// </summary>
+    public bool CanBePrepared()
+    {
+        return (Status is ERoomStatus.Available or ERoomStatus.Preparing) && !Blocks.Any(b => b.Active);
+    }
+
+    /// <summary>
     ///     Prepares the room by adding an inspection record. 
     ///     If passed, the room becomes Available.
     /// </summary>
-    public void Prepare(string observations)
+    /// <returns>The inspection that was recorded.</returns>
+    /// <exception cref="InvalidOperationException">The room is blocked or out of service.</exception>
+    public RoomInspection Prepare(string observations)
     {
+        if (!CanBePrepared())
+            throw new InvalidOperationException("A blocked or out-of-service room cannot be prepared. Release it first.");
+
         var inspection = new RoomInspection(observations, EInspectionResult.Passed);
         Inspections.Add(inspection);
         Status = ERoomStatus.Available;
+        return inspection;
     }
 
     /// <summary>
     ///     Blocks the room for maintenance or other reasons.
     /// </summary>
-    public void Block(string reason, DateTimeOffset startDateTime, DateTimeOffset endDateTime)
+    /// <returns>The block that was recorded.</returns>
+    /// <exception cref="ArgumentException">The end of the period is not after its start.</exception>
+    public RoomBlock Block(string reason, DateTimeOffset startDateTime, DateTimeOffset endDateTime)
     {
+        if (endDateTime <= startDateTime)
+            throw new ArgumentException("The end of the block must be after its start.", nameof(endDateTime));
+
         var block = new RoomBlock(reason, startDateTime, endDateTime);
         Blocks.Add(block);
         Status = ERoomStatus.Maintenance;
+        return block;
     }
 
     /// <summary>
