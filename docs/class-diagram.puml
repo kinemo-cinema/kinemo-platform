@@ -1,0 +1,96 @@
+﻿@startuml
+' Fuente: kinemo-cinema/kinemo-platform, develop
+' Commit: d4b4c617061bb6729c7c3f8dbc42baad04f84df5
+' Revisado: 2026-11-11. Modelo implementado, no diseño futuro.
+!pragma layout smetana
+hide empty members
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam classBackgroundColor<<aggregate root>> #DCEBFA
+skinparam classBackgroundColor<<value object>> #E1F2DE
+title Kinemo — Modelo de dominio — BC01 a BC09\ndevelop @ d4b4c617061b
+package "BC01 — Movie & Sensory Content Management" as Movies {
+  class "Movie" as Movies_Movie <<aggregate root>> {
+    +Id: int
+    +Title: string
+    +DurationMinutes: int
+    +Genre: EMovieGenre
+    +Status: EMovieStatus
+    +UpdateDetails(title: string, durationMinutes: int, genre: EMovieGenre): void
+    +Activate(): void
+    +Deactivate(): void
+    +AssociateSensoryFile(effectType: EEffectType, filePath: string, durationSeconds: int): bool
+    +ConfigureEffectsProfile(newIntensity: ESensoryIntensityLevel): void
+  }
+  class "ConfigurationHistoryEntry" as Movies_ConfigurationHistoryEntry <<entity>> {
+    +Id: int
+    +SensoryContentId: int
+    +PreviousIntensity: ESensoryIntensityLevel
+    +NewIntensity: ESensoryIntensityLevel
+    +ChangedAt: DateTimeOffset
+  }
+  class "SensoryContent" as Movies_SensoryContent <<entity>> {
+    +Id: int
+    +MovieId: int
+    +IntensityLevel: ESensoryIntensityLevel
+    +Status: ESensoryContentStatus
+    +AddTrack(effectType: EEffectType, filePath: string, durationSeconds: int): bool
+    +ChangeIntensity(newIntensity: ESensoryIntensityLevel): void
+    +MarkAsReady(): void
+    +Activate(): void
+    +Deactivate(): void
+  }
+  class "SensoryTrack" as Movies_SensoryTrack <<entity>> {
+    +Id: int
+    +SensoryContentId: int
+    +EffectType: EEffectType
+    +FilePath: string
+    +DurationSeconds: int
+  }
+  enum "EEffectType" as Movies_EEffectType {
+    Motion
+    Wind
+    Water
+    Vibration
+  }
+  enum "EMovieGenre" as Movies_EMovieGenre {
+    Action
+    Drama
+    SciFi
+    Animation
+    Horror
+    Documentary
+    Other
+  }
+  enum "EMovieStatus" as Movies_EMovieStatus {
+    Active
+    Inactive
+  }
+  enum "ESensoryContentStatus" as Movies_ESensoryContentStatus {
+    Draft
+    Ready
+    Active
+    Inactive
+  }
+  enum "ESensoryIntensityLevel" as Movies_ESensoryIntensityLevel {
+    Low
+    Medium
+    High
+  }
+  Movies_SensoryContent "1" *-- "0..*" Movies_SensoryTrack : Tracks
+  Movies_SensoryContent "1" *-- "0..*" Movies_ConfigurationHistoryEntry : History
+  Movies_Movie "1" *-- "1" Movies_SensoryContent : SensoryContent
+}
+
+package "BC02 — Scheduling & Calendar" as Scheduling {
+  class "Show" as Scheduling_Show <<aggregate root>> {
+    +Id: int
+    +MovieId: int
+    +RoomId: int
+    +Status: EShowStatus
+    +UpdateTimeSlot(startDateTime: DateTimeOffset, endDateTime: DateTimeOffset): void
+    +Cancel(): void
+    +Finish(): void
+  }
