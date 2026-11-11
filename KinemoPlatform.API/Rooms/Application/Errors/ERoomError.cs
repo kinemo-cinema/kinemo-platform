@@ -13,5 +13,15 @@ public enum ERoomError
     /// <summary>
     ///     Another room already uses the requested name (HTTP 409).
     /// </summary>
-    DuplicateName
+    DuplicateName,
+
+    /// <summary>
+    ///     The room is blocked or out of service, so it cannot be prepared until it is released (HTTP 409).
+    /// </summary>
+    RoomNotAvailableForPreparation,
+
+    /// <summary>
+    ///     The end of the blocking period is not after its start (HTTP 400).
+    /// </summary>
+    InvalidBlockPeriod
 }

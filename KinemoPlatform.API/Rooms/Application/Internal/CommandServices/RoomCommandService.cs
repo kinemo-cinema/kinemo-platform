@@ -14,7 +14,8 @@ namespace KinemoPlatform.API.Rooms.Application.Internal.CommandServices;
 ///     Implementation of the room command service.
 /// </summary>
 /// <remarks>
-///     Expected failures (room not found, duplicate name) are returned as <see cref="ERoomError" /> inside a
+///     Expected failures (room not found, duplicate name, invalid block period, room not preparable) are
+///     returned as <see cref="ERoomError" /> inside a
 ///     <see cref="Result{TValue,TError}" />. Unexpected failures are not caught here; they surface as exceptions and
 ///     are turned into a ProblemDetails 500 response globally.
 /// </remarks>
@@ -42,14 +43,15 @@ public class RoomCommandService(
         var room = await roomRepository.FindByIdWithDetailsAsync(command.RoomId, cancellationToken);
         if (room is null) return Fail(ERoomError.RoomNotFound);
 
-        room.Prepare(command.Observations);
+        // A blocked or out-of-service room must be released before it can be prepared again.
+        if (!room.CanBePrepared()) return Fail(ERoomError.RoomNotAvailableForPreparation);
+
+        var inspection = room.Prepare(command.Observations);
         roomRepository.Update(room);
         await unitOfWork.CompleteAsync(cancellationToken);
 
-        // Get the ID of the newly created inspection to pass to the event
-        var latestInspection = room.Inspections.OrderByDescending(i => i.InspectedAt).First();
-
-        await domainEventPublisher.PublishAsync(new RoomPreparedEvent(room.Id, latestInspection.Id),
+        // The inspection instance has its database id once the changes are saved.
+        await domainEventPublisher.PublishAsync(new RoomPreparedEvent(room.Id, inspection.Id),
             cancellationToken);
 
         return Ok(room);
@@ -58,16 +60,18 @@ public class RoomCommandService(
     public async Task<Result<Room, ERoomError>> Handle(BlockRoomCommand command,
         CancellationToken cancellationToken = default)
     {
+        // The block must end after it starts.
+        if (command.EndDateTime <= command.StartDateTime) return Fail(ERoomError.InvalidBlockPeriod);
+
         var room = await roomRepository.FindByIdWithDetailsAsync(command.RoomId, cancellationToken);
         if (room is null) return Fail(ERoomError.RoomNotFound);
 
-        room.Block(command.Reason, command.StartDateTime, command.EndDateTime);
+        var block = room.Block(command.Reason, command.StartDateTime, command.EndDateTime);
         roomRepository.Update(room);
         await unitOfWork.CompleteAsync(cancellationToken);
 
-        var latestBlock = room.Blocks.OrderByDescending(b => b.StartDateTime).First();
-
-        await domainEventPublisher.PublishAsync(new RoomBlockedEvent(room.Id, latestBlock.Id, latestBlock.Reason),
+        // Use the block that was just created: ordering the blocks by start date could pick a different one.
+        await domainEventPublisher.PublishAsync(new RoomBlockedEvent(room.Id, block.Id, block.Reason),
             cancellationToken);
 
         return Ok(room);

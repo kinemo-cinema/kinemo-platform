@@ -14,7 +14,8 @@ namespace KinemoPlatform.API.Movies.Application.Internal.CommandServices;
 ///     Represents the movie command service in the Kinemo Platform.
 /// </summary>
 /// <remarks>
-///     Expected failures (movie not found, duplicate title) are returned as <see cref="EMovieError" />
+///     Expected failures (movie not found, duplicate title, duplicate effect type) are returned as
+///     <see cref="EMovieError" />
 ///     inside a <see cref="Result{TValue,TError}" />. Unexpected failures (e.g. database errors) are not
 ///     caught here; they surface as exceptions and are turned into a ProblemDetails 500 response globally.
 /// </remarks>
@@ -92,7 +93,10 @@ public class MovieCommandService(
         var movie = await movieRepository.FindByIdWithSensoryContentAsync(command.MovieId, cancellationToken);
         if (movie is null) return Fail(EMovieError.MovieNotFound);
 
-        movie.AssociateSensoryFile(command.EffectType, command.FilePath, command.DurationSeconds);
+        // One track per effect type: report the duplicate instead of silently ignoring the file.
+        if (!movie.AssociateSensoryFile(command.EffectType, command.FilePath, command.DurationSeconds))
+            return Fail(EMovieError.DuplicateEffectType);
+
         movieRepository.Update(movie);
         await unitOfWork.CompleteAsync(cancellationToken);
 

@@ -13,5 +13,10 @@ public enum EMovieError
     /// <summary>
     ///     Another movie already uses the requested title (HTTP 409).
     /// </summary>
-    DuplicateTitle
+    DuplicateTitle,
+
+    /// <summary>
+    ///     The movie already has a sensory track for the requested effect type (HTTP 409).
+    /// </summary>
+    DuplicateEffectType
 }

@@ -40,6 +40,12 @@ public static class ActionResultFromRoomResultAssembler
                 ERoomError.DuplicateName => controller.Problem(
                     title: localizer["RoomNameDuplicated"].Value,
                     statusCode: StatusCodes.Status409Conflict),
+                ERoomError.RoomNotAvailableForPreparation => controller.Problem(
+                    title: localizer["RoomNotAvailableForPreparation"].Value,
+                    statusCode: StatusCodes.Status409Conflict),
+                ERoomError.InvalidBlockPeriod => controller.Problem(
+                    title: localizer["RoomBlockPeriodInvalid"].Value,
+                    statusCode: StatusCodes.Status400BadRequest),
                 _ => controller.Problem(
                     title: localizer["UnexpectedServerError"].Value,
                     statusCode: StatusCodes.Status500InternalServerError)

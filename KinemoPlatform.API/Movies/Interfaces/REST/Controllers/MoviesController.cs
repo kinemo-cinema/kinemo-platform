@@ -169,6 +169,7 @@ public class MoviesController(
     [ProducesResponseType(typeof(MovieResource), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> AssociateSensoryFile(
         [FromRoute] int movieId,
         IFormFile? file,                                    // <-- REMOVED [FromForm] HERE
@@ -179,11 +180,22 @@ public class MoviesController(
         if (file is null || file.Length == 0)
             return Problem(title: localizer["SensoryFileRequired"].Value, statusCode: StatusCodes.Status400BadRequest);
 
+        // Fail fast before touching the disk: do not store files for movies that do not exist.
+        var sensoryContent = await movieQueryService.Handle(new GetSensoryContentByMovieIdQuery(movieId), cancellationToken);
+        if (sensoryContent is null)
+            return Problem(title: localizer["MovieNotFound"].Value, statusCode: StatusCodes.Status404NotFound);
+
         await using var stream = file.OpenReadStream();
         var filePath = await sensoryFileStorage.UploadAsync(stream, file.FileName, movieId, cancellationToken);
 
         var command = new AssociateSensoryFileCommand(movieId, effectType, filePath, durationSeconds);
         var result = await movieCommandService.Handle(command, cancellationToken);
+
+        // The file is only kept when it was associated; otherwise (duplicate effect type, ...) remove it.
+        // Unexpected exceptions are deliberately not handled here: the change may already be committed, and
+        // deleting the file then would leave the database pointing at a missing file.
+        if (result.IsFailure) await sensoryFileStorage.DeleteAsync(filePath, CancellationToken.None);
+
         return ActionResultFromMovieResultAssembler.ToActionResult(result, this, localizer,
             movie => CreatedAtAction(nameof(GetMovieById), new { movieId = movie.Id },
                 MovieResourceFromEntityAssembler.ToResourceFromEntity(movie)));

@@ -36,11 +36,15 @@ public partial class SensoryContent
     /// <param name="effectType">The effect channel of the track.</param>
     /// <param name="filePath">The storage path of the sensory file.</param>
     /// <param name="durationSeconds">The duration of the track in seconds.</param>
-    public void AddTrack(EEffectType effectType, string filePath, int durationSeconds)
+    /// <returns>
+    ///     <c>true</c> if the track was added; <c>false</c> if a track for that effect type already exists.
+    /// </returns>
+    public bool AddTrack(EEffectType effectType, string filePath, int durationSeconds)
     {
         // Prevent duplicate tracks per effect type
-        if (Tracks.Any(t => t.EffectType == effectType)) return;
+        if (Tracks.Any(t => t.EffectType == effectType)) return false;
         Tracks.Add(new SensoryTrack(effectType, filePath, durationSeconds));
+        return true;
     }
 
     /// <summary>

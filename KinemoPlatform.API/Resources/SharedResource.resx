@@ -231,4 +231,9 @@
     <data name="InvalidSensoryContentId" xml:space="preserve"><value>The sensory content id must be a positive number.</value></data>
     <data name="RequiredEmergencyStopReason" xml:space="preserve"><value>The emergency stop reason is required.</value></data>
     <data name="InvalidEmergencyStopReasonLength" xml:space="preserve"><value>The reason must not exceed {1} characters.</value></data>
+    <data name="RoomNotAvailableForPreparation" xml:space="preserve"><value>A blocked or out-of-service room cannot be prepared. Release it first.</value></data>
+    <data name="RoomBlockPeriodInvalid" xml:space="preserve"><value>The end of the block must be after its start.</value></data>
+    <data name="Rooms.PrepareRoom.Response409" xml:space="preserve"><value>The room is blocked or out of service and cannot be prepared.</value></data>
+    <data name="SensoryTrackDuplicated" xml:space="preserve"><value>The movie already has a sensory file for this effect type.</value></data>
+    <data name="Movies.AssociateSensoryFile.Response409" xml:space="preserve"><value>The movie already has a sensory file for this effect type.</value></data>
 </root>

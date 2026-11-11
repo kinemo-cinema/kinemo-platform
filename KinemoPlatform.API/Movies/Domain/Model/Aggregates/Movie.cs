@@ -98,9 +98,12 @@ public partial class Movie
     /// <param name="durationSeconds">
     ///     The duration of the track in seconds.
     /// </param>
-    public void AssociateSensoryFile(EEffectType effectType, string filePath, int durationSeconds)
+    /// <returns>
+    ///     <c>true</c> if the file was associated; <c>false</c> if the movie already has a track for that effect type.
+    /// </returns>
+    public bool AssociateSensoryFile(EEffectType effectType, string filePath, int durationSeconds)
     {
-        SensoryContent.AddTrack(effectType, filePath, durationSeconds);
+        return SensoryContent.AddTrack(effectType, filePath, durationSeconds);
     }
 
     /// <summary>
