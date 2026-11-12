@@ -29,25 +29,8 @@ public class SubscriptionCommandService(
         return subscription;
     }
 
-    public async Task<Subscription?> Handle(ProcessPaymentCommand command)
-    {
-        var subscription = await subscriptionRepository.FindByIdWithDetailsAsync(command.SubscriptionId);
-        if (subscription is null) throw new InvalidOperationException($"Subscription {command.SubscriptionId} not found.");
-
-        // SIMULATION: In a real app, you would call Stripe/PayPal here using the PaymentToken.
-        // For this project, we simulate success if the token is not "fail".
-        bool isSuccessful = command.PaymentToken.ToLower() != "fail";
-
-        var transaction = subscription.ProcessPayment(command.Amount, isSuccessful);
-        
-        subscriptionRepository.Update(subscription);
-        await unitOfWork.CompleteAsync();
-
-        await domainEventPublisher.PublishAsync(
-            new PaymentProcessedEvent(subscription.Id, transaction.Amount, isSuccessful));
-
-        return subscription;
-    }
+    public Task<Subscription?> Handle(ProcessPaymentCommand command) =>
+        Task.FromException<Subscription?>(new NotSupportedException("No real payment provider is configured. No payment was processed."));
 
     public async Task<Subscription?> Handle(ChangePlanCommand command)
     {

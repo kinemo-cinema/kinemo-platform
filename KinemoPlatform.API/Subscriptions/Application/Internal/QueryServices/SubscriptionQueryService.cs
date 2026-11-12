@@ -7,6 +7,8 @@ namespace KinemoPlatform.API.Subscriptions.Application.Internal.QueryServices;
 
 public class SubscriptionQueryService(ISubscriptionRepository subscriptionRepository) : ISubscriptionQueryService
 {
+    public Task<IEnumerable<Subscription>> Handle(GetAllSubscriptionsQuery query) => subscriptionRepository.ListWithDetailsAsync();
+
     public async Task<Subscription?> Handle(GetSubscriptionByIdQuery query)
     {
         return await subscriptionRepository.FindByIdWithDetailsAsync(query.SubscriptionId);

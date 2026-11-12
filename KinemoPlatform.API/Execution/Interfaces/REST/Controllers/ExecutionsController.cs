@@ -17,6 +17,13 @@ public class ExecutionsController(
     IShowExecutionCommandService commandService,
     IShowExecutionQueryService queryService) : ControllerBase
 {
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var items = await queryService.Handle(new GetAllExecutionsQuery());
+        return Ok(items.Select(ShowExecutionResourceFromEntityAssembler.ToResourceFromEntity));
+    }
+
     [HttpPost]
     [SwaggerOperation(Summary = "Start Execution", Description = "Start a new 4D show execution (US13).", OperationId = "StartExecution")]
     [SwaggerResponse(StatusCodes.Status201Created, "The execution was started.", typeof(ShowExecutionResource))]

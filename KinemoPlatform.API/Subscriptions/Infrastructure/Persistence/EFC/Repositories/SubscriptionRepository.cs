@@ -9,6 +9,14 @@ namespace KinemoPlatform.API.Subscriptions.Infrastructure.Persistence.EFC.Reposi
 public class SubscriptionRepository(AppDbContext context) 
     : BaseRepository<Subscription>(context), ISubscriptionRepository
 {
+    public async Task<IEnumerable<Subscription>> ListWithDetailsAsync()
+    {
+        return await Context.Set<Subscription>().AsNoTracking()
+            .Include(item => item.Transactions)
+            .Include(item => item.Upgrades)
+            .AsSplitQuery().ToListAsync();
+    }
+
     public async Task<Subscription?> FindByIdWithDetailsAsync(int subscriptionId)
     {
         return await Context.Set<Subscription>()

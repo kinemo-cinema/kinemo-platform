@@ -14,3 +14,7 @@
 # Local sensory file storage (development only)
 storage/
 KinemoPlatform.API/storage/
+
+# Local database runtime and credentials
+.local/
+KinemoPlatform.API/appsettings.Development.local.json

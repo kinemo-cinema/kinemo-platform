@@ -1,3 +1,7 @@
+using KinemoPlatform.API.Scheduling.Domain.Repositories;
+using KinemoPlatform.API.Scheduling.Domain.Model.ValueObjects;
+using KinemoPlatform.API.Rooms.Domain.Repositories;
+using KinemoPlatform.API.Execution.Domain.Repositories;
 ﻿using Cortex.Mediator;
 using KinemoPlatform.API.Analytics.Domain.Model.Aggregates;
 using KinemoPlatform.API.Analytics.Domain.Model.Commands;
@@ -12,6 +16,9 @@ namespace KinemoPlatform.API.Analytics.Application.Internal.CommandServices;
 
 public class DashboardCommandService(
     IDashboardRepository dashboardRepository,
+    IShowRepository showRepository,
+    IRoomRepository roomRepository,
+    IExecutionRepository executionRepository,
     IUnitOfWork unitOfWork,
     IMediator domainEventPublisher) : IDashboardCommandService
 {
@@ -19,16 +26,34 @@ public class DashboardCommandService(
     {
         var dashboard = new Dashboard(command);
 
-        // SIMULATION: In a real system, you would query BC05, BC06, and BC07 
-        // to get the actual data. Here, we mock some analytics for demonstration.
-        
-        dashboard.AddMetric(new OperationalMetric(EMetricType.RoomUtilization, 85.5m, command.PeriodStart, command.PeriodEnd));
-        dashboard.AddMetric(new OperationalMetric(EMetricType.ShowCount, 120m, command.PeriodStart, command.PeriodEnd));
-        
-        dashboard.AddRoomPerformance(new RoomPerformance(1, 45.5m, 60, 2));
-        dashboard.AddRoomPerformance(new RoomPerformance(2, 38.0m, 60, 0));
-        
-        dashboard.AddIncidentSummary(new IncidentSummary(5, 2, 1, 1, 1));
+        var shows = (await showRepository.ListAsync()).Where(show =>
+            show.Status != EShowStatus.Cancelled &&
+            show.TimeSlot.StartDateTime < command.PeriodEnd &&
+            show.TimeSlot.EndDateTime > command.PeriodStart).ToList();
+        var rooms = (await roomRepository.ListAsync()).ToList();
+        var executions = (await executionRepository.ListWithDetailsAsync()).ToList();
+        decimal Hours(KinemoPlatform.API.Scheduling.Domain.Model.Aggregates.Show show)
+        {
+            var start = show.TimeSlot.StartDateTime > command.PeriodStart ? show.TimeSlot.StartDateTime : command.PeriodStart;
+            var end = show.TimeSlot.EndDateTime < command.PeriodEnd ? show.TimeSlot.EndDateTime : command.PeriodEnd;
+            return (decimal)(end - start).TotalHours;
+        }
+        var hours = shows.Sum(Hours);
+        var capacityHours = rooms.Count * (decimal)(command.PeriodEnd - command.PeriodStart).TotalHours;
+        dashboard.AddMetric(new OperationalMetric(EMetricType.ShowCount, shows.Count, command.PeriodStart, command.PeriodEnd));
+        dashboard.AddMetric(new OperationalMetric(EMetricType.OperatingHours, hours, command.PeriodStart, command.PeriodEnd));
+        dashboard.AddMetric(new OperationalMetric(EMetricType.RoomUtilization,
+            capacityHours > 0 ? Math.Min(100m, hours / capacityHours * 100m) : 0m,
+            command.PeriodStart, command.PeriodEnd));
+        foreach (var room in rooms)
+        {
+            var roomShows = shows.Where(show => show.RoomId == room.Id).ToList();
+            var showIds = roomShows.Select(show => show.Id).ToHashSet();
+            var emergencies = executions.Where(execution => showIds.Contains(execution.ShowId))
+                .SelectMany(execution => execution.EmergencyEvents)
+                .Count(emergency => emergency.TriggeredAt >= command.PeriodStart && emergency.TriggeredAt < command.PeriodEnd);
+            dashboard.AddRoomPerformance(new RoomPerformance(room.Id, roomShows.Sum(Hours), roomShows.Count, emergencies));
+        }
 
         await dashboardRepository.AddAsync(dashboard);
         await unitOfWork.CompleteAsync();

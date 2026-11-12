@@ -10,6 +10,16 @@ namespace KinemoPlatform.API.Execution.Infrastructure.Persistence.EFC.Repositori
 public class ExecutionRepository(AppDbContext context) 
     : BaseRepository<ShowExecution>(context), IExecutionRepository
 {
+    public async Task<IEnumerable<ShowExecution>> ListWithDetailsAsync()
+    {
+        return await Context.Set<ShowExecution>().AsNoTracking()
+            .Include(item => item.Sequences)
+            .Include(item => item.SyncEvents)
+            .Include(item => item.HardwareLogs)
+            .Include(item => item.EmergencyEvents)
+            .AsSplitQuery().ToListAsync();
+    }
+
     public async Task<ShowExecution?> FindByIdWithDetailsAsync(int executionId)
     {
         return await Context.Set<ShowExecution>()

@@ -26,6 +26,8 @@ public class AnalyticsController(
     [SwaggerResponse(StatusCodes.Status201Created, "The dashboard was generated.", typeof(DashboardResource))]
     public async Task<IActionResult> GenerateDashboard([FromBody] GenerateDashboardResource resource)
     {
+        if (resource.PeriodEnd <= resource.PeriodStart) return BadRequest(new { message = "Period end must be after period start." });
+
         var command = GenerateDashboardCommandFromResourceAssembler.ToCommandFromResource(resource);
         var dashboard = await dashboardCommandService.Handle(command);
         if (dashboard is null) return BadRequest();
@@ -64,6 +66,8 @@ public class AnalyticsController(
     [SwaggerResponse(StatusCodes.Status201Created, "The report was generated.", typeof(OperationalReportResource))]
     public async Task<IActionResult> GenerateReport([FromBody] GenerateReportResource resource)
     {
+        if (resource.PeriodEnd <= resource.PeriodStart) return BadRequest(new { message = "Period end must be after period start." });
+
         var command = GenerateReportCommandFromResourceAssembler.ToCommandFromResource(resource);
         var report = await reportCommandService.Handle(command);
         if (report is null) return BadRequest();

@@ -8,6 +8,8 @@ namespace KinemoPlatform.API.Ticketing.Application.Internal.QueryServices;
 
 public class TicketingQueryService(ITicketingRepository ticketingRepository) : ITicketingQueryService
 {
+    public Task<IEnumerable<TicketingIntegration>> Handle(GetAllIntegrationsQuery query) => ticketingRepository.ListWithDetailsAsync();
+
     public async Task<TicketingIntegration?> Handle(GetIntegrationByIdQuery query)
     {
         return await ticketingRepository.FindByIdWithDetailsAsync(query.IntegrationId);

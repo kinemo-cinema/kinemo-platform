@@ -80,6 +80,11 @@ using KinemoPlatform.API.Subscriptions.Domain.Services;
 using KinemoPlatform.API.Subscriptions.Infrastructure.Persistence.EFC.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddJsonFile("appsettings.Development.local.json", optional: true)
+        .AddEnvironmentVariables();
+}
 
 // Add services to the container.
 builder.Services.AddControllers(options =>
@@ -115,6 +120,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
+    options.CustomSchemaIds(type => type.FullName?.Replace("+", "."));
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "KinemoPlatform.API",
@@ -154,7 +160,7 @@ builder.Services.AddScoped<IRoomQueryService, RoomQueryService>();
 builder.Services.AddScoped<ITicketingRepository, TicketingRepository>();
 builder.Services.AddScoped<ITicketingCommandService, TicketingCommandService>();
 builder.Services.AddScoped<ITicketingQueryService, TicketingQueryService>();
-builder.Services.AddScoped<IExternalTicketingClient, MockExternalTicketingClient>();
+builder.Services.AddScoped<IExternalTicketingClient, UnconfiguredExternalTicketingClient>();
 
 // BC05: Seats
 // builder.Services.AddScoped<ISeatAllocationRepository, SeatAllocationRepository>();
@@ -217,7 +223,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 app.UseAuthorization();
 app.MapControllers();
 

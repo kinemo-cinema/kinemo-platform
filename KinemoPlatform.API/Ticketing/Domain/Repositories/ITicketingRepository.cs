@@ -9,6 +9,8 @@ namespace KinemoPlatform.API.Ticketing.Domain.Repositories;
 /// </summary>
 public interface ITicketingRepository : IBaseRepository<TicketingIntegration>
 {
+    Task<IEnumerable<TicketingIntegration>> ListWithDetailsAsync();
+
     /// <summary>
     ///     Retrieves an integration by its ID, eagerly loading sync logs and occupancies.
     /// </summary>

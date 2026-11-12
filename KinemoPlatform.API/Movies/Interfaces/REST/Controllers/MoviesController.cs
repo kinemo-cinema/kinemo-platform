@@ -74,6 +74,17 @@ public class MoviesController(
     // ---------------------------------------------------------------------
     // GET /api/v1/movies/search?title=...&genre=...
     // ---------------------------------------------------------------------
+    [HttpGet("genres")]
+    public IActionResult GetGenres()
+    {
+        return Ok(Enum.GetValues<EMovieGenre>().Select(genre => new
+        {
+            id = (int)genre,
+            name = genre.ToString(),
+            description = string.Empty
+        }));
+    }
+
     [HttpGet("search")]
     [SwaggerOperation(
         Summary = "Search Movies",

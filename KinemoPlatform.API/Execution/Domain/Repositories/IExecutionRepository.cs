@@ -8,6 +8,8 @@ namespace KinemoPlatform.API.Execution.Domain.Repositories;
 /// </summary>
 public interface IExecutionRepository : IBaseRepository<ShowExecution>
 {
+    Task<IEnumerable<ShowExecution>> ListWithDetailsAsync();
+
     /// <summary>
     ///     Retrieves an execution by its ID, eagerly loading all child entities
     ///     (sequences, logs, emergency events).

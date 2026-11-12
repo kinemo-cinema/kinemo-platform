@@ -16,6 +16,13 @@ public class TicketingController(
     ITicketingCommandService ticketingCommandService,
     ITicketingQueryService ticketingQueryService) : ControllerBase
 {
+    [HttpGet("integrations")]
+    public async Task<IActionResult> GetAll()
+    {
+        var items = await ticketingQueryService.Handle(new GetAllIntegrationsQuery());
+        return Ok(items.Select(TicketingIntegrationResourceFromEntityAssembler.ToResourceFromEntity));
+    }
+
     [HttpPost("integrations")]
     [SwaggerOperation(Summary = "Create Integration", Description = "Register a new external ticketing integration.", OperationId = "CreateIntegration")]
     [SwaggerResponse(StatusCodes.Status201Created, "The integration was created.", typeof(TicketingIntegrationResource))]

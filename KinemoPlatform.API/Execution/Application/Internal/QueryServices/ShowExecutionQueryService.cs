@@ -10,6 +10,8 @@ namespace KinemoPlatform.API.Execution.Application.Internal.QueryServices;
 /// </summary>
 public class ShowExecutionQueryService(IExecutionRepository executionRepository) : IShowExecutionQueryService
 {
+    public Task<IEnumerable<ShowExecution>> Handle(GetAllExecutionsQuery query) => executionRepository.ListWithDetailsAsync();
+
     public async Task<ShowExecution?> Handle(GetExecutionByIdQuery query)
     {
         return await executionRepository.FindByIdWithDetailsAsync(query.ExecutionId);

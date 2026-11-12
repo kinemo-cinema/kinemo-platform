@@ -10,6 +10,14 @@ namespace KinemoPlatform.API.Ticketing.Infrastructure.Persistence.EFC.Repositori
 public class TicketingRepository(AppDbContext context) 
     : BaseRepository<TicketingIntegration>(context), ITicketingRepository
 {
+    public async Task<IEnumerable<TicketingIntegration>> ListWithDetailsAsync()
+    {
+        return await Context.Set<TicketingIntegration>().AsNoTracking()
+            .Include(item => item.SyncLogs)
+            .Include(item => item.Occupancies)
+            .AsSplitQuery().ToListAsync();
+    }
+
     public async Task<TicketingIntegration?> FindByIdWithDetailsAsync(int integrationId)
     {
         return await Context.Set<TicketingIntegration>()

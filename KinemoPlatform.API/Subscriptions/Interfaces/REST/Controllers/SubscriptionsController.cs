@@ -16,6 +16,13 @@ public class SubscriptionsController(
     ISubscriptionCommandService commandService,
     ISubscriptionQueryService queryService) : ControllerBase
 {
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var items = await queryService.Handle(new GetAllSubscriptionsQuery());
+        return Ok(items.Select(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity));
+    }
+
     [HttpPost]
     [SwaggerOperation(Summary = "Create Subscription", Description = "Contract a new service plan for a cinema (US39).", OperationId = "CreateSubscription")]
     [SwaggerResponse(StatusCodes.Status201Created, "The subscription was created.", typeof(SubscriptionResource))]
@@ -70,6 +77,10 @@ public class SubscriptionsController(
             var subscription = await commandService.Handle(command);
             if (subscription is null) return NotFound();
             return Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription));
+        }
+        catch (NotSupportedException ex)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new { message = ex.Message });
         }
         catch (InvalidOperationException)
         {

@@ -8,6 +8,8 @@ namespace KinemoPlatform.API.Execution.Domain.Services;
 /// </summary>
 public interface IShowExecutionQueryService
 {
+    Task<IEnumerable<ShowExecution>> Handle(GetAllExecutionsQuery query);
+
     /// <summary>
     ///     Handles retrieving an execution by its unique ID.
     /// </summary>

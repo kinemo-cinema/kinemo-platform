@@ -8,6 +8,8 @@ namespace KinemoPlatform.API.Subscriptions.Domain.Repositories;
 /// </summary>
 public interface ISubscriptionRepository : IBaseRepository<Subscription>
 {
+    Task<IEnumerable<Subscription>> ListWithDetailsAsync();
+
     /// <summary>
     ///     Retrieves a subscription by ID, eagerly loading its payments and upgrades.
     /// </summary>
