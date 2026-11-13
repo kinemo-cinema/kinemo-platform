@@ -22,6 +22,8 @@ La variable opcional `Database__BootstrapSnapshot` permite trasladar una copia J
 
 Los archivos sensoriales de la versión PostgreSQL se guardan en la base, porque el disco de Render Free es temporal. El entorno MySQL continúa usando archivos locales.
 
+Para comprobar escrituras sin tocar los registros de la aplicación, `Database__RunSmokeCheck=true` ejecuta una verificación al arrancar dentro de un esquema temporal propio. Comprueba migraciones, altas y edición, relaciones sensoriales, fechas con zona horaria y subida/lectura/borrado de archivos. Elimina únicamente ese esquema temporal al terminar. Retira o desactiva la variable tras comprobar el resultado en los logs.
+
 ## Límites de esta instalación gratuita
 
 La base creada para esta exposición caduca el **13 de diciembre de 2026**. Exporta los datos y prepara otra base antes de esa fecha si necesitan seguir utilizándola. El servicio web gratuito puede dormirse cuando no tiene visitas; la primera carga puede tardar mientras se reactiva.

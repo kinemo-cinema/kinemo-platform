@@ -268,8 +268,13 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<AppDbContext>();
     context.Database.Migrate();
     if (context is PostgresAppDbContext postgres)
+    {
         await PostgresBootstrap.ImportAsync(postgres, builder.Configuration["Database:BootstrapSnapshot"],
             services.GetRequiredService<ILoggerFactory>().CreateLogger("PostgresBootstrap"));
+        if (builder.Configuration.GetValue("Database:RunSmokeCheck", false))
+            await PostgresSmokeCheck.RunAsync(PostgresAppDbContext.NormalizeConnectionString(connectionStringTemplate),
+                services.GetRequiredService<ILoggerFactory>().CreateLogger("PostgresSmokeCheck"));
+    }
 }
 
 // HTTP Request Pipeline
