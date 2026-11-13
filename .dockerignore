@@ -1,0 +1,8 @@
+.git
+.local
+**/bin
+**/obj
+**/appsettings.Development.local.json
+.env*
+**/storage
+**/node_modules

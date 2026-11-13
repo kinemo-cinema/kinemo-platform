@@ -168,22 +168,23 @@ var connectionStringTemplate = builder.Configuration.GetConnectionString("Defaul
 if (string.IsNullOrWhiteSpace(connectionStringTemplate))
     throw new InvalidOperationException("Database connection string is not set in the configuration.");
 
-builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
+var usePostgres = string.Equals(builder.Configuration["Database:Provider"], "PostgreSQL", StringComparison.OrdinalIgnoreCase);
+if (usePostgres)
 {
-    var connectionString = Environment.ExpandEnvironmentVariables(connectionStringTemplate);
-    if (string.IsNullOrWhiteSpace(connectionString))
-        throw new InvalidOperationException("Database connection string is not set in the configuration.");
-
-    // The provider is configured for every environment; only diagnostics differ.
-    // EF Core logs go through the application's ILogger pipeline (see the "Logging" section of appsettings).
-    options.UseMySQL(connectionString)
-        .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>())
-        .EnableDetailedErrors();
-
-    if (builder.Environment.IsDevelopment())
-        options.EnableSensitiveDataLogging();
-});
-
+    var connectionString = PostgresAppDbContext.NormalizeConnectionString(connectionStringTemplate);
+    builder.Services.AddDbContext<PostgresAppDbContext>(options => options.UseNpgsql(connectionString));
+    builder.Services.AddScoped<AppDbContext>(services => services.GetRequiredService<PostgresAppDbContext>());
+}
+else
+{
+    builder.Services.AddDbContext<AppDbContext>((services, options) =>
+    {
+        options.UseMySQL(Environment.ExpandEnvironmentVariables(connectionStringTemplate))
+            .UseLoggerFactory(services.GetRequiredService<ILoggerFactory>())
+            .EnableDetailedErrors();
+        if (builder.Environment.IsDevelopment()) options.EnableSensitiveDataLogging();
+    });
+}
 
 // Dependency Injection
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -193,7 +194,10 @@ builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IMovieCommandService, MovieCommandService>();
 builder.Services.AddScoped<IMovieQueryService, MovieQueryService>();
 builder.Services.AddScoped<IMovieSensoryDomainService, MovieSensoryDomainService>();
-builder.Services.AddScoped<ISensoryFileStorage, LocalSensoryFileStorage>();
+if (usePostgres)
+    builder.Services.AddScoped<ISensoryFileStorage, PostgresSensoryFileStorage>();
+else
+    builder.Services.AddScoped<ISensoryFileStorage, LocalSensoryFileStorage>();
 
 // BC02: Scheduling
 builder.Services.AddScoped<IShowRepository, ShowRepository>();
@@ -263,6 +267,9 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
     context.Database.Migrate();
+    if (context is PostgresAppDbContext postgres)
+        await PostgresBootstrap.ImportAsync(postgres, builder.Configuration["Database:BootstrapSnapshot"],
+            services.GetRequiredService<ILoggerFactory>().CreateLogger("PostgresBootstrap"));
 }
 
 // HTTP Request Pipeline
@@ -280,10 +287,12 @@ var localizationOptions = new RequestLocalizationOptions()
 localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
 app.UseRequestLocalization(localizationOptions);
 
-if (!app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment() && builder.Configuration.GetValue("Hosting:UseHttpsRedirection", true))
 {
     app.UseHttpsRedirection();
 }
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.UseAuthorization();
 
 // OpenAPI document (/openapi/v1.json) and Scalar API reference (/scalar).
@@ -293,4 +302,19 @@ app.MapOpenApi();
 app.MapScalarApiReference();
 app.MapControllers();
 
+app.MapGet("/health", async (AppDbContext db, CancellationToken ct) =>
+    await db.Database.CanConnectAsync(ct) ? Results.Ok(new { status = "ok" }) : Results.StatusCode(503));
+if (File.Exists(Path.Combine(app.Environment.WebRootPath ?? "wwwroot", "index.html")))
+{
+    app.MapFallback(async context =>
+    {
+        if (context.Request.Path.StartsWithSegments("/api") || context.Request.Path.StartsWithSegments("/openapi"))
+        {
+            context.Response.StatusCode = 404;
+            return;
+        }
+        context.Response.ContentType = "text/html; charset=utf-8";
+        await context.Response.SendFileAsync(Path.Combine(app.Environment.WebRootPath ?? "wwwroot", "index.html"));
+    });
+}
 app.Run();

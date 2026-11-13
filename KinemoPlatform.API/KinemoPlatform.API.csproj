@@ -26,6 +26,7 @@
 
         <!-- OpenAPI documentation related packages -->
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.13" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
         <PackageReference Include="Scalar.AspNetCore" Version="2.18.0" />
 
         <!-- BCrypt Encryption related packages -->
@@ -47,4 +48,8 @@
       <Folder Include="Ticketing\Domain\Services\" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Update="appsettings.Development.local.json" CopyToPublishDirectory="Never" />
+        <Content Update="appsettings.Development.local.example.json" CopyToPublishDirectory="Never" />
+    </ItemGroup>
 </Project>
