@@ -15,6 +15,8 @@ public interface IExternalTicketingClient
     /// </summary>
     /// <param name="providerName">The name of the provider (e.g., "Teleticket").</param>
     /// <param name="showId">The ID of the show in our system.</param>
+    /// <param name="cancellationToken">Cancellation token for the operation.</param>
     /// <returns>The occupancy data, or null if the show is not found externally.</returns>
-    Task<ExternalOccupancyData?> GetOccupancyAsync(string providerName, int showId);
+    Task<ExternalOccupancyData?> GetOccupancyAsync(string providerName, int showId,
+        CancellationToken cancellationToken = default);
 }

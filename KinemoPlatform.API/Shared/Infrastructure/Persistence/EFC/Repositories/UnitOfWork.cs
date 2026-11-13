@@ -17,8 +17,8 @@ namespace KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
 public class UnitOfWork(AppDbContext context) : IUnitOfWork
 {
     // inheritedDoc
-    public async Task CompleteAsync()
+    public async Task CompleteAsync(CancellationToken cancellationToken = default)
     {
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

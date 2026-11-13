@@ -6,25 +6,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KinemoPlatform.API.Analytics.Infrastructure.Persistence.EFC.Repositories;
 
-public class DashboardRepository(AppDbContext context) 
+public class DashboardRepository(AppDbContext context)
     : BaseRepository<Dashboard>(context), IDashboardRepository
 {
-    public async Task<Dashboard?> FindByIdWithDetailsAsync(int dashboardId)
+    public async Task<Dashboard?> FindByIdWithDetailsAsync(
+        int dashboardId,
+        CancellationToken cancellationToken = default)
     {
         return await Context.Set<Dashboard>()
             .Include(d => d.Metrics)
             .Include(d => d.RoomPerformances)
             .Include(d => d.IncidentSummaries)
-            .FirstOrDefaultAsync(d => d.Id == dashboardId);
+            .FirstOrDefaultAsync(
+                d => d.Id == dashboardId,
+                cancellationToken);
     }
 
-    public async Task<Dashboard?> FindLatestAsync()
+    public async Task<Dashboard?> FindLatestAsync(
+        CancellationToken cancellationToken = default)
     {
         return await Context.Set<Dashboard>()
             .Include(d => d.Metrics)
             .Include(d => d.RoomPerformances)
             .Include(d => d.IncidentSummaries)
             .OrderByDescending(d => d.GeneratedAt)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }

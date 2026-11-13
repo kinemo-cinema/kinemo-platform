@@ -4,6 +4,6 @@ namespace KinemoPlatform.API.Ticketing.Infrastructure.External;
 
 public class UnconfiguredExternalTicketingClient : IExternalTicketingClient
 {
-    public Task<ExternalOccupancyData?> GetOccupancyAsync(string providerName, int showId) =>
+    public Task<ExternalOccupancyData?> GetOccupancyAsync(string providerName, int showId, CancellationToken cancellationToken = default) =>
         Task.FromException<ExternalOccupancyData?>(new HttpRequestException("No real external ticketing provider is configured."));
 }

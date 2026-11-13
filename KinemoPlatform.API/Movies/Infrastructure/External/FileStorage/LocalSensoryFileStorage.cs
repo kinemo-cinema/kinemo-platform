@@ -8,7 +8,8 @@ namespace KinemoPlatform.API.Movies.Infrastructure.External.FileStorage;
 /// <remarks>
 ///     Intended for development. Files are written under a configurable
 ///     root folder (default: <c>storage/sensory-files</c>) relative to
-///     the API's working directory. In production, replace this adapter
+///     the API's working directory. Every stored file gets a unique prefix, so two uploads with the same
+///     file name never overwrite each other. In production, replace this adapter
 ///     with an object storage implementation (Azure Blob, AWS S3).
 /// </remarks>
 /// <param name="configuration">
@@ -35,7 +36,9 @@ public class LocalSensoryFileStorage(IConfiguration configuration) : ISensoryFil
         var movieFolder = Path.Combine(Root, $"movie-{movieId}");
         Directory.CreateDirectory(movieFolder);
 
-        var relativePath = Path.Combine($"movie-{movieId}", safeFileName)
+        // Unique prefix: uploads with the same file name must never overwrite each other (or be deleted by mistake).
+        var storedFileName = $"{Guid.NewGuid():N}-{safeFileName}";
+        var relativePath = Path.Combine($"movie-{movieId}", storedFileName)
             .Replace('\\', '/');
         var absolutePath = Path.Combine(Root, relativePath);
 

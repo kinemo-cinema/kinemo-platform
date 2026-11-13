@@ -7,18 +7,18 @@ using KinemoPlatform.API.Rooms.Infrastructure.Persistence.EFC.Configuration.Exte
 // BC04: Ticketing
 using KinemoPlatform.API.Ticketing.Infrastructure.Persistence.EFC.Configuration.Extensions;
 // BC05: Seats
-// using KinemoPlatform.API.Seats.Infrastructure.Persistence.EFC.Configuration.Extensions;
+using KinemoPlatform.API.Seats.Infrastructure.Persistence.EFC.Configuration.Extensions;
 // BC06: Execution
 using KinemoPlatform.API.Execution.Infrastructure.Persistence.EFC.Configuration.Extensions;
 // BC07: Maintenance
-// using KinemoPlatform.API.Maintenance.Infrastructure.Persistence.EFC.Configuration.Extensions;
+using KinemoPlatform.API.Maintenance.Infrastructure.Persistence.EFC.Configuration.Extensions;
 // BC08: Analytics
 using KinemoPlatform.API.Analytics.Infrastructure.Persistence.EFC.Configuration.Extensions;
 // BC09: Subscriptions
 using KinemoPlatform.API.Subscriptions.Infrastructure.Persistence.EFC.Configuration.Extensions;
 
 using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
-using EntityFrameworkCore.CreatedUpdatedDate.Extensions;
+using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Interceptors;
 using Microsoft.EntityFrameworkCore;
 
 namespace KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
@@ -41,9 +41,15 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     /// <param name="builder">
     ///     The option builder for the database context
     /// </param>
+    ///
+    
+    // The interceptor is stateless, so a single shared instance is used. Creating a new one per
+    // DbContext would force EF Core to build a new internal service provider every time.
+    private static readonly AuditableEntityInterceptor AuditInterceptor = new();
+    
     protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
-        builder.AddCreatedUpdatedInterceptor();
+        builder.AddInterceptors(AuditInterceptor);
         base.OnConfiguring(builder);
     }
 
@@ -65,9 +71,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.ApplySchedulingConfiguration();       // BC02
         builder.ApplyRoomsConfiguration();            // BC03
         builder.ApplyTicketingConfiguration();        // BC04
-        // builder.ApplySeatsConfiguration();            // BC05
+        builder.ApplySeatsConfiguration();            // BC05
         builder.ApplyExecutionConfiguration();        // BC06
-        // builder.ApplyMaintenanceConfiguration();      // BC07
+        builder.ApplyMaintenanceConfiguration();      // BC07
         builder.ApplyAnalyticsConfiguration();        // BC08
         builder.ApplySubscriptionsConfiguration();    // BC09
 

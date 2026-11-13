@@ -1,4 +1,4 @@
-﻿using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
+using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
 using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
 using KinemoPlatform.API.Ticketing.Domain.Model.Aggregates;
 using KinemoPlatform.API.Ticketing.Domain.Model.Entities;
@@ -10,25 +10,25 @@ namespace KinemoPlatform.API.Ticketing.Infrastructure.Persistence.EFC.Repositori
 public class TicketingRepository(AppDbContext context) 
     : BaseRepository<TicketingIntegration>(context), ITicketingRepository
 {
-    public async Task<IEnumerable<TicketingIntegration>> ListWithDetailsAsync()
+    public async Task<IEnumerable<TicketingIntegration>> ListWithDetailsAsync(CancellationToken cancellationToken = default)
     {
         return await Context.Set<TicketingIntegration>().AsNoTracking()
             .Include(item => item.SyncLogs)
             .Include(item => item.Occupancies)
-            .AsSplitQuery().ToListAsync();
+            .AsSplitQuery().ToListAsync(cancellationToken);
     }
 
-    public async Task<TicketingIntegration?> FindByIdWithDetailsAsync(int integrationId)
+    public async Task<TicketingIntegration?> FindByIdWithDetailsAsync(int integrationId, CancellationToken cancellationToken = default)
     {
         return await Context.Set<TicketingIntegration>()
             .Include(t => t.SyncLogs)
             .Include(t => t.Occupancies)
-            .FirstOrDefaultAsync(t => t.Id == integrationId);
+            .FirstOrDefaultAsync(t => t.Id == integrationId, cancellationToken);
     }
 
-    public async Task<ShowOccupancy?> FindOccupancyByShowIdAsync(int showId)
+    public async Task<ShowOccupancy?> FindOccupancyByShowIdAsync(int showId, CancellationToken cancellationToken = default)
     {
         return await Context.Set<ShowOccupancy>()
-            .FirstOrDefaultAsync(o => o.ShowId == showId);
+            .FirstOrDefaultAsync(o => o.ShowId == showId, cancellationToken);
     }
 }

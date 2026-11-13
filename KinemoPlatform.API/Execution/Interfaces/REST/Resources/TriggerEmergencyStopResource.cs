@@ -1,3 +1,7 @@
-﻿namespace KinemoPlatform.API.Execution.Interfaces.REST.Resources;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record TriggerEmergencyStopResource(string Reason);
+namespace KinemoPlatform.API.Execution.Interfaces.REST.Resources;
+
+public record TriggerEmergencyStopResource(
+    [Required(ErrorMessage = "RequiredEmergencyStopReason")]
+    [StringLength(500, ErrorMessage = "InvalidEmergencyStopReasonLength")] string Reason);

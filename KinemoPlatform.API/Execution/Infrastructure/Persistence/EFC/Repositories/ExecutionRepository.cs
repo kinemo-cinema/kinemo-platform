@@ -1,4 +1,4 @@
-﻿using KinemoPlatform.API.Execution.Domain.Model.Aggregates;
+using KinemoPlatform.API.Execution.Domain.Model.Aggregates;
 using KinemoPlatform.API.Execution.Domain.Model.ValueObjects;
 using KinemoPlatform.API.Execution.Domain.Repositories;
 using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
@@ -7,37 +7,42 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KinemoPlatform.API.Execution.Infrastructure.Persistence.EFC.Repositories;
 
-public class ExecutionRepository(AppDbContext context) 
+public class ExecutionRepository(AppDbContext context)
     : BaseRepository<ShowExecution>(context), IExecutionRepository
 {
-    public async Task<IEnumerable<ShowExecution>> ListWithDetailsAsync()
+    public async Task<IEnumerable<ShowExecution>> ListWithDetailsAsync(CancellationToken cancellationToken = default)
     {
         return await Context.Set<ShowExecution>().AsNoTracking()
             .Include(item => item.Sequences)
             .Include(item => item.SyncEvents)
             .Include(item => item.HardwareLogs)
             .Include(item => item.EmergencyEvents)
-            .AsSplitQuery().ToListAsync();
+            .AsSplitQuery().ToListAsync(cancellationToken);
     }
 
-    public async Task<ShowExecution?> FindByIdWithDetailsAsync(int executionId)
+    public async Task<ShowExecution?> FindByIdWithDetailsAsync(int executionId, CancellationToken cancellationToken = default)
     {
         return await Context.Set<ShowExecution>()
             .Include(e => e.Sequences)
             .Include(e => e.SyncEvents)
             .Include(e => e.HardwareLogs)
             .Include(e => e.EmergencyEvents)
-            .FirstOrDefaultAsync(e => e.Id == executionId);
+            .FirstOrDefaultAsync(e => e.Id == executionId, cancellationToken);
     }
 
-    public async Task<ShowExecution?> FindActiveByShowIdAsync(int showId)
+    public async Task<ShowExecution?> FindActiveByShowIdAsync(int showId, CancellationToken cancellationToken = default)
     {
         return await Context.Set<ShowExecution>()
             .Include(e => e.Sequences)
             .Include(e => e.SyncEvents)
             .Include(e => e.HardwareLogs)
             .Include(e => e.EmergencyEvents)
-            .FirstOrDefaultAsync(e => e.ShowId == showId && 
-                                      (e.Status == EExecutionStatus.InProgress || e.Status == EExecutionStatus.Paused));
+            .FirstOrDefaultAsync(e => e.ShowId == showId &&
+                                      (e.Status == EExecutionStatus.InProgress || e.Status == EExecutionStatus.Paused),
+                cancellationToken);
     }
+
+    public async Task<bool> ExistsActiveByShowIdAsync(int showId, CancellationToken cancellationToken = default) =>
+        await Context.Set<ShowExecution>().AnyAsync(e => e.ShowId == showId &&
+                                                         (e.Status == EExecutionStatus.InProgress || e.Status == EExecutionStatus.Paused), cancellationToken);
 }

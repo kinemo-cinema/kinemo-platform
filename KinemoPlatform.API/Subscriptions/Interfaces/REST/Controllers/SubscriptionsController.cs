@@ -1,109 +1,149 @@
-﻿using System.Net.Mime;
+using KinemoPlatform.API.Resources;
+using Microsoft.Extensions.Localization;
+
+using System.Net.Mime;
+using KinemoPlatform.API.Subscriptions.Application.Errors;
+using KinemoPlatform.API.Subscriptions.Application.Services;
 using KinemoPlatform.API.Subscriptions.Domain.Model.Queries;
-using KinemoPlatform.API.Subscriptions.Domain.Services;
 using KinemoPlatform.API.Subscriptions.Interfaces.REST.Resources;
 using KinemoPlatform.API.Subscriptions.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace KinemoPlatform.API.Subscriptions.Interfaces.REST.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-[SwaggerTag("Available Subscription Endpoints.")]
+[Tags("Subscription")]
 public class SubscriptionsController(
     ISubscriptionCommandService commandService,
     ISubscriptionQueryService queryService) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var items = await queryService.Handle(new GetAllSubscriptionsQuery());
+        var items = await queryService.Handle(new GetAllSubscriptionsQuery(), cancellationToken);
         return Ok(items.Select(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity));
     }
 
     [HttpPost]
-    [SwaggerOperation(Summary = "Create Subscription", Description = "Contract a new service plan for a cinema (US39).", OperationId = "CreateSubscription")]
-    [SwaggerResponse(StatusCodes.Status201Created, "The subscription was created.", typeof(SubscriptionResource))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "The plan does not exist.")]
-    public async Task<IActionResult> CreateSubscription([FromBody] CreateSubscriptionResource resource)
+    [EndpointSummary("Create Subscription")]
+    [EndpointDescription("Contract a new service plan for a cinema (US39).")]
+    [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CreateSubscription(
+        [FromBody] CreateSubscriptionResource resource,
+        CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = CreateSubscriptionCommandFromResourceAssembler.ToCommandFromResource(resource);
-            var subscription = await commandService.Handle(command);
-            if (subscription is null) return BadRequest();
-            
-            var subscriptionResource = SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription);
-            return CreatedAtAction(nameof(GetSubscriptionById), new { subscriptionId = subscription.Id }, subscriptionResource);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var command = CreateSubscriptionCommandFromResourceAssembler.ToCommandFromResource(resource);
+
+        var result = await commandService.Handle(command, cancellationToken);
+
+        return result.Fold<IActionResult>(
+            subscription =>
+            {
+                var subscriptionResource =
+                    SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription);
+
+                return CreatedAtAction(
+                    nameof(GetSubscriptionById),
+                    new { subscriptionId = subscription.Id },
+                    subscriptionResource);
+            },
+            MapSubscriptionError);
     }
 
     [HttpGet("{subscriptionId:int}")]
-    [SwaggerOperation(Summary = "Get Subscription by Id", OperationId = "GetSubscriptionById")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The subscription was found.", typeof(SubscriptionResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The subscription was not found.")]
-    public async Task<IActionResult> GetSubscriptionById([FromRoute] int subscriptionId)
+    [EndpointSummary("Get Subscription by Id")]
+    [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetSubscriptionById(
+        [FromRoute] int subscriptionId,
+        CancellationToken cancellationToken)
     {
-        var subscription = await queryService.Handle(new GetSubscriptionByIdQuery(subscriptionId));
-        if (subscription is null) return NotFound();
-        return Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription));
+        var subscription = await queryService.Handle(
+            new GetSubscriptionByIdQuery(subscriptionId),
+            cancellationToken);
+
+        if (subscription is null)
+            return NotFound();
+
+        return Ok(
+            SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription));
     }
 
     [HttpGet("cinema/{cinemaId:int}")]
-    [SwaggerOperation(Summary = "Get Subscription by Cinema Id", Description = "Check the current subscription status for a cinema (US41).", OperationId = "GetSubscriptionByCinemaId")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The subscription was found.", typeof(SubscriptionResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "No subscription found for this cinema.")]
-    public async Task<IActionResult> GetSubscriptionByCinemaId([FromRoute] int cinemaId)
+    [EndpointSummary("Get Subscription by Cinema Id")]
+    [EndpointDescription("Check the current subscription status for a cinema (US41).")]
+    [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetSubscriptionByCinemaId(
+        [FromRoute] int cinemaId,
+        CancellationToken cancellationToken)
     {
-        var subscription = await queryService.Handle(new GetSubscriptionByCinemaIdQuery(cinemaId));
-        if (subscription is null) return NotFound();
-        return Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription));
+        var subscription = await queryService.Handle(
+            new GetSubscriptionByCinemaIdQuery(cinemaId),
+            cancellationToken);
+
+        if (subscription is null)
+            return NotFound();
+
+        return Ok(
+            SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription));
     }
 
     [HttpPost("{subscriptionId:int}/payments")]
-    [SwaggerOperation(Summary = "Process Payment", Description = "Process a subscription payment (US40).", OperationId = "ProcessPayment")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The payment was processed.", typeof(SubscriptionResource))]
-    public async Task<IActionResult> ProcessPayment([FromRoute] int subscriptionId, [FromBody] ProcessPaymentResource resource)
+    [EndpointSummary("Process Payment")]
+    [EndpointDescription("Process a subscription payment (US40).")]
+    [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ProcessPayment(
+        [FromRoute] int subscriptionId,
+        [FromBody] ProcessPaymentResource resource,
+        CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = ProcessPaymentCommandFromResourceAssembler.ToCommandFromResource(resource, subscriptionId);
-            var subscription = await commandService.Handle(command);
-            if (subscription is null) return NotFound();
-            return Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription));
-        }
-        catch (NotSupportedException ex)
-        {
-            return StatusCode(StatusCodes.Status503ServiceUnavailable, new { message = ex.Message });
-        }
-        catch (InvalidOperationException)
-        {
-            return NotFound();
-        }
+        var command = ProcessPaymentCommandFromResourceAssembler.ToCommandFromResource(
+            resource, subscriptionId);
+
+        var result = await commandService.Handle(command, cancellationToken);
+
+        return result.Fold<IActionResult>(
+            subscription => Ok(
+                SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription)),
+            MapSubscriptionError);
     }
 
     [HttpPost("{subscriptionId:int}/upgrades")]
-    [SwaggerOperation(Summary = "Change Plan", Description = "Upgrade or downgrade a subscription (US42).", OperationId = "ChangePlan")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The plan was changed.", typeof(SubscriptionResource))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "The new plan does not exist or is the same as the current one.")]
-    public async Task<IActionResult> ChangePlan([FromRoute] int subscriptionId, [FromBody] ChangePlanResource resource)
+    [EndpointSummary("Change Plan")]
+    [EndpointDescription("Upgrade or downgrade a subscription (US42).")]
+    [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> ChangePlan(
+        [FromRoute] int subscriptionId,
+        [FromBody] ChangePlanResource resource,
+        CancellationToken cancellationToken)
     {
-        try
+        var command = ChangePlanCommandFromResourceAssembler.ToCommandFromResource(
+            resource, subscriptionId);
+
+        var result = await commandService.Handle(command, cancellationToken);
+
+        return result.Fold<IActionResult>(
+            subscription => Ok(
+                SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription)),
+            MapSubscriptionError);
+    }
+
+    private IActionResult MapSubscriptionError(ESubscriptionError error)
+    {
+        var problem = SubscriptionErrorAssembler.ToProblemDetails(error, HttpContext.RequestServices.GetRequiredService<IStringLocalizer<SharedResource>>());
+
+        return new ObjectResult(problem)
         {
-            var command = ChangePlanCommandFromResourceAssembler.ToCommandFromResource(resource, subscriptionId);
-            var subscription = await commandService.Handle(command);
-            if (subscription is null) return NotFound();
-            return Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription));
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+            StatusCode = problem.Status,
+            ContentTypes = { "application/problem+json" }
+        };
     }
 }

@@ -1,6 +1,20 @@
 @KinemoPlatform_API_HostAddress = http://localhost:5089
 
-GET {{KinemoPlatform_API_HostAddress}}/weatherforecast/
+### OpenAPI document
+GET {{KinemoPlatform_API_HostAddress}}/openapi/v1.json
 Accept: application/json
 
-###
+### List movies
+GET {{KinemoPlatform_API_HostAddress}}/api/v1/movies
+Accept: application/json
+
+### Create a movie
+POST {{KinemoPlatform_API_HostAddress}}/api/v1/movies
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "title": "Dune: Part Two",
+  "durationMinutes": 166,
+  "genre": "SciFi"
+}

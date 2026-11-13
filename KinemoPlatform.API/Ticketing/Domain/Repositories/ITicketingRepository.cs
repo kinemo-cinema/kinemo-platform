@@ -1,4 +1,4 @@
-﻿using KinemoPlatform.API.Ticketing.Domain.Model.Aggregates;
+using KinemoPlatform.API.Ticketing.Domain.Model.Aggregates;
 using KinemoPlatform.API.Shared.Domain.Repositories;
 using KinemoPlatform.API.Ticketing.Domain.Model.Entities;
 
@@ -9,15 +9,16 @@ namespace KinemoPlatform.API.Ticketing.Domain.Repositories;
 /// </summary>
 public interface ITicketingRepository : IBaseRepository<TicketingIntegration>
 {
-    Task<IEnumerable<TicketingIntegration>> ListWithDetailsAsync();
+    Task<IEnumerable<TicketingIntegration>> ListWithDetailsAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Retrieves an integration by its ID, eagerly loading sync logs and occupancies.
     /// </summary>
-    Task<TicketingIntegration?> FindByIdWithDetailsAsync(int integrationId);
+    Task<TicketingIntegration?> FindByIdWithDetailsAsync(int integrationId, CancellationToken cancellationToken = default);
+
 
     /// <summary>
     ///     Retrieves the occupancy record for a specific show.
     /// </summary>
-    Task<ShowOccupancy?> FindOccupancyByShowIdAsync(int showId);
+    Task<ShowOccupancy?> FindOccupancyByShowIdAsync(int showId, CancellationToken cancellationToken = default);
 }

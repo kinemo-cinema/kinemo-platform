@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using EntityFrameworkCore.CreatedUpdatedDate.Contracts;
+﻿using KinemoPlatform.API.Shared.Domain.Model;
 
 namespace KinemoPlatform.API.Rooms.Domain.Model.Aggregates;
 
-public partial class Room : IEntityWithCreatedUpdatedDate
-{
-    [Column("CreatedAt")] public DateTimeOffset? CreatedDate { get; set; }
-    [Column("UpdatedAt")] public DateTimeOffset? UpdatedDate { get; set; }
+public partial class Room : IAuditableEntity
+{ 
+    public DateTimeOffset? CreatedAt { get; set; }
+    public DateTimeOffset? UpdatedAt { get; set; }
 }
