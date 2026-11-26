@@ -187,6 +187,8 @@ builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 
 // Dependency Injection
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(ExceptionHandlingCommandBehavior<>));
+builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(TransactionCommandBehavior<>));
 
 // BC01: Movies
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
