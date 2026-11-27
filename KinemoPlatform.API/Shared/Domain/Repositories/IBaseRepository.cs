@@ -55,4 +55,18 @@ public interface IBaseRepository<TEntity>
     ///     A list of all entities in the repository
     /// </returns>
     Task<IEnumerable<TEntity>> ListAsync(CancellationToken cancellationToken = default);
+    /// <summary>
+    ///  
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<TEntity?> FindByIdAsNoTrackingAsync(int id, CancellationToken cancellationToken = default);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<IEnumerable<TEntity>> ListAsNoTrackingAsync(CancellationToken cancellationToken = default);
 }

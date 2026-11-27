@@ -56,4 +56,15 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     {
         return await Context.Set<TEntity>().ToListAsync(cancellationToken);
     }
+    
+    public virtual async Task<TEntity?> FindByIdAsNoTrackingAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<TEntity>().AsNoTracking()
+            .FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id, cancellationToken);
+    }
+
+    public virtual async Task<IEnumerable<TEntity>> ListAsNoTrackingAsync(CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<TEntity>().AsNoTracking().ToListAsync(cancellationToken);
+    }
 }
