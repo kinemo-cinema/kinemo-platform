@@ -1,6 +1,8 @@
 ﻿using KinemoPlatform.API.Seats.Domain.Model.Commands;
 using KinemoPlatform.API.Seats.Domain.Model.Entities;
 using KinemoPlatform.API.Seats.Domain.Model.ValueObjects;
+using KinemoPlatform.API.Shared.Domain.Model.Aggregates.Internal;
+
 
 namespace KinemoPlatform.API.Seats.Domain.Model.Aggregates;
 
@@ -11,7 +13,7 @@ namespace KinemoPlatform.API.Seats.Domain.Model.Aggregates;
 ///     Manages the seat map for a specific show, including statuses 
 ///     and manual interventions.
 /// </remarks>
-public partial class SeatAllocation
+public partial class SeatAllocation  : AggregateRoot
 {
     public SeatAllocation()
     {
