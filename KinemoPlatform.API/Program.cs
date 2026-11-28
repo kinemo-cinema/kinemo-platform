@@ -74,7 +74,9 @@ using KinemoPlatform.API.Analytics.Infrastructure.Persistence.EFC.Repositories;
 using KinemoPlatform.API.Execution.Application.ACL;
 using KinemoPlatform.API.Execution.Application.Services;
 using KinemoPlatform.API.Execution.Interfaces.ACL;
+using KinemoPlatform.API.Movies.Application.ACL;
 using KinemoPlatform.API.Movies.Application.Services;
+using KinemoPlatform.API.Movies.Interfaces.ACL;
 using KinemoPlatform.API.Rooms.Application.ACL;
 using KinemoPlatform.API.Rooms.Application.Services;
 using KinemoPlatform.API.Rooms.Interfaces.ACL;
@@ -200,6 +202,7 @@ builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(Transactio
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IMovieCommandService, MovieCommandService>();
 builder.Services.AddScoped<IMovieQueryService, MovieQueryService>();
+builder.Services.AddScoped<IMoviesContextFacade, MoviesContextFacade>();
 builder.Services.AddScoped<IMovieSensoryDomainService, MovieSensoryDomainService>();
 builder.Services.AddScoped<ISensoryFileStorage, LocalSensoryFileStorage>();
 

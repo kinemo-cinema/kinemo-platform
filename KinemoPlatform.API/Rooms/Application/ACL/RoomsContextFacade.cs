@@ -17,4 +17,16 @@ public class RoomsContextFacade(IRoomQueryService roomQueryService) : IRoomsCont
         var room = await roomQueryService.Handle(new GetRoomByIdQuery(roomId), cancellationToken);
         return room?.Capacity ?? 0;
     }
+    
+    public async Task<RoomSlotAvailability> FetchRoomSlotAvailability(
+        int roomId, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellationToken = default)
+    {
+        // GetRoomByIdQuery loads the blocks, so no extra query is needed.
+        var room = await roomQueryService.Handle(new GetRoomByIdQuery(roomId), cancellationToken);
+        if (room is null) return new RoomSlotAvailability(false, false);
+
+        var isBlocked = room.Blocks.Any(block =>
+            block.Active && block.StartDateTime < to && block.EndDateTime > from);
+        return new RoomSlotAvailability(true, isBlocked);
+    }
 }
