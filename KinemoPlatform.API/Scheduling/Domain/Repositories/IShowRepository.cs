@@ -1,4 +1,5 @@
 ﻿using KinemoPlatform.API.Scheduling.Domain.Model.Aggregates;
+using KinemoPlatform.API.Scheduling.Domain.Model.ValueObjects;
 using KinemoPlatform.API.Shared.Domain.Repositories;
 
 namespace KinemoPlatform.API.Scheduling.Domain.Repositories;
@@ -24,4 +25,7 @@ public interface IShowRepository : IBaseRepository<Show>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A list of shows scheduled for the specified date.</returns>
     Task<IEnumerable<Show>> FindByDateAsync(DateTimeOffset date, CancellationToken cancellationToken = default);
+    
+    Task<IEnumerable<Show>> FindByFilterAsync(DateTimeOffset? date, int? roomId, int? movieId, EShowStatus? status,
+        CancellationToken cancellationToken = default);
 }

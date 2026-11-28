@@ -40,4 +40,28 @@ public class ShowRepository(AppDbContext context)
             .OrderBy(s => s.TimeSlot.StartDateTime)
             .ToListAsync(cancellationToken);
     }
+    
+    public async Task<IEnumerable<Show>> FindByFilterAsync(
+        DateTimeOffset? date, int? roomId, int? movieId, EShowStatus? status,
+        CancellationToken cancellationToken = default)
+    {
+        var query = Context.Set<Show>().AsNoTracking().AsQueryable();
+
+        // Same date expression as FindByDateAsync, so the filter translates exactly like the daily schedule did.
+        if (date is not null)
+        {
+            var day = date.Value.Date;
+            query = query.Where(s => s.TimeSlot.StartDateTime.Date == day);
+        }
+        if (roomId is not null) query = query.Where(s => s.RoomId == roomId.Value);
+        if (movieId is not null) query = query.Where(s => s.MovieId == movieId.Value);
+        if (status is not null) query = query.Where(s => s.Status == status.Value);
+
+        // The daily schedule is ordered by start time; the plain list keeps the previous (id) order.
+        query = date is not null
+            ? query.OrderBy(s => s.TimeSlot.StartDateTime)
+            : query.OrderBy(s => s.Id);
+
+        return await query.ToListAsync(cancellationToken);
+    }
 }
