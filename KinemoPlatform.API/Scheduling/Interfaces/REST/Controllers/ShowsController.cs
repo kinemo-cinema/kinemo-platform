@@ -56,6 +56,7 @@ public class ShowsController(
     [ProducesResponseType(typeof(ShowResource), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ScheduleShow([FromBody] ScheduleShowResource resource,
         CancellationToken cancellationToken)
     {
@@ -87,6 +88,7 @@ public class ShowsController(
     [EndpointDescription("Cancel a scheduled show (US08).")]
     [ProducesResponseType(typeof(ShowResource), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CancelShow([FromRoute] int showId, CancellationToken cancellationToken)
     {
         var result = await showCommandService.Handle(new CancelShowCommand(showId), cancellationToken);

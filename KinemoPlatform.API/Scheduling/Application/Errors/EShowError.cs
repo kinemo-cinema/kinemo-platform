@@ -23,5 +23,11 @@ public enum EShowError
     /// <summary>
     ///     The end of the time slot is not after its start (HTTP 400).
     /// </summary>
-    InvalidTimeSlot
+    InvalidTimeSlot,
+    
+    MovieNotFound,
+    MovieNotActive,
+    RoomNotFound,
+    RoomBlocked,
+    ShowNotModifiable
 }
