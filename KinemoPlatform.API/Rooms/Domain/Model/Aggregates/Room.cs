@@ -88,4 +88,16 @@ public partial class Room
         }
         Status = ERoomStatus.Available;
     }
+    
+    /// <summary>Lifts one block. Returns true when no active block remains and the room became available.</summary>
+    public bool LiftBlock(int blockId)
+    {
+        var block = Blocks.FirstOrDefault(b => b.Id == blockId)
+                    ?? throw new InvalidOperationException($"Block {blockId} not found in room.");
+        block.Deactivate();
+        if (Blocks.Any(b => b.Active)) return false;
+
+        Status = ERoomStatus.Available;
+        return true;
+    }
 }
