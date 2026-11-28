@@ -1,6 +1,7 @@
 ﻿using KinemoPlatform.API.Rooms.Application.Errors;
 using KinemoPlatform.API.Rooms.Domain.Model.Aggregates;
 using KinemoPlatform.API.Rooms.Domain.Model.Commands;
+using KinemoPlatform.API.Rooms.Domain.Model.Entities;
 using KinemoPlatform.API.Shared.Application.Patterns;
 
 namespace KinemoPlatform.API.Rooms.Application.Services;
@@ -33,4 +34,8 @@ public interface IRoomCommandService
     ///     Handles releasing a room from maintenance.
     /// </summary>
     Task<Result<Room, ERoomError>> Handle(ReleaseRoomCommand command, CancellationToken cancellationToken = default);
+    
+    Task<Result<RoomInspection, ERoomError>> Handle(CreateRoomInspectionCommand command, CancellationToken cancellationToken = default);
+    Task<Result<RoomBlock, ERoomError>> Handle(CreateRoomBlockCommand command, CancellationToken cancellationToken = default);
+    Task<Result<RoomBlock, ERoomError>> Handle(LiftRoomBlockCommand command, CancellationToken cancellationToken = default);
 }
