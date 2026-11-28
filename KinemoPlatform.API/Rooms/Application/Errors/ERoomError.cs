@@ -23,5 +23,6 @@ public enum ERoomError
     /// <summary>
     ///     The end of the blocking period is not after its start (HTTP 400).
     /// </summary>
-    InvalidBlockPeriod
+    InvalidBlockPeriod,
+    BlockNotFound
 }
