@@ -4,6 +4,7 @@ using KinemoPlatform.API.Seats.Application.Errors;
 using KinemoPlatform.API.Seats.Application.Services;
 using KinemoPlatform.API.Seats.Domain.Model.Aggregates;
 using KinemoPlatform.API.Seats.Domain.Model.Commands;
+using KinemoPlatform.API.Seats.Domain.Model.ValueObjects;
 using KinemoPlatform.API.Seats.Domain.Repositories;
 using KinemoPlatform.API.Shared.Application.Patterns;
 using KinemoPlatform.API.Shared.Domain.Repositories;
@@ -45,7 +46,12 @@ public class SeatAllocationCommandService(
         if (!SeatAllocation.IsManuallyAssignable(command.NewStatus))
             return Fail(ESeatAllocationError.UnsupportedSeatStatus);
 
-        allocation.AssignSeat(command.SeatNumber, command.NewStatus, command.Reason);
+        if (command.NewStatus == ESeatStatus.OutOfService)
+            allocation.MarkSeatOutOfService(command.SeatNumber,
+                string.IsNullOrWhiteSpace(command.Reason) ? "Marked out of service" : command.Reason);
+        else
+            allocation.AssignSeat(command.SeatNumber, command.NewStatus, command.Reason);
+        
         seatAllocationRepository.Update(allocation);
         await unitOfWork.CompleteAsync(cancellationToken);   // dispatches SeatStatusChangedEvent
         return Ok(allocation);
