@@ -21,4 +21,10 @@ public class ShowQueryService(IShowRepository showRepository) : IShowQueryServic
     {
         return await showRepository.FindByDateAsync(query.Date, cancellationToken);
     }
+    
+    public async Task<IEnumerable<Show>> Handle(GetShowsQuery query, CancellationToken cancellationToken = default)
+    {
+        return await showRepository.FindByFilterAsync(
+            query.Date, query.RoomId, query.MovieId, query.Status, cancellationToken);
+    }
 }

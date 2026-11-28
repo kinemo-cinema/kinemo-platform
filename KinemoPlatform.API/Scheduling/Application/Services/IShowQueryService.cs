@@ -23,4 +23,6 @@ public interface IShowQueryService
     ///     Handles the retrieval of the daily schedule (US09).
     /// </summary>
     Task<IEnumerable<Show>> Handle(GetDailyScheduleQuery query, CancellationToken cancellationToken = default);
+    
+    Task<IEnumerable<Show>> Handle(GetShowsQuery query, CancellationToken cancellationToken = default);
 }
