@@ -6,5 +6,6 @@ public enum ESubscriptionError
     SubscriptionNotFound,
     InvalidPayment,
     PaymentProviderUnavailable,
-    InvalidPlanChange
+    InvalidPlanChange,
+    ActiveSubscriptionAlreadyExists
 }

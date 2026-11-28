@@ -238,4 +238,10 @@
     <data name="Movies.AssociateSensoryFile.Response409" xml:space="preserve"><value>The movie already has a sensory file for this effect type.</value></data>
   <data name="Subscriptions.PaymentProviderUnavailable.Title" xml:space="preserve"><value>Payment provider unavailable</value></data>
   <data name="Subscriptions.PaymentProviderUnavailable.Detail" xml:space="preserve"><value>No real payment provider is configured. No payment was processed.</value></data>
+    <data name="Subscriptions.ActiveSubscriptionAlreadyExists.Title" xml:space="preserve">
+        <value>Active subscription already exists</value>
+    </data>
+    <data name="Subscriptions.ActiveSubscriptionAlreadyExists.Detail" xml:space="preserve">
+        <value>This cinema already has an active subscription. Please manage your current plan instead.</value>
+    </data>
 </root>

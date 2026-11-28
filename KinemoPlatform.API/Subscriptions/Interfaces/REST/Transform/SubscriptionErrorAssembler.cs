@@ -15,14 +15,22 @@ public static class SubscriptionErrorAssembler
         {
             ESubscriptionError.PlanNotFound =>
                 (StatusCodes.Status404NotFound, "Subscriptions.PlanNotFound"),
+
             ESubscriptionError.SubscriptionNotFound =>
                 (StatusCodes.Status404NotFound, "Subscriptions.SubscriptionNotFound"),
+
             ESubscriptionError.PaymentProviderUnavailable =>
                 (StatusCodes.Status503ServiceUnavailable, "Subscriptions.PaymentProviderUnavailable"),
+
             ESubscriptionError.InvalidPayment =>
                 (StatusCodes.Status400BadRequest, "Subscriptions.InvalidPayment"),
+
             ESubscriptionError.InvalidPlanChange =>
                 (StatusCodes.Status409Conflict, "Subscriptions.InvalidPlanChange"),
+
+            ESubscriptionError.ActiveSubscriptionAlreadyExists =>
+                (StatusCodes.Status409Conflict, "Subscriptions.ActiveSubscriptionAlreadyExists"),
+
             _ => (StatusCodes.Status500InternalServerError, "")
         };
 

@@ -27,9 +27,19 @@ public class SubscriptionCommandService(
             return new Result<Subscription, ESubscriptionError>.Failure(
                 ESubscriptionError.PlanNotFound);
 
+        var alreadySubscribed =
+            await subscriptionRepository.ExistsActiveByCinemaIdAsync(
+                command.CinemaId, cancellationToken);
+
+        if (alreadySubscribed)
+            return new Result<Subscription, ESubscriptionError>.Failure(
+                ESubscriptionError.ActiveSubscriptionAlreadyExists);
+
         var subscription = new Subscription(command);
 
-        await subscriptionRepository.AddAsync(subscription, cancellationToken);
+        await subscriptionRepository.AddAsync(
+            subscription, cancellationToken);
+
         await unitOfWork.CompleteAsync(cancellationToken);
 
         await domainEventPublisher.PublishAsync(
@@ -39,21 +49,24 @@ public class SubscriptionCommandService(
                 subscription.PlanId),
             cancellationToken);
 
-        return new Result<Subscription, ESubscriptionError>.Success(subscription);
+        return new Result<Subscription, ESubscriptionError>.Success(
+            subscription);
     }
 
     public async Task<Result<Subscription, ESubscriptionError>> Handle(
         ProcessPaymentCommand command,
         CancellationToken cancellationToken = default)
     {
-        var subscription = await subscriptionRepository.FindByIdWithDetailsAsync(
-            command.SubscriptionId, cancellationToken);
+        var subscription =
+            await subscriptionRepository.FindByIdWithDetailsAsync(
+                command.SubscriptionId, cancellationToken);
 
         if (subscription is null)
             return new Result<Subscription, ESubscriptionError>.Failure(
                 ESubscriptionError.SubscriptionNotFound);
 
-        if (command.Amount <= 0 || string.IsNullOrWhiteSpace(command.PaymentToken))
+        if (command.Amount <= 0 ||
+            string.IsNullOrWhiteSpace(command.PaymentToken))
             return new Result<Subscription, ESubscriptionError>.Failure(
                 ESubscriptionError.InvalidPayment);
 
@@ -65,8 +78,9 @@ public class SubscriptionCommandService(
         ChangePlanCommand command,
         CancellationToken cancellationToken = default)
     {
-        var subscription = await subscriptionRepository.FindByIdWithDetailsAsync(
-            command.SubscriptionId, cancellationToken);
+        var subscription =
+            await subscriptionRepository.FindByIdWithDetailsAsync(
+                command.SubscriptionId, cancellationToken);
 
         if (subscription is null)
             return new Result<Subscription, ESubscriptionError>.Failure(
@@ -86,8 +100,10 @@ public class SubscriptionCommandService(
         subscription.ChangePlan(command.NewPlanId);
 
         subscriptionRepository.Update(subscription);
+
         await unitOfWork.CompleteAsync(cancellationToken);
 
-        return new Result<Subscription, ESubscriptionError>.Success(subscription);
+        return new Result<Subscription, ESubscriptionError>.Success(
+            subscription);
     }
 }

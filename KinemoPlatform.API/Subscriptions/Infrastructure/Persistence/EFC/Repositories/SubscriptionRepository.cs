@@ -1,6 +1,7 @@
 using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
 using KinemoPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
 using KinemoPlatform.API.Subscriptions.Domain.Model.Aggregates;
+using KinemoPlatform.API.Subscriptions.Domain.Model.ValueObjects;
 using KinemoPlatform.API.Subscriptions.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,12 +10,14 @@ namespace KinemoPlatform.API.Subscriptions.Infrastructure.Persistence.EFC.Reposi
 public class SubscriptionRepository(AppDbContext context)
     : BaseRepository<Subscription>(context), ISubscriptionRepository
 {
-    public async Task<IEnumerable<Subscription>> ListWithDetailsAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Subscription>> ListWithDetailsAsync(
+        CancellationToken cancellationToken = default)
     {
         return await Context.Set<Subscription>().AsNoTracking()
             .Include(item => item.Transactions)
             .Include(item => item.Upgrades)
-            .AsSplitQuery().ToListAsync(cancellationToken);
+            .AsSplitQuery()
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<Subscription?> FindByIdWithDetailsAsync(
@@ -39,5 +42,19 @@ public class SubscriptionRepository(AppDbContext context)
             .Where(s => s.CinemaId == cinemaId)
             .OrderByDescending(s => s.EndDate)
             .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<bool> ExistsActiveByCinemaIdAsync(
+        int cinemaId,
+        CancellationToken cancellationToken = default)
+    {
+        var now = DateTimeOffset.UtcNow;
+
+        return await Context.Set<Subscription>()
+            .AnyAsync(
+                s => s.CinemaId == cinemaId &&
+                     s.Status == ESubscriptionStatus.Active &&
+                     s.EndDate > now,
+                cancellationToken);
     }
 }

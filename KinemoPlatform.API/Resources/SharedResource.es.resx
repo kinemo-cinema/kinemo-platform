@@ -259,4 +259,10 @@
     <data name="Movies.AssociateSensoryFile.Response409" xml:space="preserve"><value>La película ya tiene un archivo sensorial para este tipo de efecto.</value></data>
   <data name="Subscriptions.PaymentProviderUnavailable.Title" xml:space="preserve"><value>Proveedor de pagos no disponible</value></data>
   <data name="Subscriptions.PaymentProviderUnavailable.Detail" xml:space="preserve"><value>No hay una pasarela de pagos real configurada. No se ha procesado ningun pago.</value></data>
+    <data name="Subscriptions.ActiveSubscriptionAlreadyExists.Title" xml:space="preserve">
+	    <value>Ya existe una suscripción activa</value>
+    </data>
+    <data name="Subscriptions.ActiveSubscriptionAlreadyExists.Detail" xml:space="preserve">
+	    <value>Este cine ya cuenta con una suscripción activa. Gestiona tu plan actual.</value>
+    </data>
 </root>
