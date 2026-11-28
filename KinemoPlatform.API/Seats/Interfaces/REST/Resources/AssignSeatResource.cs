@@ -5,4 +5,6 @@ namespace KinemoPlatform.API.Seats.Interfaces.REST.Resources;
 
 public record AssignSeatResource(
     [EnumDataType(typeof(ESeatStatus), ErrorMessage = "InvalidSeatStatus")]
-    ESeatStatus NewStatus);
+    ESeatStatus NewStatus,
+    [StringLength(500, ErrorMessage = "InvalidOutOfServiceReasonLength")]
+    string? Reason = null);

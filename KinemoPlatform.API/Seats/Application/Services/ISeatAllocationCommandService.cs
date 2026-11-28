@@ -31,4 +31,10 @@ public interface ISeatAllocationCommandService
     /// </summary>
     Task<Result<SeatAllocation, ESeatAllocationError>> Handle(MarkSeatOutOfServiceCommand command,
         CancellationToken cancellationToken = default);
+    
+    Task<Result<SeatAllocation, ESeatAllocationError>> Handle(CloseAllocationCommand command,
+        CancellationToken cancellationToken = default);
+
+    Task<Result<SeatAllocation, ESeatAllocationError>> Handle(MarkAllocationSynchronizedCommand command,
+        CancellationToken cancellationToken = default);
 }

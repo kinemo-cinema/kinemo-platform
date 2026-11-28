@@ -55,6 +55,9 @@ public static class ActionResultFromSeatAllocationResultAssembler
                 ESeatAllocationError.RoomCapacityUnavailable => controller.Problem(
                     title: localizer["SeatAllocationRoomCapacityUnavailable"].Value,
                     statusCode: StatusCodes.Status409Conflict),
+                ESeatAllocationError.AllocationClosed => controller.Problem(
+                    title: localizer["SeatAllocationClosed"].Value,
+                    statusCode: StatusCodes.Status409Conflict),
                 _ => controller.Problem(
                     title: localizer["UnexpectedServerError"].Value,
                     statusCode: StatusCodes.Status500InternalServerError)

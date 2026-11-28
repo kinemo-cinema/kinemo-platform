@@ -1,5 +1,6 @@
 ﻿using KinemoPlatform.API.Seats.Domain.Model.Aggregates;
 using KinemoPlatform.API.Seats.Domain.Model.Entities;
+using KinemoPlatform.API.Seats.Domain.Model.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace KinemoPlatform.API.Seats.Infrastructure.Persistence.EFC.Configuration.Extensions;
@@ -56,5 +57,10 @@ public static class ModelBuilderExtensions
             .HasForeignKey(i => i.SeatAllocationId)
             .HasConstraintName("fk_manual_interventions_seat_allocations")
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Entity<SeatAllocation>()
+            .Property(a => a.Status).IsRequired()
+            .HasConversion<string>().HasMaxLength(20)
+            .HasDefaultValue(EAllocationStatus.Pending);
     }
 }

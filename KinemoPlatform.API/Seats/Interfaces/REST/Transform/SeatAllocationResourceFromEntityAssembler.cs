@@ -10,6 +10,7 @@ public static class SeatAllocationResourceFromEntityAssembler
         return new SeatAllocationResource(
             entity.Id,
             entity.ShowId,
-            entity.ShowSeats.OrderBy(s => s.SeatNumber).Select(ShowSeatResourceFromEntityAssembler.ToResourceFromEntity));
+            entity.ShowSeats.OrderBy(s => s.SeatNumber).Select(ShowSeatResourceFromEntityAssembler.ToResourceFromEntity),
+            entity.Status);
     }
 }

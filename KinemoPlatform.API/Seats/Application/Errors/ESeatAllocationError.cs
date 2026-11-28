@@ -38,5 +38,7 @@ public enum ESeatAllocationError
     /// <summary>
     /// 
     /// </summary>
-    RoomCapacityUnavailable
+    RoomCapacityUnavailable,
+    
+    AllocationClosed
 }
