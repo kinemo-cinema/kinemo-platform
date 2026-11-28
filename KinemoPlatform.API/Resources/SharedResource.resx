@@ -249,4 +249,7 @@
   <data name="ShowNotModifiable" xml:space="preserve"><value>Only scheduled shows can be modified or cancelled.</value></data>
   <data name="Shows.ScheduleShow.Response404" xml:space="preserve"><value>The movie or the room was not found.</value></data>
   <data name="Shows.CancelShow.Response409" xml:space="preserve"><value>The show has already finished and cannot be cancelled.</value></data>
+  <data name="RoomBlockNotFound" xml:space="preserve"><value>The room block was not found.</value></data>
+  <data name="RoomInspectionNotFound" xml:space="preserve"><value>The room inspection was not found.</value></data>
+  <data name="RoomBlockCannotBeReactivated" xml:space="preserve"><value>A block can only be lifted (active=false). Create a new block instead.</value></data>
 </root>

@@ -270,4 +270,7 @@
   <data name="ShowNotModifiable" xml:space="preserve"><value>Solo se pueden modificar o cancelar funciones programadas.</value></data>
   <data name="Shows.ScheduleShow.Response404" xml:space="preserve"><value>No se encontró la película o la sala.</value></data>
   <data name="Shows.CancelShow.Response409" xml:space="preserve"><value>La función ya finalizó y no se puede cancelar.</value></data>
+  <data name="RoomBlockNotFound" xml:space="preserve"><value>No se encontró el bloqueo de la sala.</value></data>
+  <data name="RoomInspectionNotFound" xml:space="preserve"><value>No se encontró la inspección de la sala.</value></data>
+  <data name="RoomBlockCannotBeReactivated" xml:space="preserve"><value>Un bloqueo solo se puede levantar (active=false). Cree un bloqueo nuevo.</value></data>
 </root>
