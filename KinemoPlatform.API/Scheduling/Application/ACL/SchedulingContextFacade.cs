@@ -19,4 +19,10 @@ public class SchedulingContextFacade(IShowQueryService showQueryService) : ISche
                 show.TimeSlot.StartDateTime, show.TimeSlot.EndDateTime))
             .ToList();
     }
+    
+    public async Task<ShowInfo?> FetchShowInfo(int showId, CancellationToken cancellationToken = default)
+    {
+        var show = await showQueryService.Handle(new GetShowByIdQuery(showId), cancellationToken);
+        return show is null ? null : new ShowInfo(show.Id, show.RoomId, show.Status == EShowStatus.Scheduled);
+    }
 }

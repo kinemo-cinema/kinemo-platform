@@ -11,4 +11,10 @@ public class RoomsContextFacade(IRoomQueryService roomQueryService) : IRoomsCont
         var rooms = await roomQueryService.Handle(new GetAllRoomsQuery(), cancellationToken);
         return rooms.Select(room => room.Id).ToList();
     }
+    
+    public async Task<int> FetchRoomCapacity(int roomId, CancellationToken cancellationToken = default)
+    {
+        var room = await roomQueryService.Handle(new GetRoomByIdQuery(roomId), cancellationToken);
+        return room?.Capacity ?? 0;
+    }
 }
