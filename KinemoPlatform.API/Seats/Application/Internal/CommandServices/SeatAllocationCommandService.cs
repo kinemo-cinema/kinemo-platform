@@ -1,33 +1,20 @@
-﻿using Cortex.Mediator;
-using KinemoPlatform.API.Rooms.Interfaces.ACL;
+﻿using KinemoPlatform.API.Rooms.Interfaces.ACL;
 using KinemoPlatform.API.Scheduling.Interfaces.ACL;
 using KinemoPlatform.API.Seats.Application.Errors;
 using KinemoPlatform.API.Seats.Application.Services;
 using KinemoPlatform.API.Seats.Domain.Model.Aggregates;
 using KinemoPlatform.API.Seats.Domain.Model.Commands;
-using KinemoPlatform.API.Seats.Domain.Model.Events;
 using KinemoPlatform.API.Seats.Domain.Repositories;
 using KinemoPlatform.API.Shared.Application.Patterns;
 using KinemoPlatform.API.Shared.Domain.Repositories;
 
 namespace KinemoPlatform.API.Seats.Application.Internal.CommandServices;
 
-/// <summary>
-///     Implementation of the seat allocation command service.
-/// </summary>
-/// <remarks>
-///     Expected failures are returned as <see cref="ESeatAllocationError" /> inside a
-///     <see cref="Result{TValue,TError}" />. The service checks the preconditions of the aggregate (the seat exists, the
-///     status is supported) before changing it, so the aggregate's own guards are never reached through the API.
-///     Unexpected failures are not caught here; they surface as exceptions and are turned into a ProblemDetails 500
-///     response globally.
-/// </remarks>
 public class SeatAllocationCommandService(
     ISeatAllocationRepository seatAllocationRepository,
     ISchedulingContextFacade schedulingFacade,
     IRoomsContextFacade roomsFacade,
-    IUnitOfWork unitOfWork,
-    IMediator domainEventPublisher) : ISeatAllocationCommandService
+    IUnitOfWork unitOfWork) : ISeatAllocationCommandService
 {
     public async Task<Result<SeatAllocation, ESeatAllocationError>> Handle(InitializeSeatsCommand command,
         CancellationToken cancellationToken = default)
@@ -53,19 +40,14 @@ public class SeatAllocationCommandService(
     {
         var allocation = await seatAllocationRepository.FindByShowIdWithDetailsAsync(command.ShowId, cancellationToken);
         if (allocation is null) return Fail(ESeatAllocationError.AllocationNotFound);
-
+        if (allocation.IsClosed) return Fail(ESeatAllocationError.AllocationClosed);
         if (!allocation.HasSeat(command.SeatNumber)) return Fail(ESeatAllocationError.SeatNotFound);
         if (!SeatAllocation.IsManuallyAssignable(command.NewStatus))
             return Fail(ESeatAllocationError.UnsupportedSeatStatus);
 
-        allocation.AssignSeat(command.SeatNumber, command.NewStatus);
+        allocation.AssignSeat(command.SeatNumber, command.NewStatus, command.Reason);
         seatAllocationRepository.Update(allocation);
-        await unitOfWork.CompleteAsync(cancellationToken);
-
-        await domainEventPublisher.PublishAsync(
-            new SeatStatusChangedEvent(allocation.ShowId, command.SeatNumber, command.NewStatus),
-            cancellationToken);
-
+        await unitOfWork.CompleteAsync(cancellationToken);   // dispatches SeatStatusChangedEvent
         return Ok(allocation);
     }
 
@@ -74,17 +56,36 @@ public class SeatAllocationCommandService(
     {
         var allocation = await seatAllocationRepository.FindByShowIdWithDetailsAsync(command.ShowId, cancellationToken);
         if (allocation is null) return Fail(ESeatAllocationError.AllocationNotFound);
-
+        if (allocation.IsClosed) return Fail(ESeatAllocationError.AllocationClosed);
         if (!allocation.HasSeat(command.SeatNumber)) return Fail(ESeatAllocationError.SeatNotFound);
 
         allocation.MarkSeatOutOfService(command.SeatNumber, command.Reason);
         seatAllocationRepository.Update(allocation);
+        await unitOfWork.CompleteAsync(cancellationToken);   // dispatches SeatMarkedOutOfServiceEvent
+        return Ok(allocation);
+    }
+
+    public async Task<Result<SeatAllocation, ESeatAllocationError>> Handle(CloseAllocationCommand command,
+        CancellationToken cancellationToken = default)
+    {
+        var allocation = await seatAllocationRepository.FindByShowIdWithDetailsAsync(command.ShowId, cancellationToken);
+        if (allocation is null) return Fail(ESeatAllocationError.AllocationNotFound);
+
+        // The entity is already tracked, so EF detects the status change without Update().
+        // Update() would mark every seat row as modified for no reason.
+        allocation.Close();
         await unitOfWork.CompleteAsync(cancellationToken);
+        return Ok(allocation);
+    }
 
-        await domainEventPublisher.PublishAsync(
-            new SeatMarkedOutOfServiceEvent(allocation.ShowId, command.SeatNumber, command.Reason),
-            cancellationToken);
+    public async Task<Result<SeatAllocation, ESeatAllocationError>> Handle(MarkAllocationSynchronizedCommand command,
+        CancellationToken cancellationToken = default)
+    {
+        var allocation = await seatAllocationRepository.FindByShowIdWithDetailsAsync(command.ShowId, cancellationToken);
+        if (allocation is null) return Fail(ESeatAllocationError.AllocationNotFound);
 
+        allocation.MarkSynchronized();
+        await unitOfWork.CompleteAsync(cancellationToken);
         return Ok(allocation);
     }
 

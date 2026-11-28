@@ -83,6 +83,7 @@ public class SeatAllocationsController(
     [ProducesResponseType(typeof(SeatAllocationResource), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> AssignSeat(
         [FromRoute] int showId,
         [FromRoute] int seatNumber,
@@ -107,6 +108,7 @@ public class SeatAllocationsController(
     [ProducesResponseType(typeof(SeatAllocationResource), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> MarkSeatOutOfService(
         [FromRoute] int showId,
         [FromRoute] int seatNumber,
