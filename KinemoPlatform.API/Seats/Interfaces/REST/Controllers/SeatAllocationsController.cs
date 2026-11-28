@@ -25,6 +25,7 @@ public class SeatAllocationsController(
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [EndpointDescription("Generates the seat map for a scheduled show from its room capacity. The totalSeats field is deprecated and ignored.")]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [Obsolete("Use POST /api/v1/shows/{showId}/seat-allocation")]
     public async Task<IActionResult> InitializeSeats(
         [FromBody] InitializeSeatsResource resource,
         CancellationToken cancellationToken)
@@ -46,6 +47,7 @@ public class SeatAllocationsController(
     [EndpointSummary("Get Seat Allocation by Show ID")]
     [ProducesResponseType(typeof(SeatAllocationResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Obsolete("Use GET /api/v1/shows/{showId}/seat-allocation")]
     public async Task<IActionResult> GetAllocationByShowId(
         [FromRoute] int showId,
         CancellationToken cancellationToken)
@@ -63,6 +65,7 @@ public class SeatAllocationsController(
     [EndpointSummary("Get Specific Seat")]
     [ProducesResponseType(typeof(ShowSeatResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Obsolete("Use GET /api/v1/shows/{showId}/seat-allocation/seats/{seatNumber}")]
     public async Task<IActionResult> GetShowSeat(
         [FromRoute] int showId,
         [FromRoute] int seatNumber,
@@ -84,6 +87,7 @@ public class SeatAllocationsController(
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    [Obsolete("Use PATCH /api/v1/shows/{showId}/seat-allocation/seats/{seatNumber}")]
     public async Task<IActionResult> AssignSeat(
         [FromRoute] int showId,
         [FromRoute] int seatNumber,
@@ -109,6 +113,7 @@ public class SeatAllocationsController(
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    [Obsolete("Use PATCH .../seats/{seatNumber} with newStatus OutOfService")]
     public async Task<IActionResult> MarkSeatOutOfService(
         [FromRoute] int showId,
         [FromRoute] int seatNumber,
