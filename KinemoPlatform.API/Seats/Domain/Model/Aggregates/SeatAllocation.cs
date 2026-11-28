@@ -19,12 +19,10 @@ public partial class SeatAllocation
         Interventions = new List<ManualIntervention>();
     }
 
-    public SeatAllocation(InitializeSeatsCommand command) : this()
+    public SeatAllocation(int showId, int totalSeats) : this()
     {
-        ShowId = command.ShowId;
-        
-        // Generate the seats automatically based on the room capacity
-        for (int i = 1; i <= command.TotalSeats; i++)
+        ShowId = showId;
+        for (var i = 1; i <= totalSeats; i++)
         {
             ShowSeats.Add(new ShowSeat(i));
         }

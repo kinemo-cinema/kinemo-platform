@@ -20,10 +20,11 @@ public class SeatAllocationsController(
 {
     [HttpPost]
     [EndpointSummary("Initialize Seats")]
-    [EndpointDescription("Generate the seat map for a specific show.")]
     [ProducesResponseType(typeof(SeatAllocationResource), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    [EndpointDescription("Generates the seat map for a scheduled show from its room capacity. The totalSeats field is deprecated and ignored.")]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> InitializeSeats(
         [FromBody] InitializeSeatsResource resource,
         CancellationToken cancellationToken)

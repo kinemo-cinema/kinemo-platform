@@ -23,5 +23,20 @@ public enum ESeatAllocationError
     /// <summary>
     ///     The requested status cannot be assigned manually (HTTP 400).
     /// </summary>
-    UnsupportedSeatStatus
+    UnsupportedSeatStatus,
+
+    /// <summary>
+    ///  
+    /// </summary>
+    ShowNotFound,
+    
+    /// <summary>
+    ///  
+    /// </summary>
+    ShowNotScheduled,
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    RoomCapacityUnavailable
 }

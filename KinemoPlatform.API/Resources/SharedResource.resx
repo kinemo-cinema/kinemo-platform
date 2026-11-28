@@ -238,4 +238,7 @@
     <data name="Movies.AssociateSensoryFile.Response409" xml:space="preserve"><value>The movie already has a sensory file for this effect type.</value></data>
   <data name="Subscriptions.PaymentProviderUnavailable.Title" xml:space="preserve"><value>Payment provider unavailable</value></data>
   <data name="Subscriptions.PaymentProviderUnavailable.Detail" xml:space="preserve"><value>No real payment provider is configured. No payment was processed.</value></data>
+  <data name="SeatAllocationShowNotFound" xml:space="preserve"><value>The show for this seat allocation was not found.</value></data>
+  <data name="SeatAllocationShowNotScheduled" xml:space="preserve"><value>Seats can only be allocated for scheduled shows.</value></data>
+  <data name="SeatAllocationRoomCapacityUnavailable" xml:space="preserve"><value>The room of this show has no seat capacity configured.</value></data>
 </root>

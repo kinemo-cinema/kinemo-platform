@@ -1,4 +1,6 @@
 ﻿using Cortex.Mediator;
+using KinemoPlatform.API.Rooms.Interfaces.ACL;
+using KinemoPlatform.API.Scheduling.Interfaces.ACL;
 using KinemoPlatform.API.Seats.Application.Errors;
 using KinemoPlatform.API.Seats.Application.Services;
 using KinemoPlatform.API.Seats.Domain.Model.Aggregates;
@@ -22,19 +24,27 @@ namespace KinemoPlatform.API.Seats.Application.Internal.CommandServices;
 /// </remarks>
 public class SeatAllocationCommandService(
     ISeatAllocationRepository seatAllocationRepository,
+    ISchedulingContextFacade schedulingFacade,
+    IRoomsContextFacade roomsFacade,
     IUnitOfWork unitOfWork,
     IMediator domainEventPublisher) : ISeatAllocationCommandService
 {
     public async Task<Result<SeatAllocation, ESeatAllocationError>> Handle(InitializeSeatsCommand command,
         CancellationToken cancellationToken = default)
     {
+        var show = await schedulingFacade.FetchShowInfo(command.ShowId, cancellationToken);
+        if (show is null) return Fail(ESeatAllocationError.ShowNotFound);
+        if (!show.IsScheduled) return Fail(ESeatAllocationError.ShowNotScheduled);
+
         if (await seatAllocationRepository.ExistsByShowIdAsync(command.ShowId, cancellationToken))
             return Fail(ESeatAllocationError.AllocationAlreadyExists);
 
-        var allocation = new SeatAllocation(command);
+        var capacity = await roomsFacade.FetchRoomCapacity(show.RoomId, cancellationToken);
+        if (capacity <= 0) return Fail(ESeatAllocationError.RoomCapacityUnavailable);
+
+        var allocation = new SeatAllocation(command.ShowId, capacity);
         await seatAllocationRepository.AddAsync(allocation, cancellationToken);
         await unitOfWork.CompleteAsync(cancellationToken);
-
         return Ok(allocation);
     }
 
