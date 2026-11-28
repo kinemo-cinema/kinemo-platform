@@ -5,6 +5,7 @@ using KinemoPlatform.API.Movies.Domain.Model.Aggregates;
 using KinemoPlatform.API.Movies.Domain.Model.Commands;
 using KinemoPlatform.API.Movies.Domain.Model.Events;
 using KinemoPlatform.API.Movies.Domain.Repositories;
+using KinemoPlatform.API.Movies.Infrastructure.External.FileStorage;
 using KinemoPlatform.API.Shared.Application.Patterns;
 using KinemoPlatform.API.Shared.Domain.Repositories;
 
@@ -30,6 +31,7 @@ namespace KinemoPlatform.API.Movies.Application.Internal.CommandServices;
 /// </param>
 public class MovieCommandService(
     IMovieRepository movieRepository,
+    ISensoryFileStorage sensoryFileStorage,
     IUnitOfWork unitOfWork,
     IMediator domainEventPublisher) : IMovieCommandService
 {
@@ -130,4 +132,28 @@ public class MovieCommandService(
 
     private static Result<Movie, EMovieError> Fail(EMovieError error) =>
         new Result<Movie, EMovieError>.Failure(error);
+    
+    public async Task<Result<Movie, EMovieError>> Handle(UploadSensoryTrackCommand command,
+        CancellationToken cancellationToken = default)
+    {
+        // Fail fast before touching the disk: do not store files for movies that do not exist,
+        // or for an effect type that already has a track.
+        var movie = await movieRepository.FindByIdWithSensoryContentAsync(command.MovieId, cancellationToken);
+        if (movie is null) return Fail(EMovieError.MovieNotFound);
+        if (movie.SensoryContent.Tracks.Any(track => track.EffectType == command.EffectType))
+            return Fail(EMovieError.DuplicateEffectType);
+
+        var filePath = await sensoryFileStorage.UploadAsync(
+            command.Content, command.FileName, command.MovieId, cancellationToken);
+
+        var result = await Handle(
+            new AssociateSensoryFileCommand(command.MovieId, command.EffectType, filePath, command.DurationSeconds),
+            cancellationToken);
+
+        // The file is only kept when it was associated. Unexpected exceptions are deliberately not handled here:
+        // the change may already be committed, and deleting the file then would leave the database pointing
+        // at a missing file.
+        if (result.IsFailure) await sensoryFileStorage.DeleteAsync(filePath, CancellationToken.None);
+        return result;
+    }
 }

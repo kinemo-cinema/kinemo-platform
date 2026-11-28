@@ -252,4 +252,5 @@
   <data name="RoomBlockNotFound" xml:space="preserve"><value>The room block was not found.</value></data>
   <data name="RoomInspectionNotFound" xml:space="preserve"><value>The room inspection was not found.</value></data>
   <data name="RoomBlockCannotBeReactivated" xml:space="preserve"><value>A block can only be lifted (active=false). Create a new block instead.</value></data>
+  <data name="SensoryTrackNotFound" xml:space="preserve"><value>The sensory track was not found.</value></data>
 </root>

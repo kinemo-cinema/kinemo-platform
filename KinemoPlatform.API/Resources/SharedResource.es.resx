@@ -273,4 +273,5 @@
   <data name="RoomBlockNotFound" xml:space="preserve"><value>No se encontró el bloqueo de la sala.</value></data>
   <data name="RoomInspectionNotFound" xml:space="preserve"><value>No se encontró la inspección de la sala.</value></data>
   <data name="RoomBlockCannotBeReactivated" xml:space="preserve"><value>Un bloqueo solo se puede levantar (active=false). Cree un bloqueo nuevo.</value></data>
+  <data name="SensoryTrackNotFound" xml:space="preserve"><value>No se encontró la pista sensorial.</value></data>
 </root>

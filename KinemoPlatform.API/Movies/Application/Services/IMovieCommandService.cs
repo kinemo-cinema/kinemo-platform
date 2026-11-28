@@ -82,4 +82,6 @@ public interface IMovieCommandService
     ///     A success result with the affected <see cref="Movie" />, or a failure with an <see cref="EMovieError" />.
     /// </returns>
     Task<Result<Movie, EMovieError>> Handle(ConfigureEffectsProfileCommand command, CancellationToken cancellationToken = default);
+    
+    Task<Result<Movie, EMovieError>> Handle(UploadSensoryTrackCommand command, CancellationToken cancellationToken = default);
 }

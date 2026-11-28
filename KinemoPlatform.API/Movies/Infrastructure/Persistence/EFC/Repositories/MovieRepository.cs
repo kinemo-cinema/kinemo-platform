@@ -26,7 +26,7 @@ public class MovieRepository(AppDbContext context)
     public async Task<IEnumerable<Movie>> FindByTitleOrGenreAsync(string? title, EMovieGenre? genre,
         CancellationToken cancellationToken = default)
     {
-        var query = Context.Set<Movie>().AsQueryable();
+        var query = Context.Set<Movie>().Include(m => m.SensoryContent).AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(title))
             query = query.Where(m => m.Title.Contains(title));
