@@ -1,7 +1,3 @@
-using KinemoPlatform.API.Scheduling.Domain.Repositories;
-using KinemoPlatform.API.Scheduling.Domain.Model.ValueObjects;
-using KinemoPlatform.API.Rooms.Domain.Repositories;
-using KinemoPlatform.API.Execution.Domain.Repositories;
 using Cortex.Mediator;
 using KinemoPlatform.API.Analytics.Application.Errors;
 using KinemoPlatform.API.Analytics.Application.Services;
@@ -11,6 +7,9 @@ using KinemoPlatform.API.Analytics.Domain.Model.Entities;
 using KinemoPlatform.API.Analytics.Domain.Model.Events;
 using KinemoPlatform.API.Analytics.Domain.Model.ValueObjects;
 using KinemoPlatform.API.Analytics.Domain.Repositories;
+using KinemoPlatform.API.Execution.Interfaces.ACL;
+using KinemoPlatform.API.Rooms.Interfaces.ACL;
+using KinemoPlatform.API.Scheduling.Interfaces.ACL;
 using KinemoPlatform.API.Shared.Application.Patterns;
 using KinemoPlatform.API.Shared.Domain.Repositories;
 
@@ -18,9 +17,9 @@ namespace KinemoPlatform.API.Analytics.Application.Internal.CommandServices;
 
 public class DashboardCommandService(
     IDashboardRepository dashboardRepository,
-    IShowRepository showRepository,
-    IRoomRepository roomRepository,
-    IExecutionRepository executionRepository,
+    ISchedulingContextFacade schedulingFacade,
+    IRoomsContextFacade roomsFacade,
+    IExecutionContextFacade executionFacade,
     IUnitOfWork unitOfWork,
     IMediator domainEventPublisher) : IDashboardCommandService
 {
@@ -34,33 +33,31 @@ public class DashboardCommandService(
 
         var dashboard = new Dashboard(command);
 
-        var shows = (await showRepository.ListAsync(cancellationToken)).Where(show =>
-            show.Status != EShowStatus.Cancelled &&
-            show.TimeSlot.StartDateTime < command.PeriodEnd &&
-            show.TimeSlot.EndDateTime > command.PeriodStart).ToList();
-        var rooms = (await roomRepository.ListAsync(cancellationToken)).ToList();
-        var executions = (await executionRepository.ListWithDetailsAsync(cancellationToken)).ToList();
-        decimal Hours(KinemoPlatform.API.Scheduling.Domain.Model.Aggregates.Show show)
+        var shows = await schedulingFacade.FetchActiveShowSlots(command.PeriodStart, command.PeriodEnd, cancellationToken);
+        var roomIds = await roomsFacade.FetchRoomIds(cancellationToken);
+        var emergencies = await executionFacade.FetchEmergencies(command.PeriodStart, command.PeriodEnd, cancellationToken);
+
+        decimal Hours(ShowSlot show)
         {
-            var start = show.TimeSlot.StartDateTime > command.PeriodStart ? show.TimeSlot.StartDateTime : command.PeriodStart;
-            var end = show.TimeSlot.EndDateTime < command.PeriodEnd ? show.TimeSlot.EndDateTime : command.PeriodEnd;
+            var start = show.StartDateTime > command.PeriodStart ? show.StartDateTime : command.PeriodStart;
+            var end = show.EndDateTime < command.PeriodEnd ? show.EndDateTime : command.PeriodEnd;
             return (decimal)(end - start).TotalHours;
         }
+
         var hours = shows.Sum(Hours);
-        var capacityHours = rooms.Count * (decimal)(command.PeriodEnd - command.PeriodStart).TotalHours;
+        var capacityHours = roomIds.Count * (decimal)(command.PeriodEnd - command.PeriodStart).TotalHours;
         dashboard.AddMetric(new OperationalMetric(EMetricType.ShowCount, shows.Count, command.PeriodStart, command.PeriodEnd));
         dashboard.AddMetric(new OperationalMetric(EMetricType.OperatingHours, hours, command.PeriodStart, command.PeriodEnd));
         dashboard.AddMetric(new OperationalMetric(EMetricType.RoomUtilization,
             capacityHours > 0 ? Math.Min(100m, hours / capacityHours * 100m) : 0m,
             command.PeriodStart, command.PeriodEnd));
-        foreach (var room in rooms)
+
+        foreach (var roomId in roomIds)
         {
-            var roomShows = shows.Where(show => show.RoomId == room.Id).ToList();
-            var showIds = roomShows.Select(show => show.Id).ToHashSet();
-            var emergencies = executions.Where(execution => showIds.Contains(execution.ShowId))
-                .SelectMany(execution => execution.EmergencyEvents)
-                .Count(emergency => emergency.TriggeredAt >= command.PeriodStart && emergency.TriggeredAt < command.PeriodEnd);
-            dashboard.AddRoomPerformance(new RoomPerformance(room.Id, roomShows.Sum(Hours), roomShows.Count, emergencies));
+            var roomShows = shows.Where(show => show.RoomId == roomId).ToList();
+            var showIds = roomShows.Select(show => show.ShowId).ToHashSet();
+            var emergencyCount = emergencies.Count(emergency => showIds.Contains(emergency.ShowId));
+            dashboard.AddRoomPerformance(new RoomPerformance(roomId, roomShows.Sum(Hours), roomShows.Count, emergencyCount));
         }
 
         await dashboardRepository.AddAsync(dashboard, cancellationToken);
