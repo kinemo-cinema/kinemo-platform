@@ -71,10 +71,16 @@ using KinemoPlatform.API.Analytics.Application.Internal.QueryServices;
 using KinemoPlatform.API.Analytics.Application.Services;
 using KinemoPlatform.API.Analytics.Domain.Repositories;
 using KinemoPlatform.API.Analytics.Infrastructure.Persistence.EFC.Repositories;
+using KinemoPlatform.API.Execution.Application.ACL;
 using KinemoPlatform.API.Execution.Application.Services;
+using KinemoPlatform.API.Execution.Interfaces.ACL;
 using KinemoPlatform.API.Movies.Application.Services;
+using KinemoPlatform.API.Rooms.Application.ACL;
 using KinemoPlatform.API.Rooms.Application.Services;
+using KinemoPlatform.API.Rooms.Interfaces.ACL;
+using KinemoPlatform.API.Scheduling.Application.ACL;
 using KinemoPlatform.API.Scheduling.Application.Services;
+using KinemoPlatform.API.Scheduling.Interfaces.ACL;
 using KinemoPlatform.API.Seats.Application.Services;
 
 // BC09: Subscriptions
@@ -201,11 +207,13 @@ builder.Services.AddScoped<ISensoryFileStorage, LocalSensoryFileStorage>();
 builder.Services.AddScoped<IShowRepository, ShowRepository>();
 builder.Services.AddScoped<IShowCommandService, ShowCommandService>();
 builder.Services.AddScoped<IShowQueryService, ShowQueryService>();
+builder.Services.AddScoped<ISchedulingContextFacade, SchedulingContextFacade>();
 
 // BC03: Rooms
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 builder.Services.AddScoped<IRoomCommandService, RoomCommandService>();
 builder.Services.AddScoped<IRoomQueryService, RoomQueryService>();
+builder.Services.AddScoped<IRoomsContextFacade, RoomsContextFacade>(); 
 
 // BC04: Ticketing
 builder.Services.AddScoped<ITicketingRepository, TicketingRepository>();
@@ -222,6 +230,7 @@ builder.Services.AddScoped<ISeatAllocationQueryService, SeatAllocationQueryServi
 builder.Services.AddScoped<IExecutionRepository, ExecutionRepository>();
 builder.Services.AddScoped<IShowExecutionCommandService, ShowExecutionCommandService>();
 builder.Services.AddScoped<IShowExecutionQueryService, ShowExecutionQueryService>();
+builder.Services.AddScoped<IExecutionContextFacade, ExecutionContextFacade>();
 
 // BC07: Maintenance
 builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
