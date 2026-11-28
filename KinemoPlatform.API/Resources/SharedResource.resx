@@ -242,4 +242,11 @@
   <data name="SeatAllocationShowNotScheduled" xml:space="preserve"><value>Seats can only be allocated for scheduled shows.</value></data>
   <data name="SeatAllocationRoomCapacityUnavailable" xml:space="preserve"><value>The room of this show has no seat capacity configured.</value></data>
   <data name="SeatAllocationClosed" xml:space="preserve"><value>The seat allocation is closed and can no longer be changed.</value></data>
+  <data name="ShowMovieNotFound" xml:space="preserve"><value>The movie was not found.</value></data>
+  <data name="ShowRoomNotFound" xml:space="preserve"><value>The room was not found.</value></data>
+  <data name="ShowMovieNotActive" xml:space="preserve"><value>The movie is inactive and cannot be scheduled.</value></data>
+  <data name="ShowRoomBlocked" xml:space="preserve"><value>The room is blocked during the selected time slot.</value></data>
+  <data name="ShowNotModifiable" xml:space="preserve"><value>Only scheduled shows can be modified or cancelled.</value></data>
+  <data name="Shows.ScheduleShow.Response404" xml:space="preserve"><value>The movie or the room was not found.</value></data>
+  <data name="Shows.CancelShow.Response409" xml:space="preserve"><value>The show has already finished and cannot be cancelled.</value></data>
 </root>

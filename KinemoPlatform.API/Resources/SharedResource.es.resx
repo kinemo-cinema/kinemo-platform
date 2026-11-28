@@ -263,4 +263,11 @@
   <data name="SeatAllocationShowNotScheduled" xml:space="preserve"><value>Solo se pueden asignar asientos a funciones programadas.</value></data>
   <data name="SeatAllocationRoomCapacityUnavailable" xml:space="preserve"><value>La sala de esta función no tiene capacidad de asientos configurada.</value></data>
   <data name="SeatAllocationClosed" xml:space="preserve"><value>La asignación de asientos está cerrada y ya no se puede modificar.</value></data>
+  <data name="ShowMovieNotFound" xml:space="preserve"><value>No se encontró la película.</value></data>
+  <data name="ShowRoomNotFound" xml:space="preserve"><value>No se encontró la sala.</value></data>
+  <data name="ShowMovieNotActive" xml:space="preserve"><value>La película está inactiva y no se puede programar.</value></data>
+  <data name="ShowRoomBlocked" xml:space="preserve"><value>La sala está bloqueada durante el horario seleccionado.</value></data>
+  <data name="ShowNotModifiable" xml:space="preserve"><value>Solo se pueden modificar o cancelar funciones programadas.</value></data>
+  <data name="Shows.ScheduleShow.Response404" xml:space="preserve"><value>No se encontró la película o la sala.</value></data>
+  <data name="Shows.CancelShow.Response409" xml:space="preserve"><value>La función ya finalizó y no se puede cancelar.</value></data>
 </root>

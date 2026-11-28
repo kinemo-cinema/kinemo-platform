@@ -48,6 +48,21 @@ public static class ActionResultFromShowResultAssembler
                 EShowError.InvalidTimeSlot => controller.Problem(
                     title: localizer["ShowInvalidTimeSlot"].Value,
                     statusCode: StatusCodes.Status400BadRequest),
+                EShowError.MovieNotFound => controller.Problem(
+                    title: localizer["ShowMovieNotFound"].Value,
+                    statusCode: StatusCodes.Status404NotFound),
+                EShowError.RoomNotFound => controller.Problem(
+                    title: localizer["ShowRoomNotFound"].Value,
+                    statusCode: StatusCodes.Status404NotFound),
+                EShowError.MovieNotActive => controller.Problem(
+                    title: localizer["ShowMovieNotActive"].Value,
+                    statusCode: StatusCodes.Status409Conflict),
+                EShowError.RoomBlocked => controller.Problem(
+                    title: localizer["ShowRoomBlocked"].Value,
+                    statusCode: StatusCodes.Status409Conflict),
+                EShowError.ShowNotModifiable => controller.Problem(
+                    title: localizer["ShowNotModifiable"].Value,
+                    statusCode: StatusCodes.Status409Conflict),
                 _ => controller.Problem(
                     title: localizer["UnexpectedServerError"].Value,
                     statusCode: StatusCodes.Status500InternalServerError)

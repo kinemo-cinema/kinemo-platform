@@ -47,21 +47,17 @@ public partial class Show
     
     public EShowStatus Status { get; private set; }
 
-    /// <summary>
-    ///     Update the time slot of an existing show.
-    /// </summary>
-    /// <param name="startDateTime">The new start time.</param>
-    /// <param name="endDateTime">The new end time.</param>
     public void UpdateTimeSlot(DateTimeOffset startDateTime, DateTimeOffset endDateTime)
     {
+        if (Status != EShowStatus.Scheduled)
+            throw new InvalidOperationException("Only scheduled shows can be edited.");
         TimeSlot = new TimeSlot(startDateTime, endDateTime);
     }
 
-    /// <summary>
-    ///     Mark the show as cancelled.
-    /// </summary>
     public void Cancel()
     {
+        if (Status == EShowStatus.Finished)
+            throw new InvalidOperationException("A finished show cannot be cancelled.");
         Status = EShowStatus.Cancelled;
     }
 
@@ -72,4 +68,6 @@ public partial class Show
     {
         Status = EShowStatus.Finished;
     }
+    
+    
 }
