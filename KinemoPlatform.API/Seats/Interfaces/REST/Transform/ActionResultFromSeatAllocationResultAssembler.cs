@@ -46,6 +46,15 @@ public static class ActionResultFromSeatAllocationResultAssembler
                 ESeatAllocationError.UnsupportedSeatStatus => controller.Problem(
                     title: localizer["SeatStatusNotSupported"].Value,
                     statusCode: StatusCodes.Status400BadRequest),
+                ESeatAllocationError.ShowNotFound => controller.Problem(
+                    title: localizer["SeatAllocationShowNotFound"].Value,
+                    statusCode: StatusCodes.Status404NotFound),
+                ESeatAllocationError.ShowNotScheduled => controller.Problem(
+                    title: localizer["SeatAllocationShowNotScheduled"].Value,
+                    statusCode: StatusCodes.Status409Conflict),
+                ESeatAllocationError.RoomCapacityUnavailable => controller.Problem(
+                    title: localizer["SeatAllocationRoomCapacityUnavailable"].Value,
+                    statusCode: StatusCodes.Status409Conflict),
                 _ => controller.Problem(
                     title: localizer["UnexpectedServerError"].Value,
                     statusCode: StatusCodes.Status500InternalServerError)

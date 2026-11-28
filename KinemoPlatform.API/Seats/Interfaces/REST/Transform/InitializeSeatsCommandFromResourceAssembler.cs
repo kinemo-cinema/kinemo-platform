@@ -7,6 +7,6 @@ public static class InitializeSeatsCommandFromResourceAssembler
 {
     public static InitializeSeatsCommand ToCommandFromResource(InitializeSeatsResource resource)
     {
-        return new InitializeSeatsCommand(resource.ShowId, resource.TotalSeats);
+        return new InitializeSeatsCommand(resource.ShowId);
     }
 }

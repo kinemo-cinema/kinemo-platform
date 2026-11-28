@@ -259,4 +259,7 @@
     <data name="Movies.AssociateSensoryFile.Response409" xml:space="preserve"><value>La película ya tiene un archivo sensorial para este tipo de efecto.</value></data>
   <data name="Subscriptions.PaymentProviderUnavailable.Title" xml:space="preserve"><value>Proveedor de pagos no disponible</value></data>
   <data name="Subscriptions.PaymentProviderUnavailable.Detail" xml:space="preserve"><value>No hay una pasarela de pagos real configurada. No se ha procesado ningun pago.</value></data>
+  <data name="SeatAllocationShowNotFound" xml:space="preserve"><value>No se encontró la función de esta asignación de asientos.</value></data>
+  <data name="SeatAllocationShowNotScheduled" xml:space="preserve"><value>Solo se pueden asignar asientos a funciones programadas.</value></data>
+  <data name="SeatAllocationRoomCapacityUnavailable" xml:space="preserve"><value>La sala de esta función no tiene capacidad de asientos configurada.</value></data>
 </root>
